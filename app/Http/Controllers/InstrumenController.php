@@ -15,16 +15,15 @@ class InstrumenController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
             $data = Instrumen::orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('NamaAlat', function ($row) {
-                    $namaAlat ='';
+                    $namaAlat = '';
                     foreach ($row->AlatUkur as $key => $value) {
-                        $alat = MasterAlat::where('id',$value)->get('NamaAlat');
-                        $namaAlat .= '<span class="badge bg-dark mb-1">'.$alat[0]->NamaAlat.'</span>';
+                        $alat = MasterAlat::where('id', $value)->get('NamaAlat');
+                        $namaAlat .= '<span class="badge bg-dark mb-1">' . $alat[0]->NamaAlat . '</span>';
                     }
                     return $namaAlat;
                 })
@@ -34,14 +33,14 @@ class InstrumenController extends Controller
                     return $btnEdit . '  ' . $btnDelete;
                 })
                 ->addColumn('Stat', function ($row) {
-                   if($row->Status == "Baik"){
-                    $Stat ='<span class="badge bg-primary">Aktif</span>';
-                   }else{
+                    if ($row->Status == 'Baik') {
+                        $Stat = '<span class="badge bg-primary">Aktif</span>';
+                    } else {
                         $Stat = '<span class="badge bg-primary">Tidak AKtif</span>';
-                   }
+                    }
                     return $Stat;
                 })
-                ->rawColumns(['action', 'NamaAlat','Stat'])
+                ->rawColumns(['action', 'NamaAlat', 'Stat'])
                 ->make(true);
         }
         return view('master.instrumen.index');
@@ -53,7 +52,7 @@ class InstrumenController extends Controller
     public function create()
     {
         $data = MasterAlat::get();
-        return view('master.instrumen.create',compact('data'));
+        return view('master.instrumen.create', compact('data'));
     }
 
     /**
@@ -71,7 +70,8 @@ class InstrumenController extends Controller
             'Status' => 'required',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()
+            return redirect()
+                ->back()
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -80,7 +80,7 @@ class InstrumenController extends Controller
             $file = $request->file('LK');
             $file->storeAs('public/file_lk', $file->getClientOriginalName());
             $data['LK'] = $file->getClientOriginalName();
-        }else{
+        } else {
             $data['LK'] = null;
         }
         $data['KodeInstrumen'] = $this->GenerateKode();
@@ -102,9 +102,9 @@ class InstrumenController extends Controller
      */
     public function edit($id)
     {
-        $instrumen  = Instrumen::find($id);
-        $data       = MasterAlat::get();
-        return view('master.instrumen.edit', compact('instrumen','data'));
+        $instrumen = Instrumen::find($id);
+        $data = MasterAlat::get();
+        return view('master.instrumen.edit', compact('instrumen', 'data'));
     }
 
     /**
@@ -122,7 +122,8 @@ class InstrumenController extends Controller
             'Status' => 'required',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()
+            return redirect()
+                ->back()
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -130,15 +131,13 @@ class InstrumenController extends Controller
             $excelLK = $request->file('LK');
             $excelLK->storeAs('public/file_lk', $excelLK->getClientOriginalName());
             $alat['LK'] = $excelLK->getClientOriginalName();
-        }else{
+        } else {
             $alat['LK'] = null;
         }
 
-
         $data = $request->all();
-        $data['']
         $alat = Instrumen::find($id);
-        $alat->update();
+        $alat->update($data);
 
         return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Diupdate');
     }
@@ -166,7 +165,7 @@ class InstrumenController extends Controller
         $year = date('Y');
         $lastKodeAlat = Instrumen::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
         if ($lastKodeAlat) {
-            $lastKodeAlat = (int) substr($lastKodeAlat->KodeAlat, 0, 4);
+            $lastKodeAlat = (int) substr($lastKodeAlat->KodeInstrumen, 0, 4);
             $KodeAlat = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/INST-DKH/' . $month . '/' . $year;
         } else {
             $KodeAlat = '0001/INST-DKH/' . $month . '/' . $year;

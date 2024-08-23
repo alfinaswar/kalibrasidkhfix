@@ -1,23 +1,22 @@
-(function($) {
-    "use strict"
+(function ($) {
+    "use strict";
 
     // MAterial Date picker
-    $('#mdate').bootstrapMaterialDatePicker({
+    $("#mdate").bootstrapMaterialDatePicker({
         weekStart: 0,
-        time: false
+        time: false,
     });
-    $('#timepicker').bootstrapMaterialDatePicker({
-        format: 'HH:mm',
+    $("#timepicker").bootstrapMaterialDatePicker({
+        format: "HH:mm",
         time: true,
-        date: false
+        date: false,
     });
-    $('#date-format').bootstrapMaterialDatePicker({
-        format: 'dddd DD MMMM YYYY - HH:mm'
-    });
-
-    $('#min-date').bootstrapMaterialDatePicker({
-        format: 'DD/MM/YYYY HH:mm',
-        minDate: new Date()
+    $("#date-format, #date-format-new").bootstrapMaterialDatePicker({
+        format: "dddd - DD MMMM YYYY - HH:mm",
     });
 
+    $("#min-date").bootstrapMaterialDatePicker({
+        format: "DD/MM/YYYY HH:mm",
+        minDate: new Date(),
+    });
 })(jQuery);

@@ -19,7 +19,7 @@ class MasterAlatController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btnEdit = '<a href="'.route('alat.edit',$row->id).'" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btnEdit = '<a href="' . route('alat.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     return $btnEdit . '  ' . $btnDelete;
                 })
@@ -55,7 +55,8 @@ class MasterAlatController extends Controller
             'Status' => 'required',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()
+            return redirect()
+                ->back()
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -69,7 +70,7 @@ class MasterAlatController extends Controller
         $data['Foto'] = $foto->getClientOriginalName();
         $data['idUser'] = auth()->user()->id;
         MasterAlat::create($data);
-        return redirect()->route('alat.index')->with('success','Data Berhasil Disimpan');
+        return redirect()->route('alat.index')->with('success', 'Data Berhasil Disimpan');
     }
 
     /**
@@ -86,13 +87,13 @@ class MasterAlatController extends Controller
     public function edit($id)
     {
         $alat = MasterAlat::find($id);
-        return view('master.alat.edit',compact('alat'));
+        return view('master.alat.edit', compact('alat'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'NamaAlat' => 'required',
@@ -107,7 +108,8 @@ class MasterAlatController extends Controller
             'Status' => 'required',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()
+            return redirect()
+                ->back()
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -117,8 +119,8 @@ class MasterAlatController extends Controller
             $validator['Foto'] = $foto->getClientOriginalName();
         }
 
-       $alat = MasterAlat::find($id);
-       $alat->update($request->all());
+        $alat = MasterAlat::find($id);
+        $alat->update($request->all());
 
         return redirect()->route('alat.index')->with('success', 'Data Berhasil Diupdate');
     }
@@ -137,18 +139,19 @@ class MasterAlatController extends Controller
         }
     }
 
-    private function GenerateKode(){
+    private function GenerateKode()
+    {
         $month = date('m');
         $month2 = date('m');
         $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
         $month = $romanMonths[$month - 1];
         $year = date('Y');
-        $lastKodeAlat = MasterAlat::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id','desc')->first();
-        if($lastKodeAlat){
+        $lastKodeAlat = MasterAlat::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
+        if ($lastKodeAlat) {
             $lastKodeAlat = (int) substr($lastKodeAlat->KodeAlat, 0, 4);
-            $KodeAlat = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/AS-DKH/'.$month.'/'.$year;
+            $KodeAlat = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/AS-DKH/' . $month . '/' . $year;
         } else {
-            $KodeAlat = '0001/AS-DKH/'.$month.'/'.$year;
+            $KodeAlat = '0001/AS-DKH/' . $month . '/' . $year;
         }
         return $KodeAlat;
     }

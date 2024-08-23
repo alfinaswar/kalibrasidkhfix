@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SerahTerimaAlat;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SerahTerimaAlatController extends Controller
@@ -12,7 +13,8 @@ class SerahTerimaAlatController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::all();
+        return view('serah-terima.index', compact('user'));
     }
 
     /**
@@ -28,7 +30,7 @@ class SerahTerimaAlatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
