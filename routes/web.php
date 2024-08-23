@@ -46,5 +46,13 @@ Route::group(['middleware' => ['auth']], function() {
         Route::PUT('/update/{id}', [InstrumenController::class, 'update'])->name('instrumen.update');
         Route::delete('hapus/{id}', [InstrumenController::class, 'destroy'])->name('instrumen.destroy');
     });
+    Route::prefix('master-customer')->group(function () {
+        Route::GET('/', [InstrumenController::class, 'index'])->name('customer.index');
+        Route::GET('/create', [InstrumenController::class, 'create'])->name('customer.create');
+        Route::POST('/simpan', [InstrumenController::class, 'store'])->name('customer.store');
+        Route::GET('/edit/{id}', [InstrumenController::class, 'edit'])->name('customer.edit');
+        Route::PUT('/update/{id}', [InstrumenController::class, 'update'])->name('customer.update');
+        Route::delete('hapus/{id}', [InstrumenController::class, 'destroy'])->name('customer.destroy');
+    });
 });
 

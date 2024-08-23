@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instrumen;
 use App\Models\MasterAlat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,16 +15,33 @@ class InstrumenController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
-            $data = MasterAlat::orderBy('id', 'Desc')->get();
+            $data = Instrumen::orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('NamaAlat', function ($row) {
+                    $namaAlat ='';
+                    foreach ($row->AlatUkur as $key => $value) {
+                        $alat = MasterAlat::where('id',$value)->get('NamaAlat');
+                        $namaAlat .= '<span class="badge bg-dark mb-1">'.$alat[0]->NamaAlat.'</span>';
+                    }
+                    return $namaAlat;
+                })
                 ->addColumn('action', function ($row) {
-                    $btnEdit = '<a href="' . route('alat.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btnEdit = '<a href="' . route('instrumen.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     return $btnEdit . '  ' . $btnDelete;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('Stat', function ($row) {
+                   if($row->Status == "Baik"){
+                    $Stat ='<span class="badge bg-primary">Aktif</span>';
+                   }else{
+                        $Stat = '<span class="badge bg-primary">Tidak AKtif</span>';
+                   }
+                    return $Stat;
+                })
+                ->rawColumns(['action', 'NamaAlat','Stat'])
                 ->make(true);
         }
         return view('master.instrumen.index');
@@ -58,16 +76,17 @@ class InstrumenController extends Controller
                 ->withInput();
         }
         $data = $request->all();
-        if ($request->hasFile('File')) {
-            $file = $request->file('File');
-            $file->storeAs('public/file_lk', $foto->getClientOriginalName());
-            $file = $request->file('File');
+        if ($request->hasFile('LK')) {
+            $file = $request->file('LK');
+            $file->storeAs('public/file_lk', $file->getClientOriginalName());
+            $data['LK'] = $file->getClientOriginalName();
+        }else{
+            $data['LK'] = null;
         }
-        $data['KodeAlat'] = $this->GenerateKode();
-        $data['Foto'] = $foto->getClientOriginalName();
+        $data['KodeInstrumen'] = $this->GenerateKode();
         $data['idUser'] = auth()->user()->id;
-        MasterAlat::create($data);
-        return redirect()->route('alat.index')->with('success', 'Data Berhasil Disimpan');
+        Instrumen::create($data);
+        return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Disimpan');
     }
 
     /**
@@ -83,8 +102,9 @@ class InstrumenController extends Controller
      */
     public function edit($id)
     {
-        $alat = MasterAlat::find($id);
-        return view('master.alat.edit', compact('alat'));
+        $instrumen  = Instrumen::find($id);
+        $data       = MasterAlat::get();
+        return view('master.instrumen.edit', compact('instrumen','data'));
     }
 
     /**
@@ -93,15 +113,12 @@ class InstrumenController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlat' => 'required',
-            'Merk' => 'required',
-            'Type' => 'required',
-            'SerialNumber' => 'required',
-            'Foto' => 'image|max:5000',
-            'BuyDate' => 'required',
-            'TanggalKalibrasi' => 'required',
-            'DueDate' => 'required',
-            'Tertelusur' => 'required',
+            'Kategori' => 'required',
+            'Nama' => 'required',
+            'Tarif' => 'required',
+            'Akreditasi' => 'required',
+            'AlatUkur' => 'required',
+            'LK' => 'required|file|max:1024',
             'Status' => 'required',
         ]);
         if ($validator->fails()) {
@@ -109,16 +126,21 @@ class InstrumenController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        if ($request->hasFile('Foto')) {
-            $foto = $request->file('Foto');
-            $foto->storeAs('public/foto_alat', $foto->getClientOriginalName());
-            $validator['Foto'] = $foto->getClientOriginalName();
+        if ($request->hasFile('LK')) {
+            $excelLK = $request->file('LK');
+            $excelLK->storeAs('public/file_lk', $excelLK->getClientOriginalName());
+            $alat['LK'] = $excelLK->getClientOriginalName();
+        }else{
+            $alat['LK'] = null;
         }
 
-        $alat = MasterAlat::find($id);
-        $alat->update($request->all());
 
-        return redirect()->route('alat.index')->with('success', 'Data Berhasil Diupdate');
+        $data = $request->all();
+        $data['']
+        $alat = Instrumen::find($id);
+        $alat->update();
+
+        return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Diupdate');
     }
 
     /**
@@ -126,12 +148,12 @@ class InstrumenController extends Controller
      */
     public function destroy($id)
     {
-        $alat = MasterAlat::find($id);
+        $alat = Instrumen::find($id);
         if ($alat) {
             $alat->delete();
-            return response()->json(['message' => 'fasilitas berhasil dihapus'], 200);
+            return response()->json(['message' => 'instrumen berhasil dihapus'], 200);
         } else {
-            return response()->json(['message' => 'room tidak ditemukan'], 404);
+            return response()->json(['message' => 'Instrumen    tidak ditemukan'], 404);
         }
     }
 
@@ -142,12 +164,12 @@ class InstrumenController extends Controller
         $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
         $month = $romanMonths[$month - 1];
         $year = date('Y');
-        $lastKodeAlat = MasterAlat::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
+        $lastKodeAlat = Instrumen::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
         if ($lastKodeAlat) {
             $lastKodeAlat = (int) substr($lastKodeAlat->KodeAlat, 0, 4);
-            $KodeAlat = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/AS-DKH/' . $month . '/' . $year;
+            $KodeAlat = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/INST-DKH/' . $month . '/' . $year;
         } else {
-            $KodeAlat = '0001/AS-DKH/' . $month . '/' . $year;
+            $KodeAlat = '0001/INST-DKH/' . $month . '/' . $year;
         }
         return $KodeAlat;
     }

@@ -3,7 +3,7 @@
 <div class="col-xl-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Form Master Alat</h4>
+                                <h4 class="card-title">Form Instrumen Alat</h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -14,8 +14,8 @@
                                                 <label class="form-label">Kategori</label>
                                                 <select name="Kategori" id="" class="form-control @error('Kategori') is-invalid @enderror">
                                                     <option value="">Pilih Kategori</option>
-                                                    <option value="kategori 1">kategori 1</option>
-                                                    <option value="Kategori 2">Kategori 2</option>
+                                                    <option value="Alkes">Alkes</option>
+                                                    <option value="Industri">Industri</option>
                                                 </select>
                                                 @error('Kategori')
                                                 <span class="invalid-feedback" role="alert">
@@ -25,7 +25,7 @@
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Nama</label>
-                                                <input type="text" name="Merk" class="form-control @error('Nama') is-invalid @enderror" placeholder="Nama">
+                                                <input type="text" name="Nama" class="form-control @error('Nama') is-invalid @enderror" placeholder="Nama">
                                                 @error('Nama')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -86,8 +86,8 @@
                                                 <label class="form-label">Status</label>
                                                 <select name="Status" id="" class="form-control @error('Status') is-invalid @enderror">
                                                     <option value="">Pilih Status</option>
-                                                    <option value="Baik">Baik</option>
-                                                    <option value="Tidak Baik">Tidak Baik</option>
+                                                    <option value="Aktif">Aktif</option>
+                                                    <option value="Tidak Aktif">Tidak Baik</option>
                                                 </select>
                                                 @error('Status')
                                                 <span class="invalid-feedback" role="alert">

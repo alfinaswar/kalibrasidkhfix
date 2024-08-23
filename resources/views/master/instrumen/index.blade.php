@@ -2,26 +2,28 @@
 
 @section('content')
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
-					<a href="{{route('instrumen.create')}}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah Alat</a>
+					<a href="{{route('instrumen.create')}}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah Instrumen</a>
 	</div>
 
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Data Alat Medis</h4>
+                    <h4 class="card-title">Data Instrumen</h4>
                 </div>
                 <div class="card-body">
                         <table id="example" class="display" style="min-width: 845px">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Kode Alat</th>
-                                    <th>Nama Alat</th>
-                                    <th>Merk</th>
-                                    <th>Serial Number</th>
-                                    <th>Foto</th>
-                                    <th>Tertelusur</th>
+                                    <th>Kode Instrumen</th>
+                                    <th>Kategori</th>
+                                    <th>Nama</th>
+                                    <th>Tarif</th>
+                                    <th>Akreditasi</th>
+                                    <th>Alat Ukur</th>
+                                    <th>LK</th>
+                                    <th>Status</th>
                                     <th width="12%">Aksi</th>
                                 </tr>
                             </thead>
@@ -63,7 +65,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ route('alat.destroy', ':id') }}'.replace(':id',
+                            url: '{{ route('instrumen.destroy', ':id') }}'.replace(':id',
                                 id),
                             type: 'DELETE',
                             data: {
@@ -105,36 +107,43 @@
                         }
                     },
                     serverSide: true,
-                    ajax: "{{ route('alat.index') }}",
+                    ajax: "{{ route('instrumen.index') }}",
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'KodeAlat',
-                            name: 'KodeAlat'
+                            data: 'KodeInstrumen',
+                            name: 'KodeInstrumen'
+                        },
+                        {
+                            data: 'Kategori',
+                            name: 'Kategori'
+                        },
+                        {
+                            data: 'Nama',
+                            name: 'Nama'
+                        },
+                        {
+                            data: 'Tarif',
+                            name: 'Tarif'
+                        },
+                        {
+                            data: 'Akreditasi',
+                            name: 'Akreditasi'
                         },
                         {
                             data: 'NamaAlat',
                             name: 'NamaAlat'
                         },
                         {
-                            data: 'Merk',
-                            name: 'Merk'
+                            data: 'LK',
+                            name: 'LK'
                         },
-                        {
-                            data: 'SerialNumber',
-                            name: 'SerialNumber'
+ {
+                            data: 'Stat',
+                            name: 'Stat'
                         },
-                        {
-                            data: 'Tertelusur',
-                            name: 'Tertelusur'
-                        },
-                        {
-                            data: 'Foto',
-                            name: 'Foto'
-                        },
-
                         {
                             data: 'action',
                             name: 'action',

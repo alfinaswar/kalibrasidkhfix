@@ -910,7 +910,7 @@
 						</a>
                         <ul aria-expanded="false">
                             <li><a href="{{route('alat.index')}}">Alat Medis</a></li>
-                            <li><a href="{{route('instrumen.index')}}">Customer</a></li>
+                            <li><a href="{{route('customer.index')}}">Customer</a></li>
                             <li><a href="{{route('instrumen.index')}}">Instrumen</a></li>
                         </ul>
                     </li>
