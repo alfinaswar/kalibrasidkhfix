@@ -68,13 +68,17 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><select class="form-control default-select dashboard-select-2 h-auto wide"
+                                    <td><select class="form-control"
                                             tabindex="null">
                                             @foreach ($user as $x)
                                                 <option value="{{ $x->id }}">{{ $x->name }}</option>
                                             @endforeach
                                         </select></td>
-                                    <td><input type="text" name="InstrumenId[]" class="form-control" placeholder="Alat">
+                                    <td><select class="form-control"></select>
+                                            @foreach ($user as $x)
+                                                <option value="{{ $x->id }}">{{ $x->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </td>
                                     <td><input type="text" name="Merk[]" class="form-control" placeholder="Merk">
                                     </td>
@@ -104,7 +108,7 @@
             var newRow = table.insertRow();
 
             var cells = [
-                '<select class="form-control default-select dashboard-select-2 h-auto wide">@foreach ($user as $x)<option value="{{ $x->id }}">{{ $x->name }}</option>@endforeach</select>',
+                '<select class="form-control"  tabindex="true">@foreach ($user as $x)<option value="{{ $x->id }}">{{ $x->name }}</option>@endforeach</select>',
                 '<input type="text" name="InstrumenId[]" class="form-control" placeholder="Alat">',
                 '<input type="text" name="Merk[]" class="form-control" placeholder="Merk">',
                 '<input type="text" name="Type[]" class="form-control" placeholder="Type">',

@@ -25,7 +25,11 @@
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Nama</label>
-                                                <input type="text" name="Nama" class="form-control @error('Nama') is-invalid @enderror" placeholder="Nama">
+                                                 <select id="single-select" name="Name" class="form-control @error('Nama') is-invalid @enderror">
+                                                    @foreach ($data as $i)
+                                                        <option value="{{$i->id}}">{{$i->NamaAlat}}</option>
+                                                    @endforeach
+                                </select>
                                                 @error('Nama')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instrumen;
 use App\Models\SerahTerimaAlat;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,7 +15,8 @@ class SerahTerimaAlatController extends Controller
     public function index()
     {
         $user = User::all();
-        return view('serah-terima.index', compact('user'));
+        $instrumen = Instrumen::all();
+        return view('serah-terima.index', compact('user','instrumen'));
     }
 
     /**
