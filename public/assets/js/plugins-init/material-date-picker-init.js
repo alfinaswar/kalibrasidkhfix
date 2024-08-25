@@ -12,7 +12,7 @@
         date: false,
     });
     $("#date-format, #date-format-new").bootstrapMaterialDatePicker({
-        format: "dddd - DD MMMM YYYY - HH:mm",
+        format: "YYYY-MM-DD HH:mm:ss",
     });
 
     $("#min-date").bootstrapMaterialDatePicker({

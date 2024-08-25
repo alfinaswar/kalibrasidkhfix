@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SerahTerimaDetail extends Model
 {
     use HasFactory;
+
+    protected $table = 'serah_terima_details';
+    protected $guarded = ['id'];
 }
