@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instrumen;
+use App\Models\KajiUlang;
 use App\Models\MasterCustomer;
 use App\Models\SerahTerima;
 use App\Models\SerahTerimaDetail;
 use App\Models\User;
+use PDF;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -22,9 +24,11 @@ class SerahTerimaAlatController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
+                    $btnPdf = '<a href="' . route('st.pdf', $row->id) . '" class="btn btn-primary btn-sm" title="Pdf"><i class="fas fa-print"></i></a>';
                     $btnEdit = '<a href="' . route('st.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-                    return $btnEdit . '  ' . $btnDelete;
+
+                    return $btnEdit . '  ' . $btnDelete . '  ' .$btnPdf;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -53,17 +57,34 @@ class SerahTerimaAlatController extends Controller
         $data['idUser'] = auth()->user()->id;
         $SerahTerima = SerahTerima::create($data);
         $latestId = SerahTerima::latest()->first()->id ?? 1;
-        for ($i = 0; $i < count($request->Merk); $i++) {
-            SerahTerimaDetail::create([
-                'SerahTerimaId' => $latestId,
-                'InstrumenId' => $request->InstrumenId[$i],
-                'Merk' => $request->Merk[$i],
-                'Type' => $request->Type[$i],
-                'SerialNumber' => $request->SerialNumber[$i],
-                'Qty' => $request->Qty[$i],
-                'Deskripsi' => $request->Deskripsi[$i],
-                'idUser' => auth()->user()->id,
-            ]);
+
+        for ($i = 0; $i < count($request->InstrumenId); $i++) {
+            if($request->Qty[$i] > 0){
+                for ($j=0; $j < $request->Qty[$i]; $j++) {
+                    SerahTerimaDetail::create([
+                        'SerahTerimaId' => $latestId,
+                        'InstrumenId' => $request->InstrumenId[$i],
+                        'Merk' => $request->Merk[$i],
+                        'Type' => $request->Type[$i],
+                        'SerialNumber' => $request->SerialNumber[$i],
+                        'Qty' => 1,
+                        'Deskripsi' => $request->Deskripsi[$i],
+                        'idUser' => auth()->user()->id,
+                    ]);
+                }
+            }else{
+                SerahTerimaDetail::create([
+                    'SerahTerimaId' => $latestId,
+                    'InstrumenId' => $request->InstrumenId[$i],
+                    'Merk' => $request->Merk[$i],
+                    'Type' => $request->Type[$i],
+                    'SerialNumber' => $request->SerialNumber[$i],
+                    'Qty' => $request->Qty[$i],
+                    'Deskripsi' => $request->Deskripsi[$i],
+                    'idUser' => auth()->user()->id,
+                ]);
+            }
+
         }
         return redirect()->back()->with('success', 'Data Berhasil Disimpan');
     }
@@ -71,15 +92,24 @@ class SerahTerimaAlatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SerahTerimaAlat $serahTerimaAlat)
+    public function GeneratePdf($id)
     {
-        //
+        $data = SerahTerima::with('Stdetail')->where('id', $id)->orderBy('id', 'Desc')->first();
+        $filename = str_replace(['/', '\\'], '_', $data->KodeSt) . ".pdf";
+        $viewData = [
+            'judul' => 'SERAH TERIMA BARANG',
+            'KodeSt' => $data->KodeSt,
+            'instrumen' => $data,
+        ];
+        $pdf = app('dompdf.wrapper')->loadView('serah-terima.formatPdf', $viewData);
+
+        return $pdf->download($filename);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SerahTerimaAlat $serahTerimaAlat)
+    public function edit($serahTerimaAlat)
     {
         //
     }
@@ -87,7 +117,7 @@ class SerahTerimaAlatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SerahTerimaAlat $serahTerimaAlat)
+    public function update(Request $request, $serahTerimaAlat)
     {
         //
     }
@@ -95,7 +125,7 @@ class SerahTerimaAlatController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SerahTerimaAlat $serahTerimaAlat)
+    public function destroy($serahTerimaAlat)
     {
         //
     }

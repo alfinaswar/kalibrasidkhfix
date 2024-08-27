@@ -2,18 +2,56 @@
 
 @section('content')
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
-        <a href="{{ route('st.create') }}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah
-            Alat</a>
-    </div>
+        <button type="button" class="btn btn-primary me-3 btn-sm" data-bs-toggle="modal" data-bs-target="#kajiUlangModal">
+            <i class="fas fa-plus me-2"></i>Kaji Ulang
+        </button>
+
+
+	</div>
 
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Data Serah Terima Alat</h4>
+                    <h4 class="card-title">Data Kaji Ulang Alat</h4>
                 </div>
                 <div class="card-body">
-                    <table id="example" class="display" style="min-width: 845px" width="100%">
+                        <table id="example" class="display" style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                <th>#</th>
+                                <th>Kode</th>
+                                <th>Nama Alat</th>
+                                <th>Metode1</th>
+                                <th>Metode2</th>
+                                <th>Status</th>
+                                <th>Kondisi</th>
+                                <th>Catatan</th>
+                                    <th width="12%">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+            <div class="modal fade" id="kajiUlangModal" tabindex="-1" aria-labelledby="kajiUlangModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="kajiUlangModalLabel">Kaji Ulang</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="example4" class="display" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -22,35 +60,46 @@
                                 <th>Tanggal Diterima</th>
                                 <th>Tanggal Diserahkan</th>
                                 <th>Status</th>
-                                <th width="15%">Aksi</th>
+                                <th width="12%">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-
-                        </tbody>
+                         <tbody>
+@foreach ($dataSerahTerima as $key => $st)
+<tr>
+  <td>{{$key+1}}</td>
+  <td>{{$st->KodeSt}}</td>
+  <td>{{$st->CustomerId}}</td>
+  <td>{{$st->TanggalDiterima}}</td>
+  <td>{{$st->TanggalDiajukan}}</td>
+  <td>{{$st->Status}}</td>
+  <td><a href="{{route('ku.form-kaji-ulang',$st->id)}}" class="btn btn-primary">Kaji</a></td>
+</tr>
+@endforeach
+                            </tbody>
 
                     </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+     @if (session()->has('success'))
+                <script>
+                    swal.fire({
+                        title: "{{ __('Success!') }}",
+                        text: "{!! \Session::get('success') !!}",
+                        type: "success"
+                    });
+                </script>
+            @endif
+ <script>
 
+    $(document).ready(function () {
 
-    </div>
-    </div>
-    @if (session()->has('success'))
-        <script>
-            swal.fire({
-                title: "{{ __('Success!') }}",
-                text: "{!! \Session::get('success') !!}",
-                type: "success"
-            });
-        </script>
-    @endif
-    <script>
-        $(document).ready(function() {
-
-            $('body').on('click', '.btn-delete', function() {
+        $('body').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
 
                 Swal.fire({
@@ -89,7 +138,7 @@
                     }
                 });
             });
-            var dataTable = function() {
+        var dataTable = function() {
                 var table = $('#example');
                 table.DataTable({
                     responsive: true,
@@ -104,30 +153,38 @@
                         }
                     },
                     serverSide: true,
-                    ajax: "{{ route('st.index') }}",
+                    ajax: "{{ route('ku.index') }}",
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'KodeSt',
-                            name: 'KodeSt'
+                            data: 'KodeKajiUlang',
+                            name: 'KodeKajiUlang'
                         },
                         {
-                            data: 'CustomerId',
-                            name: 'CustomerId'
+                            data: 'get_instrumen.Nama',
+                            name: 'get_instrumen.Nama'
                         },
                         {
-                            data: 'TanggalDiterima',
-                            name: 'TanggalDiterima'
+                            data: 'Metode1',
+                            name: 'Metode1'
                         },
                         {
-                            data: 'TanggalDiajukan',
-                            name: 'TanggalDiajukan'
+                            data: 'Metode2',
+                            name: 'Metode2'
                         },
                         {
                             data: 'Status',
                             name: 'Status'
+                        },
+                        {
+                            data: 'Kondisi',
+                            name: 'Kondisi'
+                        },
+                        {
+                            data: 'Catatan',
+                            name: 'Catatan'
                         },
 
                         {
@@ -140,6 +197,6 @@
                 });
             };
             dataTable();
-        });
-    </script>
+    });
+ </script>
 @endsection

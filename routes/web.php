@@ -3,9 +3,11 @@
 use App\Http\Controllers\AlatUkurController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstrumenController;
+use App\Http\Controllers\KajiUlangController;
 use App\Http\Controllers\MasterAlatController;
 use App\Http\Controllers\MasterCustomerController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SerahTerimaAlatController;
 use App\Http\Controllers\UserController;
@@ -62,5 +64,27 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [SerahTerimaAlatController::class, 'edit'])->name('st.edit');
         Route::PUT('/update/{id}', [SerahTerimaAlatController::class, 'update'])->name('st.update');
         Route::delete('hapus/{id}', [SerahTerimaAlatController::class, 'destroy'])->name('st.destroy');
+        Route::GET('/pdf/{id}', [SerahTerimaAlatController::class, 'GeneratePdf'])->name('st.pdf');
+    });
+    Route::prefix('kaji-ulang')->group(function () {
+        Route::GET('/', [KajiUlangController::class, 'index'])->name('ku.index');
+        Route::GET('/create', [KajiUlangController::class, 'create'])->name('ku.create');
+        Route::GET('/form-kaji-ulang/{id}', [KajiUlangController::class, 'formKaji'])->name('ku.form-kaji-ulang');
+        Route::POST('/simpan', [KajiUlangController::class, 'store'])->name('ku.store');
+        Route::GET('/edit/{id}', [KajiUlangController::class, 'edit'])->name('ku.edit');
+        Route::PUT('/update/{id}', [KajiUlangController::class, 'update'])->name('ku.update');
+        Route::delete('hapus/{id}', [KajiUlangController::class, 'destroy'])->name('ku.destroy');
+    });
+    Route::prefix('Master-Metode')->group(function () {
+        Route::GET('/', [KajiUlangController::class, 'index'])->name('metode.index');
+
+    });
+    Route::prefix('quotation')->group(function () {
+        Route::GET('/', [QuotationController::class, 'index'])->name('quotation.index');
+        Route::GET('/buat/{id}', [QuotationController::class, 'create'])->name('quotation.form-quotation');
+        Route::POST('/simpan', [QuotationController::class, 'store'])->name('quotation.store');
+        Route::GET('/edit/{id}', [QuotationController::class, 'edit'])->name('quotation.edit');
+        Route::PUT('/update/{id}', [QuotationController::class, 'update'])->name('quotation.update');
+        Route::delete('hapus/{id}', [QuotationController::class, 'destroy'])->name('quotation.destroy');
     });
 });

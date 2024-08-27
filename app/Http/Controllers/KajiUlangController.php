@@ -2,17 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instrumen;
 use App\Models\KajiUlang;
+use App\Models\SerahTerima;
+use App\Models\SerahTerimaDetail;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class KajiUlangController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // $data = KajiUlang::with('getInstrumen')->orderBy('id', 'Desc')->get();
+        // dd($data);
+        if ($request->ajax()) {
+            $data = KajiUlang::with('getInstrumen')->orderBy('id', 'Desc')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btnEdit = '<a href="' . route('ku.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
+                    return $btnEdit . '  ' . $btnDelete;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        $dataSerahTerima = SerahTerima::latest()->get();
+        return view('kaji-ulang.index',compact('dataSerahTerima'));
     }
 
     /**
@@ -28,7 +47,21 @@ class KajiUlangController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        for ($j = 0; $j < count($request->InstrumenId); $j++) {
+            KajiUlang::create([
+                'KodeKajiUlang' => $this->GenerateKode(),
+                'SerahTerimaId' => $request->SerahTerimaId,
+                'InstrumenId' => $request->InstrumenId[$j],
+                'Metode1' => $request->Metode1[$j],
+                'Metode2' => $request->Metode2[$j],
+                'Status' => $request->Status[$j],
+                'Kondisi' => $request->Kondisi[$j],
+                'Catatan' => $request->Catatan[$j],
+                'idUser' => auth()->user()->id,
+            ]);
+        }
+        return redirect()->back()->with('success','Data Berhasil Disimpan');
     }
 
     /**
@@ -38,7 +71,13 @@ class KajiUlangController extends Controller
     {
         //
     }
-
+    public function formKaji($id)
+    {
+        $data = SerahTerima::with('Stdetail')->find($id);
+        // dd($data);
+        $instrumen = Instrumen::all();
+        return view('kaji-ulang.form-kaji-ulang',compact('data','instrumen'));
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -61,5 +100,21 @@ class KajiUlangController extends Controller
     public function destroy(KajiUlang $kajiUlang)
     {
         //
+    }
+    private function GenerateKode()
+    {
+        $month = date('m');
+        $month2 = date('m');
+        $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $month = $romanMonths[$month - 1];
+        $year = date('Y');
+        $lastKode = KajiUlang::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
+        if ($lastKode) {
+            $lastKode = (int) substr($lastKode->KodeKajiUlang, 0, 4);
+            $Kode = str_pad($lastKode + 1, 4, '0', STR_PAD_LEFT) . '/KU-DKH/' . $month . '/' . $year;
+        } else {
+            $Kode = '0001/KU-DKH/' . $month . '/' . $year;
+        }
+        return $Kode;
     }
 }

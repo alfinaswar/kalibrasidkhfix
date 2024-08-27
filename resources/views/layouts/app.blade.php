@@ -1090,7 +1090,7 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{ route('st.index') }}">Serah Terima</a></li>
-                            <li><a href="job-view.html">Kaji Ulang</a></li>
+                            <li><a href="{{ route('ku.index') }}">Kaji Ulang</a></li>
 
                         </ul>
                     </li>
@@ -1099,7 +1099,7 @@
                             <span class="nav-text">Transaksi</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="app-profile.html">Quotation</a></li>
+                            <li><a href="{{route('quotation.index')}}">Quotation</a></li>
                             <li><a href="edit-profile.html"> Purchase Order</a></li>
                             <li><a href="post-details.html">Surat Perintah Kerja</a></li>
                             <li><a href="post-details.html">Invoice</a></li>
@@ -1125,6 +1125,7 @@
                             <li><a href="{{ route('alat.index') }}">Alat Medis</a></li>
                             <li><a href="{{ route('customer.index') }}">Customer</a></li>
                             <li><a href="{{ route('instrumen.index') }}">Instrumen</a></li>
+                            <li><a href="{{ route('metode.index') }}">Metode</a></li>
                         </ul>
                     </li>
 

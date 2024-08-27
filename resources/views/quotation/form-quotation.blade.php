@@ -3,7 +3,7 @@
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Form Serah Terima Barang</h4>
+                <h4 class="card-title">Buat Quotation</h4>
             </div>
             <div class="card-body">
                 <div class="basic-form">
@@ -63,7 +63,7 @@
                         </div>
                         <div class="table-responsive">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped verticle-middle" id="instrument-table">
+                                {{-- <table class="table table-bordered table-striped verticle-middle" id="instrument-table">
                                     <thead>
                                         <tr class="text-center">
 
@@ -79,7 +79,7 @@
                                         <tr>
 
                                             <td><select class="form-control" tabindex="null" name="InstrumenId[]">
-                                                    @foreach ($instrumen as $inst)
+                                                    @foreach ($data as $inst)
                                                         <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
                                                     @endforeach
                                                 </select></td>
@@ -99,7 +99,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table> --}}
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@
         </div>
     </div>
 
-    <script>
+    {{-- <script>
         document.getElementById('add-row').addEventListener('click', function() {
             var table = document.getElementById('instrument-table').getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
@@ -144,5 +144,5 @@
         }
         var existingDeleteButtons = document.querySelectorAll('.delete-row');
         existingDeleteButtons.forEach(addDeleteRowEventListener);
-    </script>
+    </script> --}}
 @endsection
