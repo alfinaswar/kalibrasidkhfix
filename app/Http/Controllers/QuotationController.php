@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KajiUlang;
+use App\Models\MasterCustomer;
 use App\Models\SerahTerima;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -38,8 +39,8 @@ class QuotationController extends Controller
     public function create($id)
     {
         $data = SerahTerima::with('dataKaji', 'Stdetail')->where('id',$id)->latest()->first();
-        // dd($data);
-        return view('quotation.form-quotation', compact('data'));
+        $customer = MasterCustomer::all();
+        return view('quotation.form-quotation', compact('data','customer'));
     }
     public function form(string $id){
 
