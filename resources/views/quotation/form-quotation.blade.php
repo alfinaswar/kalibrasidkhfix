@@ -40,7 +40,7 @@
                             </div>
                              <div class="mb-3 col-md-6">
                                 <label class="form-label">Tipe Diskon</label>
-                                <select name="TipeDiskon" class="form-control @error('TipeDiskon') is-invalid @enderror">
+                                <select name="TipeDiskon" id="" class="form-control @error('TipeDiskon') is-invalid @enderror">
                                     <option value="">Pilih Tipe Diskon</option>
                                     <option value="flat">Flat</option>
                                     <option value="persentase">Persentase</option>
@@ -52,9 +52,9 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Diskon</label>
-                               <input type="number" class="form-control" placeholder="Besar Diskon">
-                                @error('TipeDiskon')
+                            <label class="form-label">Diskon</label>
+                               <input type="number" name="Diskon" id="Diskon" class="form-control" placeholder="Besar Diskon" onkeyup="updateDiskon()">
+                                @error('Diskon')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -105,49 +105,65 @@
                                 <h3>DETAIL INSTRUMEN</h3>
                             </u>
                         </div>
-                        <div class="text-end mt-4">
-                            <button type="button" class="btn btn-md btn-secondary mb-3" id="add-row">Tambah
-                                Baris</button>
-                        </div>
+
                         <div class="table-responsive">
                             <div class="table-responsive">
-                                {{-- <table class="table table-bordered table-striped verticle-middle" id="instrument-table">
+                                <table class="table table-bordered table-striped verticle-middle" id="instrument-table">
                                     <thead>
                                         <tr class="text-center">
 
-                                            <th scope="col">Alat</th>
-                                            <th scope="col">Merk</th>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">SerialNumber</th>
-                                            <th scope="col">Qty</th>
-                                            <th scope="col">Deskripsi</th>
+                                            <th scope="col">Nama Alat</th>
+                                            <th scope="col">Jumlah</th>
+                                            <th scope="col">Harga</th>
+                                            <th scope="col">Sub Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        @php
+                                        $totalSubTotal = 0;
+                                        $totalQty = 0;
+                                        $total = 0;
+                                        @endphp
+                                        @foreach ($GetKajiUlang as $item)
+                                        @php
+                                        $subTotal = $item->getInstrumen->Tarif * $item->Qty;
+                                        $qty = $item->Qty;
+                                        $total += $subTotal;
+                                        $totalQty += $qty;
+                                        $totalSubTotal += $subTotal;
 
-                                            <td><select class="form-control" tabindex="null" name="InstrumenId[]">
-                                                    @foreach ($data as $inst)
-                                                        <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
-                                                    @endforeach
-                                                </select></td>
-                                            <td><input type="text" name="Merk[]" class="form-control"
-                                                    placeholder="Merk">
+                                        @endphp
+                                        <tr>
+                                            <td><input type="text" name="InstrumenId[]" class="form-control"
+                                                    placeholder="Nama Alat" value="{{$item->getInstrumen->Nama}}"></td>
+                                            <td><input type="text" name="Qty[]" class="form-control"
+                                                    placeholder="Jumlah Alat" value="{{$item->Qty}}">
                                             </td>
-                                            <td><input type="text" name="Type[]" class="form-control"
-                                                    placeholder="Type">
+                                            <td><input type="text" name="Harga[]" class="form-control text-end"
+                                                    placeholder="Harga" value="Rp. {{ number_format($item->getInstrumen->Tarif, 0, ',', '.') }}">
                                             </td>
-                                            <td><input type="text" name="SerialNumber[]" class="form-control"
-                                                    placeholder="Serial Number"></td>
-                                            <td><input type="number" name="Qty[]" value="1" class="form-control"
-                                                    placeholder="Qty">
-                                            </td>
-                                            <td><input type="text" name="Deskripsi[]" class="form-control"
-                                                    placeholder="Deskripsi">
-                                            </td>
+                                            <td><input type="text" name="SubTotal[]" class="form-control text-end"
+                                                    placeholder="Sub Total" value="Rp. {{ number_format($subTotal, 0, ',', '.') }}"></td>
+                                        </tr>
+                                        @endforeach
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">Sub Total</td>
+                                            <td colspan=""><input type="text" class="form-control text-end" id="subtotal" value="Rp. {{ number_format($totalSubTotal, 0, ',', '.') }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">Diskon</td>
+                                            <td colspan=""><input type="text" class="form-control text-end" id="TotalDiskon"></td>
+                                        </tr>
+                                         <tr>
+                                            <td colspan="3" class="text-end fw-bold">Qty</td>
+                                            <td colspan=""><input type="text" class="form-control text-end" name="Qty" readonly value="{{$totalQty}}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold">Total</td>
+                                            <td colspan=""><input type="text" class="form-control text-end" id="Total" name="Total" readonly value="Rp. {{ number_format($total, 0, ',', '.') }}"></td>
                                         </tr>
                                     </tbody>
-                                </table> --}}
+                                </table>
                             </div>
                         </div>
 
@@ -166,41 +182,15 @@
                                             console.error( error );
                                         } );
                                 }
+                                $(document).ready(function () {
+                                   $('#Diskon').on('keyup', function() {
+                                       let diskon = $(this).val();
+                                       $('#TotalDiskon').val(diskon);
+                                   });
+                                    $('#TotalDiskon').on('keyup', function() {
+                                       let diskon1 = $(this).val();
+                                       $('#Diskon').val(diskon1);
+                                   });
+                                });
                             </script>
-    {{--  --}}
 @endsection
-{{-- <script>
-        document.getElementById('add-row').addEventListener('click', function() {
-            var table = document.getElementById('instrument-table').getElementsByTagName('tbody')[0];
-            var newRow = table.insertRow();
-
-            var cells = [
-                '<select name="InstrumenId[]" class="default-select form-control" tabindex="true">@foreach ($instrumen as $inst)<option value="{{ $inst->id }}">{{ $inst->Nama }}</option>@endforeach',
-                '<input type="text" name="Merk[]" class="form-control" placeholder="Merk">',
-                '<input type="text" name="Type[]" class="form-control" placeholder="Type">',
-                '<input type="text" name="SerialNumber[]" class="form-control" placeholder="Serial Number">',
-                '<input type="text" name="Qty[]" value="1" class="form-control" placeholder="Qty">',
-                '<input type="text" name="Deskripsi[]" class="form-control" placeholder="Deskripsi">',
-                '<button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>'
-            ];
-
-            cells.forEach(function(cellContent) {
-                var cell = newRow.insertCell();
-                cell.innerHTML = cellContent;
-            });
-
-            addDeleteRowEventListener(newRow.querySelector('.delete-row'));
-        });
-
-        function addDeleteRowEventListener(button) {
-            button.addEventListener('click', function() {
-                var row = this.closest('tr');
-                var table = document.getElementById('instrument-table').getElementsByTagName('tbody')[0];
-                if (table.rows.length > 1) {
-                    row.parentNode.removeChild(row);
-                }
-            });
-        }
-        var existingDeleteButtons = document.querySelectorAll('.delete-row');
-        existingDeleteButtons.forEach(addDeleteRowEventListener);
-    </script> --}}

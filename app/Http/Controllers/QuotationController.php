@@ -6,6 +6,7 @@ use App\Models\KajiUlang;
 use App\Models\MasterCustomer;
 use App\Models\SerahTerima;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class QuotationController extends Controller
@@ -39,8 +40,14 @@ class QuotationController extends Controller
     public function create($id)
     {
         $data = SerahTerima::with('dataKaji', 'Stdetail')->where('id',$id)->latest()->first();
+        $GetKajiUlang = KajiUlang::select('*', DB::raw('COUNT(InstrumenId) as Qty'))
+                        ->with('getInstrumen')
+                        ->where('SerahTerimaId',$id)
+                        ->where('Status', '!=', 2)
+                        ->groupBy('InstrumenId')
+                        ->get();
         $customer = MasterCustomer::all();
-        return view('quotation.form-quotation', compact('data','customer'));
+        return view('quotation.form-quotation', compact('data','customer','GetKajiUlang'));
     }
     public function form(string $id){
 

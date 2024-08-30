@@ -135,7 +135,7 @@
             var cells = [
                 '<select name="InstrumenId[]" class="default-select form-control" tabindex="true">@foreach ($instrumen as $inst)<option value="{{ $inst->id }}">{{ $inst->Nama }}</option>@endforeach</select>',
                 '<select name="Metode1[]" class="default-select form-control" tabindex="true"><option value="val1">val1</option></select></select>',
-                '<select name="Metode2[]" class="default-                  select form-control" tabindex="true"><option value="val1">val1</option></select></select>',
+                '<select name="Metode2[]" class="default-select form-control" tabindex="true"><option value="val1">val1</option></select></select>',
                 '<select name="Status[]" class="default-select form-control" tabindex="true"><option value="1">Diterima</option><option value="2">Ditolak</option></select></select>',
                 '<select name="Kondisi[]" class="default-select form-control" tabindex="true"><option value="1">Berfungsi</option><option value="2">Tidak Berfungsi</option></select></select>',
                 '<input type="text" name="Catatan[]" class="form-control" placeholder="Deskripsi">'
