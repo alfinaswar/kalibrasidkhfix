@@ -3,11 +3,11 @@
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Buat Quotation</h4>
+                <h4 class="card-title">Buat Purchase Order</h4>
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{ route('quotation.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('po.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -16,7 +16,8 @@
                                     class="form-control-lg @error('CustomerId') is-invalid @enderror">
                                     <option>Pilih Customer</option>
                                     @foreach ($customer as $cust)
-                                        <option value="{{ $cust->id }}">{{ $cust->Name }}</option>
+                                        <option value="{{ $cust->id }}"
+                                            @if ($cust->id == $getQuotation->CustomerId) Selected @endif>{{ $cust->Name }}</option>
                                     @endforeach
                                 </select>
                                 @error('CustomerId')
@@ -26,58 +27,18 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Status</label>
-                                <select name="Status" class="form-control @error('Status') is-invalid @enderror">
-                                    <option value="">Pilih Status</option>
-                                    <option value="DRAFT">Draft</option>
-                                    <option value="DISETUJUI">Disetujui</option>
-                                    <option value="DITOLAK">Tidak Disetujui</option>
-                                </select>
-                                @error('Status')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Perihal</label>
-                                <textarea name="Perihal" id="texteditor1" class="form-control" placeholder="Isi Perihal"></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Lampiran</label>
-                                <textarea name="Lampiran" id="texteditor2" class="form-control" placeholder="Lampiran"></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Header</label>
-                                <textarea name="Header" id="texteditor3" class="form-control" placeholder="Header Quotation"></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea name="Deskripsi" id="texteditor4" class="form-control" placeholder="Deskripsi"></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Tanggal</label>
-                                <input type="date" class="form-control @error('Tanggal') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="Tanggal">
-                                @error('Tanggal')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Tanggal Dilaksanakan</label>
-                                <input type="date" class="form-control @error('DueDate') is-invalid @enderror"
-                                    placeholder="Tanggal DueDate" name="DueDate">
-                                @error('DueDate')
+                                <label class="form-label">Tanggal PO</label>
+                                <input type="text" name="TanggalPo" value="{{ now()->format('Y-m-d') }}"
+                                    class="form-control  @error('TanggalPo') is-invalid @enderror"
+                                    placeholder="{{ $getQuotation->TanggalPo }}" id="mdate">
+                                @error('TanggalPo')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                         </div>
-                        <div class="text-center mt-4">
+                        <div class="text-center mt-4 fw-bold">
                             <u>
                                 <h3>DETAIL INSTRUMEN</h3>
                             </u>
@@ -91,50 +52,34 @@
                                 <table class="table table-bordered table-striped verticle-middle" id="instrument-table">
                                     <thead>
                                         <tr class="text-center">
-
                                             <th scope="col">Nama Alat</th>
                                             <th scope="col">Jumlah</th>
                                             <th scope="col">Harga</th>
-                                            <th scope="col">Sub Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $totalSubTotal = 0;
-                                            $totalQty = 0;
-                                            $total = 0;
-                                        @endphp
-                                        @foreach ($GetKajiUlang as $item)
-                                            @php
-                                                $subTotal = $item->getInstrumen->Tarif * $item->Qty;
-                                                $qty = $item->Qty;
-                                                $total += $subTotal;
-                                                $totalQty += $qty;
-                                                $totalSubTotal += $subTotal;
-
-                                            @endphp
+                                        @foreach ($getQuotation->DetailQuotation as $key => $item)
                                             <tr>
                                                 <td>
-                                                    <select class="form-control" tabindex="null" name="InstrumenId[]"
-                                                        >
+                                                    <select class="form-control" tabindex="null" name="InstrumenId[]">
                                                         @foreach ($instrumen as $inst)
-                                                            <option value="{{ $inst->id }}"
-                                                                @if ($inst->id == $item->getInstrumen->id) selected @endif>
+                                                            <option
+                                                                value="{{ $inst->id }}"@if ($inst->id == $item->InstrumenId) selected @endif>
                                                                 {{ $inst->Nama }}</option>
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td><input type="text" name="Qty[]" class="form-control"
-                                                        placeholder="Jumlah Alat" value="{{ $item->Qty }}">
+                                                <td><input type="number" name="Qty[]" class="form-control"
+                                                        placeholder="Jumlah Alat" data-id="{{ $key }}" id="Qty{{ $key }}"
+                                                        value="{{ $item->jumlahAlat }}">
                                                 </td>
                                                 <td>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">Rp.</span>
                                                         </div>
-                                                        <input type="text" name="Harga[]" class="form-control text-end"
-                                                            placeholder="Harga"
-                                                            value="{{ number_format($item->getInstrumen->Tarif, 0, ',', '.') }}">
+                                                        <input type="number" name="Harga[]" class="form-control text-end"
+                                                            placeholder="Harga" id="Harga{{ $key }}" value="{{ $item->Harga }}">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">.00</span>
                                                         </div>
@@ -147,13 +92,13 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">Rp.</span>
                                                         </div>
-                                                        <input type="text" name="SubTotal[]"
-                                                            class="form-control text-end" placeholder="Sub Total"
-                                                            value="{{ number_format($subTotal, 0, ',', '.') }}">
+                                                        <input type="number" name="SubTotalAlat[]"
+                                                            id="SubTotalAlat{{ $key }}"
+                                                            class="form-control text-end SubTotalAlat"
+                                                            placeholder="Sub Total" value="{{ $item->SubTotal }}" readonly>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">.00</span>
                                                         </div>
-
                                                     </div>
 
                                                 </td>
@@ -167,9 +112,8 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">Rp.</span>
                                                     </div>
-                                                    <input type="text" name="subtotal" class="form-control text-end"
-                                                        id="subtotal"
-                                                        value="{{ number_format($totalSubTotal, 0, ',', '.') }}">
+                                                    <input type="text" readonly name="subtotal"
+                                                        class="form-control text-end" id="subtotal">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">.00</span>
                                                     </div>
@@ -206,7 +150,7 @@
                                         <tr>
                                             <td colspan="3" class="text-end fw-bold">Qty</td>
                                             <td colspan=""><input type="text" class="form-control text-end"
-                                                    name="totalQty" readonly value="{{ $totalQty }}"></td>
+                                                    name="totalQty" id="totalQty" readonly value=""></td>
                                         </tr>
                                         <tr>
                                             <td colspan="3" class="text-end fw-bold">Total</td>
@@ -218,8 +162,7 @@
                                                         <span class="input-group-text">Rp.</span>
                                                     </div>
                                                     <input type="text" class="form-control text-end" id="Total"
-                                                        name="Total" readonly
-                                                        value="{{ number_format($total, 0, ',', '.') }}">
+                                                        name="Total" readonly value="">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">.00</span>
                                                     </div>
@@ -230,7 +173,7 @@
                                 </table>
                             </div>
                         </div>
-                        <input type="hidden" name="SerahTerimaId" value="{{ $data->id }}">
+                        {{-- <input type="hidden" name="SerahTerimaId" value="{{ $data->id }}"> --}}
                         <button type="submit" class="btn btn-md btn-primary btn-block">Simpan</button>
                     </form>
                 </div>
@@ -246,8 +189,52 @@
                     console.error(error);
                 });
         }
+
+
+
+
         $(document).ready(function() {
 
+            //             window.onload = function() {
+            //   updateSubtotal();
+            // };
+            var total = 0;
+            var totalQty = 0;
+            var totalHarga = 0;
+            var qtyInputs = document.querySelectorAll('input[name="Qty[]"]');
+            var hargaInputs = document.querySelectorAll('input[name="Harga[]"]');
+            var subTotalInputs = document.querySelectorAll('input[name="SubTotalAlat[]"]');
+
+            function updateTotals() {
+                total = 0;
+                totalQty = 0;
+                totalHarga = 0;
+                for (let index = 0; index < subTotalInputs.length; index++) {
+                    let subTotal = parseInt(subTotalInputs[index].value) || 0;
+                    let qty = parseInt(qtyInputs[index].value) || 0;
+                    let harga = parseInt(hargaInputs[index].value) || 0;
+
+                    total += subTotal;
+                    totalQty += qty;
+                    totalHarga += harga * qty;
+                }
+                // $('#SubTotalAlat').val(totalHarga);
+                $('#subtotal').val(total.toLocaleString('id-ID'));
+                $('#totalQty').val(totalQty);
+            }
+
+            updateTotals();
+
+            $('input[name="Qty[]"]').on('keyup', function() {
+                updateTotals();
+                var id = $(this).data('id');
+                var total = parseInt($("#Qty"+id).val()) * parseInt($("#Harga"+id).val())
+                $('#SubTotalAlat'+id).val(total);
+            });
+
+            $('input[name="SubTotalAlat[]"]').on('keyup', function() {
+                updateTotals();
+            });
             $('#Diskon').on('keyup', function() {
                 let diskon = $(this).val();
                 $('#TotalDiskon').val(diskon);

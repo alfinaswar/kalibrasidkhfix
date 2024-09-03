@@ -6,6 +6,7 @@ use App\Http\Controllers\InstrumenController;
 use App\Http\Controllers\KajiUlangController;
 use App\Http\Controllers\MasterAlatController;
 use App\Http\Controllers\MasterCustomerController;
+use App\Http\Controllers\PoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RoleController;
@@ -86,5 +87,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [QuotationController::class, 'edit'])->name('quotation.edit');
         Route::PUT('/update/{id}', [QuotationController::class, 'update'])->name('quotation.update');
         Route::delete('hapus/{id}', [QuotationController::class, 'destroy'])->name('quotation.destroy');
+    });
+    Route::prefix('po')->group(function () {
+        Route::GET('/', [PoController::class, 'index'])->name('po.index');
+        Route::GET('/buat/{id}', [PoController::class, 'create'])->name('po.form-po');
+        Route::POST('/simpan', [PoController::class, 'store'])->name('po.store');
+        Route::GET('/edit/{id}', [PoController::class, 'edit'])->name('po.edit');
+        Route::PUT('/update/{id}', [PoController::class, 'update'])->name('po.update');
+        Route::delete('hapus/{id}', [PoController::class, 'destroy'])->name('po.destroy');
     });
 });

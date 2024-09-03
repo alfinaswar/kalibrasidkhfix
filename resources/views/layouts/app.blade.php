@@ -1100,7 +1100,7 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{route('quotation.index')}}">Quotation</a></li>
-                            <li><a href="edit-profile.html"> Purchase Order</a></li>
+                            <li><a href="{{route('po.index')}}"> Purchase Order</a></li>
                             <li><a href="post-details.html">Surat Perintah Kerja</a></li>
                             <li><a href="post-details.html">Invoice</a></li>
                         </ul>

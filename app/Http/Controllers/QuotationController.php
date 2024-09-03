@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instrumen;
 use App\Models\KajiUlang;
 use App\Models\MasterCustomer;
+use App\Models\Quotation;
+use App\Models\QuotationDetail;
 use App\Models\SerahTerima;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +50,8 @@ class QuotationController extends Controller
                         ->groupBy('InstrumenId')
                         ->get();
         $customer = MasterCustomer::all();
-        return view('quotation.form-quotation', compact('data','customer','GetKajiUlang'));
+        $instrumen = Instrumen::all();
+        return view('quotation.form-quotation', compact('data','customer','GetKajiUlang','instrumen'));
     }
     public function form(string $id){
 
@@ -58,12 +62,47 @@ class QuotationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data['KodeQuotation'] = $this->GenerateKode();
+        $data['Diskon'] = $request->TotalDiskon;
+        $data['SubTotal'] = str_replace(".", "", $request->subtotal);
+        $data['Total'] = str_replace(".", "", $request->Total);
+        $data['idUser'] = auth()->user()->id;
+        Quotation::create($data);
+        $getid = Quotation::latest()->first()->id ?? 1;
+
+        for ($i = 0; $i < count($request->InstrumenId); $i++) {
+            $harga = str_replace(".", "", $request->Harga[$i]);
+            $subtotal = str_replace(".", "", $request->SubTotal[$i]);
+            if ($request->Qty[$i] > 1) {
+                for ($j = 0; $j < $request->Qty[$i]; $j++) {
+                    QuotationDetail::create([
+                        'idQuotation' => $getid,
+                        'InstrumenId' => $request->InstrumenId[$i],
+                        'Qty' => "1",
+                        'Harga' => $request->Harga[$i],
+                        'SubTotal' => $request->SubTotal[$i],
+                        'Deskripsi' => '-',
+                        'idUser' => auth()->user()->id,
+                    ]);
+                }
+            } else {
+                QuotationDetail::create([
+                    'idQuotation' => $getid,
+                    'InstrumenId' => $request->InstrumenId[$i],
+                    'Qty' => "1",
+                    'Harga' => $harga,
+                    'SubTotal' => $subtotal,
+                    'Deskripsi' => '-',
+                    'idUser' => auth()->user()->id,
+                ]);
+            }
+
+        }
+
+
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
@@ -91,5 +130,21 @@ class QuotationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    private function GenerateKode()
+    {
+        $month = date('m');
+        $month2 = date('m');
+        $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $month = $romanMonths[$month - 1];
+        $year = date('Y');
+        $lastKode = Quotation::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
+        if ($lastKode) {
+            $lastKode = (int) substr($lastKode->KodeQuotation, 0, 4);
+            $Kode = str_pad($lastKode + 1, 4, '0', STR_PAD_LEFT) . '/PNW-DKH/' . $month . '/' . $year;
+        } else {
+            $Kode = '0001/PNW-DKH/' . $month . '/' . $year;
+        }
+        return $Kode;
     }
 }

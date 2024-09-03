@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('quotation_details', function (Blueprint $table) {
             $table->id();
+            $table->string('idQuotation')->nullable();
             $table->string('InstrumenId')->nullable();
             $table->string('Qty')->nullable();
             $table->string('Harga')->nullable();
+            $table->string('SubTotal')->nullable();
             $table->string('Deskripsi')->nullable();
             $table->string('idUser')->nullable();
             $table->softDeletes();

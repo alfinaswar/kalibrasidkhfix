@@ -15,4 +15,8 @@ class KajiUlang extends Model
     {
         return $this->hasOne(Instrumen::class, 'id', 'InstrumenId');
     }
+    public function getCustomer()
+    {
+        return $this->hasOne(MasterCustomer::class, 'id', 'CustomerId');
+    }
 }

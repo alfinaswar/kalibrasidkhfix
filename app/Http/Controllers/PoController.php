@@ -2,25 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instrumen;
+use App\Models\KajiUlang;
+use App\Models\MasterCustomer;
 use App\Models\po;
+use App\Models\poDetail;
+use App\Models\Quotation;
+use App\Models\QuotationDetail;
+use App\Models\SerahTerima;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class PoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = po::orderBy('id', 'Desc')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btnEdit = '<a href="' . route('po.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
+                    return $btnEdit . '  ' . $btnDelete;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        $dataQuotation = Quotation::with('getCustomer')->where('Status', '!=', 'DITOLAK')->latest()->get();
+        return view('po.index', compact('dataQuotation'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $getQuotation = Quotation::with(['DetailQuotation' => function ($query) {
+             return $query->GroupBy('InstrumenId')->
+             select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat')
+            );
+        }])
+            ->where('id', $id)
+            ->first();
+        // dd($getQuotation);
+        $customer = MasterCustomer::all();
+        $instrumen = Instrumen::all();
+        return view('po.form-po', compact('customer', 'getQuotation', 'instrumen'));
     }
 
     /**
@@ -28,7 +57,41 @@ class PoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        dd($data);
+        $data['KodePo'] = $this->GenerateKode();
+        $data['Diskon'] = $request->TotalDiskon;
+        $data['SubTotal'] = str_replace(".", "", $request->subtotal);
+        $data['Total'] = str_replace(".", "", $request->Total);
+        $data['idUser'] = auth()->user()->id;
+        po::create($data);
+        $getid = po::latest()->first()->id ?? 1;
+
+        for ($i = 0; $i < count($request->InstrumenId); $i++) {
+            $harga = str_replace(".", "", $request->Harga[$i]);
+            if ($request->Qty[$i] > 1) {
+                for ($j = 0; $j < $request->Qty[$i]; $j++) {
+                    poDetail::create([
+                        'PoId' => $getid,
+                        'InstrumenId' => $request->InstrumenId[$i],
+                        'Qty' => "1",
+                        'Harga' => $harga,
+                        'Deskripsi' => '-',
+                        'idUser' => auth()->user()->id,
+                    ]);
+                }
+            } else {
+                poDetail::create([
+                    'PoId' => $getid,
+                    'InstrumenId' => $request->InstrumenId[$i],
+                    'Qty' => "1",
+                    'Harga' => $harga,
+                    'Deskripsi' => '-',
+                    'idUser' => auth()->user()->id,
+                ]);
+            }
+
+        }
     }
 
     /**
