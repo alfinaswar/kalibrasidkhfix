@@ -33,7 +33,7 @@ class QuotationController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        $dataKajiUlang = SerahTerima::with('dataKaji','Stdetail')->latest()->get();
+        $dataKajiUlang = SerahTerima::with('dataKaji', 'Stdetail')->latest()->get();
         return view('quotation.index', compact('dataKajiUlang'));
     }
 
@@ -42,20 +42,19 @@ class QuotationController extends Controller
      */
     public function create($id)
     {
-        $data = SerahTerima::with('dataKaji', 'Stdetail')->where('id',$id)->latest()->first();
+        $data = SerahTerima::with('dataKaji', 'Stdetail')->where('id', $id)->latest()->first();
         $GetKajiUlang = KajiUlang::select('*', DB::raw('COUNT(InstrumenId) as Qty'))
-                        ->with('getInstrumen')
-                        ->where('SerahTerimaId',$id)
-                        ->where('Status', '!=', 2)
-                        ->groupBy('InstrumenId')
-                        ->get();
+            ->with('getInstrumen')
+            ->where('SerahTerimaId', $id)
+            ->where('Status', '!=', 2)
+            ->groupBy('InstrumenId')
+            ->get();
         $customer = MasterCustomer::all();
         $instrumen = Instrumen::all();
-        return view('quotation.form-quotation', compact('data','customer','GetKajiUlang','instrumen'));
+        return view('quotation.form-quotation', compact('data', 'customer', 'GetKajiUlang', 'instrumen'));
     }
-    public function form(string $id){
 
-    }
+    public function form(string $id) {}
 
     /**
      * Store a newly created resource in storage.
@@ -64,24 +63,24 @@ class QuotationController extends Controller
     {
         $data = $request->all();
         $data['KodeQuotation'] = $this->GenerateKode();
-        $data['Diskon'] = $request->TotalDiskon;
-        $data['SubTotal'] = str_replace(".", "", $request->subtotal);
-        $data['Total'] = str_replace(".", "", $request->Total);
+        $data['Diskon'] = str_replace('.', '', $request->TotalDiskon);
+        $data['SubTotal'] = str_replace('.', '', $request->subtotal);
+        $data['Total'] = str_replace('.', '', $request->Total);
         $data['idUser'] = auth()->user()->id;
         Quotation::create($data);
         $getid = Quotation::latest()->first()->id ?? 1;
 
         for ($i = 0; $i < count($request->InstrumenId); $i++) {
-            $harga = str_replace(".", "", $request->Harga[$i]);
-            $subtotal = str_replace(".", "", $request->SubTotal[$i]);
+            $harga = str_replace('.', '', $request->Harga[$i]);
+            $subtotal = str_replace('.', '', $request->SubTotal[$i]);
             if ($request->Qty[$i] > 1) {
                 for ($j = 0; $j < $request->Qty[$i]; $j++) {
                     QuotationDetail::create([
                         'idQuotation' => $getid,
                         'InstrumenId' => $request->InstrumenId[$i],
-                        'Qty' => "1",
-                        'Harga' => $request->Harga[$i],
-                        'SubTotal' => $request->SubTotal[$i],
+                        'Qty' => '1',
+                        'Harga' => $harga,
+                        'SubTotal' => $subtotal,
                         'Deskripsi' => '-',
                         'idUser' => auth()->user()->id,
                     ]);
@@ -90,17 +89,14 @@ class QuotationController extends Controller
                 QuotationDetail::create([
                     'idQuotation' => $getid,
                     'InstrumenId' => $request->InstrumenId[$i],
-                    'Qty' => "1",
+                    'Qty' => '1',
                     'Harga' => $harga,
                     'SubTotal' => $subtotal,
                     'Deskripsi' => '-',
                     'idUser' => auth()->user()->id,
                 ]);
             }
-
         }
-
-
     }
 
     public function show(string $id)
@@ -131,6 +127,7 @@ class QuotationController extends Controller
     {
         //
     }
+
     private function GenerateKode()
     {
         $month = date('m');

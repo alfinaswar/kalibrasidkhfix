@@ -40,9 +40,9 @@ class PoController extends Controller
     public function create($id)
     {
         $getQuotation = Quotation::with(['DetailQuotation' => function ($query) {
-             return $query->GroupBy('InstrumenId')->
-             select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat')
-            );
+            return $query
+                ->GroupBy('InstrumenId')
+                ->select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat'));
         }])
             ->where('id', $id)
             ->first();
@@ -58,23 +58,23 @@ class PoController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        dd($data);
         $data['KodePo'] = $this->GenerateKode();
+        $data['QuotationId'] = $request->QuotationId;
         $data['Diskon'] = $request->TotalDiskon;
-        $data['SubTotal'] = str_replace(".", "", $request->subtotal);
-        $data['Total'] = str_replace(".", "", $request->Total);
+        $data['Subtotal'] = str_replace('.', '', $request->subtotal);
+        $data['Total'] = str_replace('.', '', $request->Total);
         $data['idUser'] = auth()->user()->id;
         po::create($data);
         $getid = po::latest()->first()->id ?? 1;
 
         for ($i = 0; $i < count($request->InstrumenId); $i++) {
-            $harga = str_replace(".", "", $request->Harga[$i]);
+            $harga = str_replace('.', '', $request->Harga[$i]);
             if ($request->Qty[$i] > 1) {
                 for ($j = 0; $j < $request->Qty[$i]; $j++) {
                     poDetail::create([
                         'PoId' => $getid,
                         'InstrumenId' => $request->InstrumenId[$i],
-                        'Qty' => "1",
+                        'Qty' => '1',
                         'Harga' => $harga,
                         'Deskripsi' => '-',
                         'idUser' => auth()->user()->id,
@@ -84,13 +84,12 @@ class PoController extends Controller
                 poDetail::create([
                     'PoId' => $getid,
                     'InstrumenId' => $request->InstrumenId[$i],
-                    'Qty' => "1",
+                    'Qty' => '1',
                     'Harga' => $harga,
                     'Deskripsi' => '-',
                     'idUser' => auth()->user()->id,
                 ]);
             }
-
         }
     }
 
@@ -124,5 +123,22 @@ class PoController extends Controller
     public function destroy(po $po)
     {
         //
+    }
+
+    private function GenerateKode()
+    {
+        $month = date('m');
+        $month2 = date('m');
+        $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $month = $romanMonths[$month - 1];
+        $year = date('Y');
+        $lastKode = po::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
+        if ($lastKode) {
+            $lastKode = (int) substr($lastKode->KodePo, 0, 4);
+            $Kode = str_pad($lastKode + 1, 4, '0', STR_PAD_LEFT) . '/POK-DKH/' . $month . '/' . $year;
+        } else {
+            $Kode = '0001/POK-DKH/' . $month . '/' . $year;
+        }
+        return $Kode;
     }
 }

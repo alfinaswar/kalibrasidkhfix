@@ -89,13 +89,20 @@ class InstrumenController extends Controller
         return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Disimpan');
     }
 
+    public function getHarga($id)
+    {
+        $instrumen = Instrumen::find($id);
+
+        if (!$instrumen) {
+            return response()->json(['error' => 'Instrumen Tidak Ditemukan'], 404);
+        }
+        return response()->json(['harga' => $instrumen->Tarif]);
+    }
+
     /**
      * Display the specified resource.
      */
-    public function show(MasterAlat $masterAlat)
-    {
-        //
-    }
+    public function show(MasterAlat $masterAlat) {}
 
     /**
      * Show the form for editing the specified resource.

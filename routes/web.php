@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [InstrumenController::class, 'edit'])->name('instrumen.edit');
         Route::PUT('/update/{id}', [InstrumenController::class, 'update'])->name('instrumen.update');
         Route::delete('hapus/{id}', [InstrumenController::class, 'destroy'])->name('instrumen.destroy');
+        Route::get('/getHarga/{id}', [InstrumenController::class, 'getHarga'])->name('instrument.getHarga');
     });
     Route::prefix('master-customer')->group(function () {
         Route::GET('/', [MasterCustomerController::class, 'index'])->name('customer.index');
@@ -78,7 +79,6 @@ Route::group(['middleware' => ['auth']], function () {
     });
     Route::prefix('Master-Metode')->group(function () {
         Route::GET('/', [KajiUlangController::class, 'index'])->name('metode.index');
-
     });
     Route::prefix('quotation')->group(function () {
         Route::GET('/', [QuotationController::class, 'index'])->name('quotation.index');
