@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Instrumen;
 use App\Models\KajiUlang;
+use App\Models\MasterCustomer;
 use App\Models\SerahTerima;
 use App\Models\SerahTerimaDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class KajiUlangController extends Controller
@@ -27,10 +29,29 @@ class KajiUlangController extends Controller
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     return $btnEdit . '  ' . $btnDelete;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('StatusKaji', function ($row) {
+                    if($row->Status == 1){
+                        $StatusKaji = '<span class="badge bg-green">Diterima</span>';
+                    }elseif($row->Status == 2){
+                        $StatusKaji = '<span class="badge bg-denger text-white">Ditolak</span>';
+                    }else{
+                        $StatusKaji = '<span class="badge bg-warning">Diterima Sebagian</span>';
+                    }
+                    return $StatusKaji;
+                })
+                ->addColumn('KondisiKaji', function ($row) {
+                    if ($row->Status == 1) {
+                        $KondisiKaji = '<span class="badge bg-green">Berfungsi</span>';
+                    }else{
+                        $KondisiKaji = '<span class="badge bg-warning">Tidak Berfungsi</span>';
+                    }
+                    return $KondisiKaji;
+                })
+                ->rawColumns(['action','StatusKaji','KondisiKaji'])
                 ->make(true);
         }
-        $dataSerahTerima = SerahTerima::latest()->get();
+        $dataSerahTerima = SerahTerima::with('getCustomer')->latest()->get();
+        // dd($dataSerahTerima);
         return view('kaji-ulang.index',compact('dataSerahTerima'));
     }
 
@@ -47,7 +68,6 @@ class KajiUlangController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         for ($j = 0; $j < count($request->InstrumenId); $j++) {
             KajiUlang::create([
                 'KodeKajiUlang' => $this->GenerateKode(),
@@ -74,9 +94,9 @@ class KajiUlangController extends Controller
     public function formKaji($id)
     {
         $data = SerahTerima::with('Stdetail')->find($id);
-        // dd($data);
+        $customer = MasterCustomer::all();
         $instrumen = Instrumen::all();
-        return view('kaji-ulang.form-kaji-ulang',compact('data','instrumen'));
+        return view('kaji-ulang.form-kaji-ulang',compact('data','instrumen','customer'));
     }
     /**
      * Show the form for editing the specified resource.

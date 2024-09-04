@@ -47,9 +47,6 @@ class SerahTerimaAlatController extends Controller
         return view('serah-terima.form-serah-terima', compact('user', 'instrumen', 'customer'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->all();
@@ -109,9 +106,13 @@ class SerahTerimaAlatController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($serahTerimaAlat)
+    public function edit($id)
     {
-        //
+        $st = SerahTerima::find($id);
+        $user = User::all();
+        $customer = MasterCustomer::all();
+        $instrumen = Instrumen::all();
+        return view('serah-terima.edit', compact('st','user','customer','instrumen'));
     }
 
     /**
@@ -125,9 +126,15 @@ class SerahTerimaAlatController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($serahTerimaAlat)
+    public function destroy($id)
     {
-        //
+        $st = SerahTerima::find($id);
+        if ($st) {
+            $st->delete();
+            return response()->json(['message' => 'instrumen berhasil dihapus'], 200);
+        } else {
+            return response()->json(['message' => 'Instrumen    tidak ditemukan'], 404);
+        }
     }
 
     private function GenerateKode()

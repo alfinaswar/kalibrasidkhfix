@@ -20,5 +20,9 @@ class SerahTerima extends Model
     {
         return $this->hasMany(KajiUlang::class, 'SerahTerimaId', 'id');
     }
+    public function getCustomer()
+    {
+        return $this->hasOne(MasterCustomer::class, 'id', 'CustomerId');
+    }
 
 }

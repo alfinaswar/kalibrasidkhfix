@@ -3,21 +3,21 @@
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Form Serah Terima Barang</h4>
+                <h4 class="card-title">Update Serah Terima Barang</h4>
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{ route('st.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('st.update',$st->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                        <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label">Nama Customer</label>
                                  <select id="single-select" name="CustomerId"
                                     class="form-control-lg @error('CustomerId') is-invalid @enderror">
                                     <option>Pilih Customer</option>
                                     @foreach ($customer as $cust)
-                                        <option value="{{ $cust->id }}">
-                                            {{ $cust->Name }}</option>
+                                        <option value="{{ $cust->id }}"
+                                            @if ($cust->id == $st->CustomerId) Selected @endif>{{ $cust->Name }}</option>
                                     @endforeach
                                 </select>
                                 @error('CustomerId')
@@ -30,8 +30,8 @@
                                 <label class="form-label">Status</label>
                                 <select name="Status" class="form-control">
                                     <option value="">Pilih Status</option>
-                                    <option value="AKTIF">Aktif</option>
-                                    <option value="TIDAK">Tidak Aktif</option>
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Tidak Aktif">Tidak Aktif</option>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">

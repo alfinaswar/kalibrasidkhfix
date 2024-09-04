@@ -11,25 +11,36 @@
                         <input type="hidden" name="SerahTerimaId" value="{{$data->id}}">
                         @csrf
                         <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Nama Customer</label>
-                                <input type="text"
-                                    class="form-control @error('Nama') is-invalid @enderror" value="{{$data->CustomerId}}" placeholder="Nama Customer" disabled>
-                                @error('Nama')
+                             <div class="mb-3 col-md-6">
+                             <label class="form-label">Nama Customer</label>
+                        <select id="single-select" name="CustomerId"
+                                    class="form-control-lg @error('CustomerId') is-invalid @enderror">
+                                    <option>Pilih Customer</option>
+                                    @foreach ($customer as $cust)
+                                        <option value="{{ $cust->id }}"
+                                            @if ($cust->id == $data->CustomerId) Selected @endif>{{ $cust->Name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('CustomerId')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
+                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
-                                <select class="form-control" disabled>
+                                <select class="form-control" name="Status">
                                     <option value="">Pilih Status</option>
                                     <option value="Aktif" @selected($data->Status == "Aktif")>Aktif</option>
                                     <option value="Tidak Aktif" @if ($data->Status == "Tidak Aktif")
                                         selected
                                     @endif>Tidak Aktif</option>
                                 </select>
+                                 @error('Status')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal Diterima</label>
@@ -57,7 +68,7 @@
                         </div>
                         <div class="text-center mt-4">
                             <u>
-                                <h3>DETAIL INSTRUMEN       </u><br>{{$data->KodeSt}}</h3>
+                                <h3>DETAIL INSTRUMEN       </u></h3>
 
                         </div>
                         <div class="text-end mt-4">
@@ -81,27 +92,39 @@
                                     <tbody>
                                         @foreach ($data->Stdetail as $detail )
  <tr>
-                                            <td><select class="form-control" tabindex="null" name="InstrumenId[]">
+                                            <td><select class="form-control" tabindex="null" name="InstrumenId[]" required>
                                                   @foreach ($instrumen as $key => $item)
                                                 <option value="{{ $item->id }}"
                                                     @if ($detail->InstrumenId == $item->id) selected @endif>{{ $item->Nama }}
                                                 </option>
                                             @endforeach
-                                                </select></td>
-                                            <td><input type="text" name="Metode1[]" class="form-control"
-                                                    placeholder="Metode">
+                                                </select>
+                                              @error('InstrumenId')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror</td>
+                                            <td><input type="text" name="Metode1[]" class="form-control @error('Metode1') is-invalid @enderror"
+                                                    placeholder="Metode" required>
+                                                    @error('Metode1')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+
                                             </td>
                                             <td><input type="text" name="Metode2[]" class="form-control"
-                                                    placeholder="Type">
+                                                    placeholder="Type" required>
                                             </td>
-                                            <td><select class="form-control" tabindex="null" name="Status[]">
+                                            <td><select class="form-control" tabindex="null" name="Status[]" required>
+                                                <option value="">Pilih Status</option>
                                                 <option value="1">Diterima</option>
                                                 <option value="2">Ditolak</option>
                                                 <option value="3">Diterima Sbeagian</option>
                                                 </option>
 
                                                 </select></td>
-                                            <td><select class="form-control" tabindex="null" name="Kondisi[]">
+                                            <td><select class="form-control" tabindex="null" name="Kondisi[]" required>
                                                 <option value="">Pilih Kondisi Alat</option>
                                                 <option value="1">Berfungsi</option>
                                                 <option value="2">Tidak Bergungsi</option>
