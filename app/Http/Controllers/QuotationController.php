@@ -22,7 +22,7 @@ class QuotationController extends Controller
         // $data = KajiUlang::with('getInstrumen')->orderBy('id', 'Desc')->get();
         // dd($data);
         if ($request->ajax()) {
-            $data = KajiUlang::with('getInstrumen')->orderBy('id', 'Desc')->get();
+            $data = Quotation::orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -30,10 +30,14 @@ class QuotationController extends Controller
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     return $btnEdit . '  ' . $btnDelete;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('HargaQo', function ($row) {
+                    $HargaQo = 'Rp '.number_format($row->Total, 0, ',', '.');
+                    return $HargaQo;
+                })
+                ->rawColumns(['action','HargaQo'])
                 ->make(true);
         }
-        $dataKajiUlang = SerahTerima::with('dataKaji', 'Stdetail')->latest()->get();
+        $dataKajiUlang = SerahTerima::with('dataKaji', 'Stdetail','getCustomer')->latest()->get();
         return view('quotation.index', compact('dataKajiUlang'));
     }
 

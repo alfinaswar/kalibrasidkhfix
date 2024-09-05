@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SerahTerimaAlatController;
+use App\Http\Controllers\SuratPerintahKerjaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -95,5 +96,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [PoController::class, 'edit'])->name('po.edit');
         Route::PUT('/update/{id}', [PoController::class, 'update'])->name('po.update');
         Route::delete('hapus/{id}', [PoController::class, 'destroy'])->name('po.destroy');
+    });
+    Route::prefix('surat-tugas')->group(function () {
+        Route::GET('/', [SuratPerintahKerjaController::class, 'index'])->name('spk.index');
+        Route::GET('/surat-tugas/po/{id}', [SuratPerintahKerjaController::class, 'create'])->name('spk.form-spk');
+        Route::GET('/surat-tugas/', [SuratPerintahKerjaController::class, 'create'])->name('spk.form');
+        Route::POST('/simpan', [SuratPerintahKerjaController::class, 'store'])->name('spk.store');
+        Route::GET('/edit/{id}', [SuratPerintahKerjaController::class, 'edit'])->name('spk.edit');
+        Route::PUT('/update/{id}', [SuratPerintahKerjaController::class, 'update'])->name('spk.update');
+        Route::delete('hapus/{id}', [SuratPerintahKerjaController::class, 'destroy'])->name('spk.destroy');
     });
 });

@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
         <button type="button" class="btn btn-primary me-3 btn-sm" data-bs-toggle="modal" data-bs-target="#kajiUlangModal">
-            <i class="fas fa-plus me-2"></i>Quotation
+            <i class="fas fa-plus me-2"></i>Buat PO
         </button>
 
 
@@ -13,7 +13,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Data Quotation</h4>
+                    <h4 class="card-title">Data Purchase Order</h4>
                 </div>
                 <div class="card-body">
                         <table id="example" class="display" style="min-width: 845px">

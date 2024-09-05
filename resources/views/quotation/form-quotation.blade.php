@@ -252,7 +252,6 @@
                     const subTotal = qty * harga;
 
                     row.querySelector('.subtotal').value = subTotal.toLocaleString('id-ID', {
-                        // minimumFractionDigits: 3
                     });
 
                     totalSubTotal += subTotal;
@@ -260,7 +259,6 @@
                 });
 
                 document.getElementById('subtotal').value = totalSubTotal.toLocaleString('id-ID', {
-                    // minimumFractionDigits: 3
                 });
                 document.getElementById('totalQty').value = totalQty.toLocaleString('id-ID');
                 document.getElementById('Total').value = totalSubTotal.toLocaleString('id-ID');

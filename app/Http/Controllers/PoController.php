@@ -91,6 +91,8 @@ class PoController extends Controller
                 ]);
             }
         }
+        return redirect()->back()->with('success', 'Data Berhasil Ditambahkan');
+
     }
 
     /**

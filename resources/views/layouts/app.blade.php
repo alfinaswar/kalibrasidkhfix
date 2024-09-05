@@ -62,6 +62,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </head>
 
 <body>
@@ -102,9 +104,6 @@
                             transform="translate(-168.591 -98.178)" fill="#fff" stroke="#fff" stroke-width="1" />
                     </g>
                 </svg>
-
-
-
                 <svg class="brand-title" xmlns="http://www.w3.org/2000/svg" width="134.01" height="48.365"
                     viewBox="0 0 134.01 48.365">
                     <g id="Group_38" data-name="Group 38" transform="translate(-133.99 -40.635)">
@@ -1101,7 +1100,7 @@
                         <ul aria-expanded="false">
                             <li><a href="{{route('quotation.index')}}">Quotation</a></li>
                             <li><a href="{{route('po.index')}}"> Purchase Order</a></li>
-                            <li><a href="post-details.html">Surat Perintah Kerja</a></li>
+                            <li><a href="{{route('spk.index')}}">Surat Perintah Kerja</a></li>
                             <li><a href="post-details.html">Invoice</a></li>
                         </ul>
                     </li>
@@ -1223,7 +1222,6 @@
 <script src="{{ asset('') }}assets/vendor/pickadate/picker.date.js"></script>
 
 
-
 <!-- Daterangepicker -->
 <script src="{{ asset('') }}assets/js/plugins-init/bs-daterange-picker-init.js"></script>
 <!-- Clockpicker init -->
@@ -1247,3 +1245,12 @@
 </script>
 
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.1/tinymce.min.js" integrity="sha512-wL4f713UTdXFhzoGj57R7cKAwWMp48nzQ4Z/OLy7r8Hrqsa53x3y9Wl1N27hNktcmmHUABHuIX5xQazAl0VMRg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    tinymce.init({
+        selector: '.tinymce',
+        height: 300,
+        plugins: 'lists link table code',
+        toolbar: 'undo redo | bold italic | fontsizeselect fontselect | numlist bullist | outdent indent | link | code | alignleft aligncenter alignright',
+    });
+</script>

@@ -21,9 +21,9 @@
                                 <tr>
                                 <th>#</th>
                                 <th>Kode</th>
-                                <th>Nama Alat</th>
-                                <th>Nama Customer</th>
-                                <th>Status</th>
+                                <th>Customer</th>
+                                <th>Tanggal</th>
+                                <th>Total</th>
                                     <th width="12%">Aksi</th>
                                 </tr>
                             </thead>
@@ -64,9 +64,13 @@
 <tr>
   <td>{{$key+1}}</td>
   <td>{{$st->KodeSt}}</td>
-  <td>{{$st->CustomerId}}</td>
+  <td>{{$st->getCustomer->Name}}</td>
   <td>{{$st->TanggalDiterima}}</td>
-  <td>{{$st->Status}}</td>
+  <td>@if ($st->Status == "AKTIF")
+    <span class="badge bg-green">AKTIF</span>
+  @else
+      <span class="badge bg-danger text-white">TIDAK AKTIF</span>
+  @endif</td>
   <td class="text-center"><a href="{{route('quotation.form-quotation', $st->id)}}" class="btn btn-primary">Quotation</a></td>
 </tr>
 @endforeach
@@ -148,27 +152,27 @@
                         }
                     },
                     serverSide: true,
-                    ajax: "{{ route('ku.index') }}",
+                    ajax: "{{ route('quotation.index') }}",
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'KodeKajiUlang',
-                            name: 'KodeKajiUlang'
+                            data: 'KodeQuotation',
+                            name: 'KodeQuotation'
                         },
                         {
-                            data: 'InstrumenId',
-                            name: 'InstrumenId'
+                            data: 'CustomerId',
+                            name: 'CustomerId'
                         },
                         {
-                            data: 'InstrumenId',
-                            name: 'InstrumenId'
+                            data: 'Tanggal',
+                            name: 'Tanggal'
                         },
 
                         {
-                            data: 'Status',
-                            name: 'Status'
+                            data: 'HargaQo',
+                            name: 'HargaQo'
                         },
 
 

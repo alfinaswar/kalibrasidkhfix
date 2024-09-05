@@ -12,4 +12,14 @@ class po extends Model
 
     protected $table = 'pos';
     protected $guarded = ['id'];
+
+    public function getCustomer()
+    {
+        return $this->hasOne(MasterCustomer::class, 'id', 'CustomerId');
+    }
+
+    public function DetailPo()
+    {
+        return $this->hasMany(poDetail::class, 'id', 'PoId');
+    }
 }
