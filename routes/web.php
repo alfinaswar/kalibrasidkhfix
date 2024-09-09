@@ -105,5 +105,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [SuratPerintahKerjaController::class, 'edit'])->name('spk.edit');
         Route::PUT('/update/{id}', [SuratPerintahKerjaController::class, 'update'])->name('spk.update');
         Route::delete('hapus/{id}', [SuratPerintahKerjaController::class, 'destroy'])->name('spk.destroy');
+        Route::GET('/cetak-pdf/{id}', [SuratPerintahKerjaController::class, 'GeneratePdf'])->name('ku.pdf');
     });
 });

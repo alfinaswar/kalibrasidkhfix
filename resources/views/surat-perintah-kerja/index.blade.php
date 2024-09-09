@@ -23,7 +23,7 @@
                                 <th>Customer</th>
                                 <th>Tanggal</th>
                                 <th>Ditugaskan Ke</th>
-                                <th width="12%">Aksi</th>
+                                <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,7 +98,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ route('alat.destroy', ':id') }}'.replace(':id',
+                            url: '{{ route('spk.destroy', ':id') }}'.replace(':id',
                                 id),
                             type: 'DELETE',
                             data: {
@@ -150,8 +150,8 @@
                             name: 'KodeSpk'
                         },
                         {
-                            data: 'CustomerId',
-                            name: 'CustomerId'
+                            data: 'get_customer.Name',
+                            name: 'get_customer.Name'
                         },
                         {
                             data: 'Tanggal',
@@ -159,8 +159,8 @@
                         },
 
                         {
-                            data: 'karyawanId',
-                            name: 'karyawanId'
+                            data: 'Karyawan',
+                            name: 'Karyawan'
                         },
 
 

@@ -7,7 +7,9 @@ use App\Models\SuratPerintahKerja;
 use App\Models\SuratTugas;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class SuratPerintahKerjaController extends Controller
 {
@@ -17,19 +19,29 @@ class SuratPerintahKerjaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = SuratTugas::orderBy('id', 'Desc')->get();
+            $data = SuratTugas::with('getCustomer')->orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btnEdit = '<a href="' . route('ku.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-                    return $btnEdit . '  ' . $btnDelete;
+                    $btnPdf = '<a href="' . route('ku.pdf', $row->id) . '" target="_blank" class="btn btn-secondary btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>';
+                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
                 })
                 ->addColumn('HargaQo', function ($row) {
                     $HargaQo = 'Rp ' . number_format($row->Total, 0, ',', '.');
                     return $HargaQo;
                 })
-                ->rawColumns(['action', 'HargaQo'])
+                ->addColumn('Karyawan', function ($row) {
+                    $Karyawan = '';
+                    $decode = json_decode($row->karyawanId, true);
+                    foreach ($decode as $key => $value) {
+                        $data = User::where('id', $value)->get('name');
+                        $Karyawan .= '<span class="badge bg-dark m-1">' . $data[0]->name . '</span>';
+                    }
+                    return $Karyawan;
+                })
+                ->rawColumns(['action', 'HargaQo','Karyawan'])
                 ->make(true);
         }
         $user = User::where('role','!=','Admin');
@@ -52,10 +64,24 @@ class SuratPerintahKerjaController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'CustomerId' => 'required',
+            'Tanggal' => 'required',
+            'karyawanId' => 'required',
+            'Deskripsi' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $data = $request->all();
-        $data['KodeSpk'] =$this->generateKode();
-        $data['iduser'] = auth()->user()->id;
+        $data['karyawanId'] = json_encode($request->karyawanId);
+        $data['KodeSpk'] =$this->GenerateKode();
+        $data['idUser'] = auth()->user()->id;
         SuratTugas::create($data);
+        return redirect()->back()->with('success', 'Data Berhasil Disimpan');
     }
 
     /**
@@ -65,7 +91,23 @@ class SuratPerintahKerjaController extends Controller
     {
         //
     }
+    public function generatePdf($id)
+    {
+        $SuratTugas = SuratTugas::with('getCustomer', 'DetailPo', 'getNomorPO')->where('id', $id)->first();
+        $info = '';
+        $karyawan =  json_decode($SuratTugas->karyawanId);
+        foreach ($karyawan as $key => $value) {
+            $data = User::select('name', 'role')->where('id', $value)->first();
+            $info .= '<span>'.($key+1).'. '. $data->name . '-'. $data->role.'</span><br>';
+        }
+        $SuratTugas->info = $info;
+        if (!$SuratTugas) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
 
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('surat-perintah-kerja.surat-tugas', compact('SuratTugas'));
+        return $pdf->stream('SuratPerintahKerja_' . $SuratTugas->id . '.pdf');
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -85,9 +127,15 @@ class SuratPerintahKerjaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SuratPerintahKerja $suratPerintahKerja)
+    public function destroy($id)
     {
-        //
+        $data = SuratTugas::find($id);
+        if ($data) {
+            $data->delete();
+            return response()->json(['message' => 'Data berhasil dihapus'], 200);
+        } else {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
     }
     private function GenerateKode()
     {

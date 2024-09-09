@@ -41,26 +41,35 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Ditugaskan Ke</label>
-                                <select class="multi-pilih-placeholder select2-hidden-accessible  @error('KaryawanId') is-invalid @enderror" name="karyawanId[]" multiple="" data-select2-id="3" tabindex="-1"  aria-hidden="true">
+                                <select class="multi-pilih-placeholder select2-hidden-accessible  @error('karyawanId') is-invalid @enderror" name="karyawanId" multiple="" data-select2-id="3" tabindex="-1"  aria-hidden="true">
                                     <option value="">Pilih Petugas (Multiple)</option>
                                     @foreach ($user as $x)
                                            <option value="{{$x->id}}" data-select2-id="{{$x->id}}">{{$x->name}}</option>
                                     @endforeach
                                 </select>
+                                 @error('karyawanId')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Deskripsi</label>
-                                <textarea name="Deskripsi" id="Deskripsi" class="tinymce" placeholder="Lampiran">Untuk melakukan “Kalibrasi Alat Kesehatan di {{$po->getCustomer->Kategori}} {{$po->getCustomer->Name}} yang beralamat di {{$po->getCustomer->Alamat}}, pada tanggal {{now()->format('d F Y')}} Sampai Dengan {{now()->format('d F Y')}}”
+                                <textarea name="Deskripsi" id="Deskripsi" class="tinymce" class="@error('karyawanId') is-invalid @enderror" placeholder="Lampiran">Untuk melakukan “Kalibrasi Alat Kesehatan di {{$po->getCustomer->Kategori}} {{$po->getCustomer->Name}} yang beralamat di {{$po->getCustomer->Alamat}}, pada tanggal {{now()->format('d F Y')}} Sampai Dengan {{now()->format('d F Y')}}”
 
 Demikianlah surat tugas ini dibuat untuk dapat dilaksanakan dengan penuh tanggung jawab dan sebagaimana mestinya.
 </textarea>
-
+ @error('Deskripsi')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
 
                             </div>
 
                         </div>
-                       
-                     
+
+
                 </div>
                 <input type="hidden" name="PoId" value="{{ $po->id }}">
                 <button type="submit" class="btn btn-md btn-primary btn-block">Simpan</button>

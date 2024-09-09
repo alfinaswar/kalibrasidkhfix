@@ -23,7 +23,8 @@ class InstrumenController extends Controller
                     $namaAlat = '';
                     foreach ($row->AlatUkur as $key => $value) {
                         $alat = MasterAlat::where('id', $value)->get('NamaAlat');
-                        $namaAlat .= '<span class="badge bg-dark mb-1">' . $alat[0]->NamaAlat . '</span>';
+                        $decode = json_decode($alat,true);
+                        $namaAlat .= '<span class="badge bg-dark mb-1">' . $decode['NamaAlat'] . '</span>';
                     }
                     return $namaAlat;
                 })
