@@ -4,15 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Sertifikat;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class SertifikatController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = Sertifikat::orderBy('id', 'Desc')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btnUji = '<a href="' . route('job.kalibrasi', $row->id) . '" class="btn btn-primary   btn-sm btn-edit" title="Edit"><i class="fas fa-file-signature"></i></i></a>';
+
+                    return $btnUji;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('sertifikat.index');
     }
 
     /**
@@ -20,7 +33,7 @@ class SertifikatController extends Controller
      */
     public function create()
     {
-        //
+       return view('sertifikat.create');
     }
 
     /**

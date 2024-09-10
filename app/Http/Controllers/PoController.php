@@ -10,6 +10,7 @@ use App\Models\poDetail;
 use App\Models\Quotation;
 use App\Models\QuotationDetail;
 use App\Models\SerahTerima;
+use App\Models\Sertifikat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -39,11 +40,13 @@ class PoController extends Controller
      */
     public function create($id)
     {
-        $getQuotation = Quotation::with(['DetailQuotation' => function ($query) {
-            return $query
-                ->GroupBy('InstrumenId')
-                ->select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat'));
-        }])
+        $getQuotation = Quotation::with([
+            'DetailQuotation' => function ($query) {
+                return $query
+                    ->GroupBy('InstrumenId')
+                    ->select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat'));
+            }
+        ])
             ->where('id', $id)
             ->first();
         // dd($getQuotation);
@@ -57,6 +60,7 @@ class PoController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($this->GenerateNoSertifikat(), $this->GenerateSertifikatOrder());
         $data = $request->all();
         $data['KodePo'] = $this->GenerateKode();
         $data['QuotationId'] = $request->QuotationId;
@@ -79,6 +83,13 @@ class PoController extends Controller
                         'Deskripsi' => '-',
                         'idUser' => auth()->user()->id,
                     ]);
+                    Sertifikat::create([
+                        'NoSertifikat' => $this->GenerateNoSertifikat(),
+                        'SertifikatOrder' => $this->GenerateSertifikatOrder(),
+                        'PoId' => $getid,
+                        'InstrumenId' => $request->InstrumenId[$i],
+                        'CustomerId' => $request->CustomerId,
+                    ]);
                 }
             } else {
                 poDetail::create([
@@ -89,8 +100,17 @@ class PoController extends Controller
                     'Deskripsi' => '-',
                     'idUser' => auth()->user()->id,
                 ]);
+                Sertifikat::create([
+                    'NoSertifikat' => $this->GenerateNoSertifikat(),
+                    'SertifikatOrder' => $this->GenerateSertifikatOrder(),
+                    'PoId' => $getid,
+                    'InstrumenId' => $request->InstrumenId[$i],
+                    'CustomerId' => $request->CustomerId,
+                ]);
             }
         }
+
+
         return redirect()->back()->with('success', 'Data Berhasil Ditambahkan');
 
     }
@@ -142,5 +162,31 @@ class PoController extends Controller
             $Kode = '0001/POK-DKH/' . $month . '/' . $year;
         }
         return $Kode;
+    }
+    private function GenerateNoSertifikat()
+    {
+        $month = date('m');
+        $year = date('Y');
+        $lastKode = Sertifikat::whereYear('created_at', $year)->whereMonth('created_at', $month)->orderby('id', 'desc')->first();
+        if ($lastKode) {
+            $lastKode = (int) substr($lastKode->NoSertifikat, 9, 4);
+            $NoReg = 'DKH' . $year . $month . str_pad($lastKode + 1, 4, '0', STR_PAD_LEFT);
+        } else {
+            $NoReg = 'DKH' . $year . $month . '0001';
+        }
+        return $NoReg;
+    }
+    private function GenerateSertifikatOrder()
+    {
+        $month = date('m');
+        $year = date('Y');
+        $lastKode = Sertifikat::whereYear('created_at', $year)->whereMonth('created_at', $month)->orderby('id', 'desc')->first();
+        if ($lastKode) {
+            $lastKode = (int) substr($lastKode->SertifikatOrder, 9, 4);
+            $NoReg = 'REG' . $year . $month . str_pad($lastKode + 1, 4, '0', STR_PAD_LEFT);
+        } else {
+            $NoReg = 'REG' . $year . $month . '0001';
+        }
+        return $NoReg;
     }
 }

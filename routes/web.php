@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SerahTerimaAlatController;
+use App\Http\Controllers\SertifikatController;
 use App\Http\Controllers\SuratPerintahKerjaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -106,5 +107,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::PUT('/update/{id}', [SuratPerintahKerjaController::class, 'update'])->name('spk.update');
         Route::delete('hapus/{id}', [SuratPerintahKerjaController::class, 'destroy'])->name('spk.destroy');
         Route::GET('/cetak-pdf/{id}', [SuratPerintahKerjaController::class, 'GeneratePdf'])->name('ku.pdf');
+    });
+    Route::prefix('job-order')->group(function () {
+        Route::GET('/', [SertifikatController::class, 'index'])->name('job.index');
+        Route::GET('/kalibrasi/{id}', [SertifikatController::class, 'create'])->name('job.kalibrasi');
+        // Route::GET('/surat-tugas/', [SuratPerintahKerjaController::class, 'create'])->name('spk.form');
+        // Route::POST('/simpan', [SuratPerintahKerjaController::class, 'store'])->name('spk.store');
+        // Route::GET('/edit/{id}', [SuratPerintahKerjaController::class, 'edit'])->name('spk.edit');
+        // Route::PUT('/update/{id}', [SuratPerintahKerjaController::class, 'update'])->name('spk.update');
+        // Route::delete('hapus/{id}', [SuratPerintahKerjaController::class, 'destroy'])->name('spk.destroy');
+        // Route::GET('/cetak-pdf/{id}', [SuratPerintahKerjaController::class, 'GeneratePdf'])->name('ku.pdf');
     });
 });

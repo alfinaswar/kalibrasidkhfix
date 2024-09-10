@@ -1109,10 +1109,7 @@
                             <span class="nav-text">Job Order</span>
                         </a>
                         <ul aria-expanded="false">
-
-
-
-                            <li><a href="app-calender.html">Job Order</a></li>
+                            <li><a href="{{route('job.index')}}">Job Order</a></li>
                             <li><a href="app-calender.html">Sertifikat</a></li>
                         </ul>
                     </li>
