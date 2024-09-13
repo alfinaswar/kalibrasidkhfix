@@ -8,6 +8,7 @@ use App\Http\Controllers\MasterAlatController;
 use App\Http\Controllers\MasterCustomerController;
 use App\Http\Controllers\PoController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProsesKalibrasiController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SerahTerimaAlatController;
@@ -112,7 +113,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/', [SertifikatController::class, 'index'])->name('job.index');
         Route::GET('/kalibrasi/{id}', [SertifikatController::class, 'create'])->name('job.kalibrasi');
         // Route::GET('/surat-tugas/', [SuratPerintahKerjaController::class, 'create'])->name('spk.form');
-        // Route::POST('/simpan', [SuratPerintahKerjaController::class, 'store'])->name('spk.store');
+        Route::POST('/simpan', [ProsesKalibrasiController::class, 'store'])->name('job.store');
         // Route::GET('/edit/{id}', [SuratPerintahKerjaController::class, 'edit'])->name('spk.edit');
         // Route::PUT('/update/{id}', [SuratPerintahKerjaController::class, 'update'])->name('spk.update');
         // Route::delete('hapus/{id}', [SuratPerintahKerjaController::class, 'destroy'])->name('spk.destroy');
