@@ -212,435 +212,462 @@
                                                 </div>
                                             </div>
 
-                        </td>
-                        <td></td>
-                        </tr>
-                        </tbody>
-                        </table>
-                         </div>
-                         <div class="row">
-                                <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN FISIK DAN FUNGSI</h3>
 
-                        <table class="table">
-            <thead class="thead-dark">
-             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Parameter</th>
-              <th scope="col" colspan="2">
-               <center>Hasil</center>
-              </th>
-             </tr>
-            </thead>
-            <tbody style="vertical-align: middle">
-             <tr>
-              <th scope="row">1</th>
-              <td>
-               <input type="text" class="form-control" name="ParameterFisikAlat[]" value="Badan dan Permukaan" readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="Hasil[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="Baik"> Baik</option>
-                  <option value="Tidak Baik"> Tidak Baik</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">2</th>
-              <td>
-               <input type="text" class="form-control" name="ParameterFisikAlat[]" value="Kotak Kontak Alat" readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="Hasil[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="Baik"> Baik</option>
-                  <option value="Tidak Baik"> Tidak Baik</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">3</th>
-              <td>
-               <input type="text" class="form-control" name="ParameterFisikAlat[]" value="Kabel catu utama
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Parameter</th>
+                                        <th scope="col" colspan="2">
+                                            <center>Hasil</center>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="vertical-align: middle">
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="ParameterFisikAlat[]"
+                                                value="Badan dan Permukaan" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="Hasil[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="Baik"> Baik</option>
+                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="ParameterFisikAlat[]"
+                                                value="Kotak Kontak Alat" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="Hasil[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="Baik"> Baik</option>
+                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="ParameterFisikAlat[]"
+                                                value="Kabel catu utama
 " readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="Hasil[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="Baik"> Baik</option>
-                  <option value="Tidak Baik"> Tidak Baik</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">4</th>
-              <td>
-               <input type="text" class="form-control" name="ParameterFisikAlat[]" value="Skring Pengaman" readonly>
-              </td>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="Hasil[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="Baik"> Baik</option>
-                  <option value="Tidak Baik"> Tidak Baik</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">5</th>
-              <td>
-               <input type="text" class="form-control" name="ParameterFisikAlat[]" value="Tampilan dan Indikator" readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="Hasil[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="Baik"> Baik</option>
-                  <option value="Tidak Baik"> Tidak Baik</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-            </tbody>
-           </table>
-                         </div>
-<div class="row">
-      <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="Hasil[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="Baik"> Baik</option>
+                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="ParameterFisikAlat[]"
+                                                value="Skring Pengaman" readonly>
+                                        </td>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="Hasil[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="Baik"> Baik</option>
+                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">5</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="ParameterFisikAlat[]"
+                                                value="Tampilan dan Indikator" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="Hasil[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="Baik"> Baik</option>
+                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN KESELAMATAN LISTRIK</h3>
-                                <table class="table">
-            <thead class="thead-dark">
-             <tr>
-              <th scope="col">#</th>
-              <th scope="col">#</th>
-              <th scope="col">#</th>
-             </tr>
-            </thead>
-            <tbody style="vertical-align: middle">
-             <tr>
-              <th scope="row">1</th>
-              <td>
-               <strong>Tipe</strong>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="TipeListrik" class="form-control">
-                  <option value=""> --Plih Tipe-- </option>
-                  <option value="B"> B</option>
-                  <option value="BF"> BF</option>
-                  <option value="CF"> CF</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">2</th>
-              <td>
-               <strong>Kelas</strong>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="Kelas" class="form-control">
-                  <option value=""> --Plih Tipe-- </option>
-                  <option value="I"> I</option>
-                  <option value="II"> II</option>
-                  <option value="IP"> IP</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-            </tbody>
-           </table>
-</div>
-<div class="row">
-    <table class="table">
-            <thead class="thead-dark">
-             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Parameter</th>
-              <th scope="col">Terukur</th>
-              <th scope="col">Ambang Batas</th>
-             </tr>
-            </thead>
-            <tbody style="vertical-align: middle">
-             <tr>
-              <th scope="row">1</th>
-              <td>
-               <input type="text" class="form-control" value="Tegangan (main voltage) (V)" readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <input type="text" name="TerukurListrik2[]" class="form-control" require placeholder="Tegangan (main voltage)
-                                                                                        (V)" >
-                </div>
-               </div>
-              </td>
-              <td>
-               <span>220 V ± 10 %</span>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">2</th>
-              <td>
-               <input type="text" class="form-control" value="Resistansi PE (protective earth) Ω" readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <input type="text" name="TerukurListrik2[]" class="form-control" require placeholder="Resistansi PE (protective earth) Ω">
-                </div>
-               </div>
-              </td>
-              <td>
-               <span>≤ 0,2 Ω</span>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">3</th>
-              <td>
-               <input type="text" class="form-control" value="Arus bocor peralatan  µA" readonly>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <input type="text" name="TerukurListrik2[]" class="form-control" require placeholder="Arus bocor peralatan µA">
-                </div>
-               </div>
-              </td>
-              <td>
-               <span>≤ 500 µA</span>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">4</th>
-              <td>
-               <input type="text" class="form-control" value="Arus bocor bagian yang diaplikasikan µA" readonly>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <input type="text" name="TerukurListrik2[]" class="form-control" require placeholder="Arus bocor bagian yang diaplikasikan
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">#</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="vertical-align: middle">
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <strong>Tipe</strong>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="TipeListrik" class="form-control">
+                                                        <option value=""> --Plih Tipe-- </option>
+                                                        <option value="B"> B</option>
+                                                        <option value="BF"> BF</option>
+                                                        <option value="CF"> CF</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>
+                                            <strong>Kelas</strong>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="Kelas" class="form-control">
+                                                        <option value=""> --Plih Tipe-- </option>
+                                                        <option value="I"> I</option>
+                                                        <option value="II"> II</option>
+                                                        <option value="IP"> IP</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Parameter</th>
+                                        <th scope="col">Terukur</th>
+                                        <th scope="col">Ambang Batas</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="vertical-align: middle">
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <input type="text" class="form-control"
+                                                value="Tegangan (main voltage) (V)" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <input type="text" name="TerukurListrik2[]" class="form-control"
+                                                        require
+                                                        placeholder="Tegangan (main voltage)
+                                                                                        (V)">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>220 V ± 10 %</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>
+                                            <input type="text" class="form-control"
+                                                value="Resistansi PE (protective earth) Ω" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <input type="text" name="TerukurListrik2[]" class="form-control"
+                                                        require placeholder="Resistansi PE (protective earth) Ω">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>≤ 0,2 Ω</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>
+                                            <input type="text" class="form-control" value="Arus bocor peralatan  µA"
+                                                readonly>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <input type="text" name="TerukurListrik2[]" class="form-control"
+                                                        require placeholder="Arus bocor peralatan µA">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>≤ 500 µA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td>
+                                            <input type="text" class="form-control"
+                                                value="Arus bocor bagian yang diaplikasikan µA" readonly>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <input type="text" name="TerukurListrik2[]" class="form-control"
+                                                        require
+                                                        placeholder="Arus bocor bagian yang diaplikasikan
                                                                                         µA">
-                </div>
-               </div>
-              </td>
-              <td>
-               <span>≤ 50 µA</span>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">5</th>
-              <td>
-               <input type="text" class="form-control" value="Resistansi Isolasi" readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <input type="text" name="TerukurListrik2[]" class="form-control" require placeholder="Resistansi Isolasi">
-                </div>
-               </div>
-              </td>
-              <td>
-               <span>> 2 MΩ</span>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">6</th>
-              <td>
-               <input type="text" class="form-control" value="Ampere" readonly>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <input type="text" name="TerukurListrik2[]" class="form-control" require placeholder="Ampere">
-                </div>
-               </div>
-              </td>
-              <td>
-               <span>Ampere</span>
-              </td>
-             </tr>
-            </tbody>
-           </table>
-</div>
-<div class="row">
-   <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>≤ 50 µA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">5</th>
+                                        <td>
+                                            <input type="text" class="form-control" value="Resistansi Isolasi"
+                                                readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <input type="text" name="TerukurListrik2[]" class="form-control"
+                                                        require placeholder="Resistansi Isolasi">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>> 2 MΩ</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">6</th>
+                                        <td>
+                                            <input type="text" class="form-control" value="Ampere" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <input type="text" name="TerukurListrik2[]" class="form-control"
+                                                        require placeholder="Ampere">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>Ampere</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 PENGUJIAN KINERJA</h3>
-                                 <div class="text-end">
-             <a class="btn btn-secondary" onclick="addRow()"><i class="fas fa-plus"></i></a>
-            <a class="btn btn-danger" onclick="deleteRow()"><i class="fas fa-minus"></i></a>
-           </div>
-           <br>
-                                <table id="myTable" class="table" style="vertical-align: mid; text-align:center;">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col" rowspan="2" style="vertical-align: middle;">Titik Ukur</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-        </tr>
-    </thead>
-    <tbody>
-       <tr>
-            <td>
-                <div class="input-group">
-                    <input type="number" class="form-control" name="TestingStandart[]" placeholder="Standar Testing RPM">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            <i class="fas fa-tachometer-alt"></i>
-                        </span>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <input type="text" name="PembacaanAlat1[]" placeholder="Uji 1" class="form-control" onchange="checkValue(this)">
-            </td>
-            <td>
-                <input type="text" name="PembacaanAlat2[]" placeholder="Uji 2" class="form-control" onchange="checkValue(this)">
-            </td>
-            <td>
-                <input type="text" name="PembacaanAlat3[]" placeholder="Uji 3" class="form-control" onchange="checkValue(this)">
-            </td>
-        </tr>
+                            <div class="text-end">
+                                <a class="btn btn-secondary" onclick="addRow()"><i class="fas fa-plus"></i></a>
+                                <a class="btn btn-danger" onclick="deleteRow()"><i class="fas fa-minus"></i></a>
+                            </div>
+                            <br>
+                            <table id="myTable" class="table" style="vertical-align: mid; text-align:center;">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col" rowspan="2" style="vertical-align: middle;">Titik Ukur</th>
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="TestingStandart[]"
+                                                    placeholder="Standar Testing RPM">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-tachometer-alt"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="PembacaanAlat1[]" placeholder="Uji 1"
+                                                class="form-control" onchange="checkValue(this)">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="PembacaanAlat2[]" placeholder="Uji 2"
+                                                class="form-control" onchange="checkValue(this)">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="PembacaanAlat3[]" placeholder="Uji 3"
+                                                class="form-control" onchange="checkValue(this)">
+                                        </td>
+                                    </tr>
 
-    </tbody>
-</table>
-<table id="myTable" class="table" style="vertical-align: mid; text-align:center;">
-    <thead class="thead-dark text-center">
+                                </tbody>
+                            </table>
+                            <table id="myTable" class="table" style="vertical-align: mid; text-align:center;">
+                                <thead class="thead-dark text-center">
 
-        <tr class="text-center">
-               <th scope="col" rowspan="2" style="vertical-align: middle;">Standar Waktu</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <div class="input-group">
-                    <input type="number" class="form-control" name="StandarWaktu" placeholder="Standar Testing RPM">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            <i class="fas fa-tachometer-alt"></i>
-                        </span>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <input type="text" name="Waktu1" placeholder="Uji 1" class="form-control">
-            </td>
-            <td>
-                <input type="text" name="Waktu2" placeholder="Uji 2" class="form-control">
-            </td>
-            <td>
-                <input type="text" name="Waktu3" placeholder="Uji 3" class="form-control">
-            </td>
-        </tr>
-    </tbody>
-</table>
-</div>
-<div class="row">
-   <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                                    <tr class="text-center">
+                                        <th scope="col" rowspan="2" style="vertical-align: middle;">Standar Waktu
+                                        </th>
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="StandarWaktu"
+                                                    placeholder="Standar Testing RPM">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-tachometer-alt"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="Waktu1" placeholder="Uji 1"
+                                                class="form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="Waktu2" placeholder="Uji 2"
+                                                class="form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="Waktu3" placeholder="Uji 3"
+                                                class="form-control">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 TELAAH TEKNIS</h3>
-   <table class="table">
-            <thead class="thead-dark">
-             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Indikator</th>
-              <th scope="col">Hasil </th>
-             </tr>
-            </thead>
-            <tbody style="vertical-align: middle">
-             <tr>
-              <th scope="row">1</th>
-              <td>
-               <span name="ParameterTeknis[]">Fisik dan Fungsi</span>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="HasilTeknis[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="Baik"> Baik</option>
-                  <option value="Tidak Baik"> Tidak Baik</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">2</th>
-              <td>
-               <span name="ParameterTeknis[]">Keselamatan Listrik</span>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="HasilTeknis[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="Aman"> Aman</option>
-                  <option value="Tidak Aman"> Tidak Aman</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">3</th>
-              <td>
-               <span name="ParameterTeknis[]">Fisik dan Fungsi</span>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <select name="HasilTeknis[]" class="form-control">
-                  <option value=""> --Plih Status-- </option>
-                  <option value="1"> Perlu Perbaikan </option>
-                  <option value="2"> Dalam Batas Toleransi</option>
-                 </select>
-                </div>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <th scope="row">4</th>
-              <td>
-               <span name="Catatan">Catatan</span>
-              </td>
-              </td>
-              <td>
-               <div class="form-control-wrap">
-                <div class="input-group">
-                 <textarea name="Catatan" class="form-control"></textarea>
-                </div>
-               </div>
-              </td>
-             </tr>
-            </tbody>
-           </table>
-</div>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Indikator</th>
+                                        <th scope="col">Hasil </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="vertical-align: middle">
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <span name="ParameterTeknis[]">Fisik dan Fungsi</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="HasilTeknis[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="Baik"> Baik</option>
+                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>
+                                            <span name="ParameterTeknis[]">Keselamatan Listrik</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="HasilTeknis[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="Aman"> Aman</option>
+                                                        <option value="Tidak Aman"> Tidak Aman</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>
+                                            <span name="ParameterTeknis[]">Fisik dan Fungsi</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="HasilTeknis[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="1"> Perlu Perbaikan </option>
+                                                        <option value="2"> Dalam Batas Toleransi</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td>
+                                            <span name="Catatan">Catatan</span>
+                                        </td>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <textarea name="Catatan" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                 </div>
             </div>
         </div>
@@ -656,15 +683,15 @@
             });
         </script>
     @endif
-<script>
-    function addRow() {
-    var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
-    var newRow = table.insertRow(table.rows.length);
-    var cells = [];
-    for (var i = 0; i < 4; i++) {
-        cells[i] = newRow.insertCell(i);
-        if (i === 0) {
-            cells[i].innerHTML = `
+    <script>
+        function addRow() {
+            var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow(table.rows.length);
+            var cells = [];
+            for (var i = 0; i < 4; i++) {
+                cells[i] = newRow.insertCell(i);
+                if (i === 0) {
+                    cells[i].innerHTML = `
                 <div class="input-group">
                     <input type="number" class="form-control" name="TestingStandart[]" placeholder="Standart Testing RPM" value="">
                     <div class="input-group-prepend">
@@ -673,15 +700,16 @@
                         </span>
                     </div>
                 </div>`;
-        } else {
-            cells[i].innerHTML = `
+                } else {
+                    cells[i].innerHTML = `
                 <input type="text" name="PembacaanAlat${i}[]" placeholder="Uji ${i}" class="form-control" onchange="checkValue(this)">
             `;
+                }
+            }
+            updateTestingStandart();
         }
-    }
-    updateTestingStandart();
-}
-       function deleteRow() {
+
+        function deleteRow() {
             var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
             if (table.rows.length > 1) {
                 table.deleteRow(table.rows.length - 1);
@@ -695,26 +723,26 @@
             }
         }
 
-function updateTestingStandart() {
-    var rows = document.querySelectorAll('#myTable tbody tr');
-    var lastRowIndex = rows.length - 1;
-    var lastRowTestingStandartInput = rows[lastRowIndex].querySelector('input[name="TestingStandart[]"]');
-    if (lastRowIndex > 0) {
-        var prevRowTestingStandartInput = rows[lastRowIndex - 1].querySelector('input[name="TestingStandart[]"]');
-        lastRowTestingStandartInput.value = prevRowTestingStandartInput.value;
-    }
-}
-// function checkValue(input) {
-//     var row = input.parentNode.parentNode;
-//     var testingStandartInput = row.querySelector('input[name="TestingStandart[]"]');
-//     var testingStandartValue = parseFloat(testingStandartInput.value);
-//     var pembacaanAlatValue = parseFloat(input.value);
-//     var allowedRange = testingStandartValue * 0.1;
-//     if (pembacaanAlatValue < (testingStandartValue - allowedRange) || pembacaanAlatValue > (testingStandartValue + allowedRange)) {
-//         input.classList.add('is-invalid');
-//     } else {
-//         input.classList.remove('is-invalid');
-//     }
-// }
-</script>
-    @endsection
+        function updateTestingStandart() {
+            var rows = document.querySelectorAll('#myTable tbody tr');
+            var lastRowIndex = rows.length - 1;
+            var lastRowTestingStandartInput = rows[lastRowIndex].querySelector('input[name="TestingStandart[]"]');
+            if (lastRowIndex > 0) {
+                var prevRowTestingStandartInput = rows[lastRowIndex - 1].querySelector('input[name="TestingStandart[]"]');
+                lastRowTestingStandartInput.value = prevRowTestingStandartInput.value;
+            }
+        }
+        // function checkValue(input) {
+        //     var row = input.parentNode.parentNode;
+        //     var testingStandartInput = row.querySelector('input[name="TestingStandart[]"]');
+        //     var testingStandartValue = parseFloat(testingStandartInput.value);
+        //     var pembacaanAlatValue = parseFloat(input.value);
+        //     var allowedRange = testingStandartValue * 0.1;
+        //     if (pembacaanAlatValue < (testingStandartValue - allowedRange) || pembacaanAlatValue > (testingStandartValue + allowedRange)) {
+        //         input.classList.add('is-invalid');
+        //     } else {
+        //         input.classList.remove('is-invalid');
+        //     }
+        // }
+    </script>
+@endsection

@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
-					<a href="{{route('instrumen.create')}}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah Instrumen</a>
-	</div>
+        <a href="{{ route('instrumen.create') }}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah
+            Instrumen</a>
+    </div>
 
     <div class="row">
         <div class="col-12">
@@ -12,48 +13,47 @@
                     <h4 class="card-title">Data Instrumen</h4>
                 </div>
                 <div class="card-body">
-                        <table id="example" class="display" style="min-width: 845px">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Kode Instrumen</th>
-                                    <th>Kategori</th>
-                                    <th>Nama</th>
-                                    <th>Tarif</th>
-                                    <th>Akreditasi</th>
-                                    <th>Alat Ukur</th>
-                                    <th>LK</th>
-                                    <th>Status</th>
-                                    <th width="12%">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <table id="example" class="display" style="min-width: 845px">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kode Instrumen</th>
+                                <th>Kategori</th>
+                                <th>Nama</th>
+                                <th>Tarif</th>
+                                <th>Akreditasi</th>
+                                <th>Alat Ukur</th>
+                                <th>LK</th>
+                                <th>Status</th>
+                                <th width="12%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                            </tbody>
+                        </tbody>
 
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
 
     </div>
     </div>
-     @if (session()->has('success'))
-                <script>
-                    swal.fire({
-                        title: "{{ __('Success!') }}",
-                        text: "{!! \Session::get('success') !!}",
-                        type: "success"
-                    });
-                </script>
-            @endif
- <script>
+    @if (session()->has('success'))
+        <script>
+            swal.fire({
+                title: "{{ __('Success!') }}",
+                text: "{!! \Session::get('success') !!}",
+                type: "success"
+            });
+        </script>
+    @endif
+    <script>
+        $(document).ready(function() {
 
-    $(document).ready(function () {
-
-        $('body').on('click', '.btn-delete', function() {
+            $('body').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
 
                 Swal.fire({
@@ -92,7 +92,7 @@
                     }
                 });
             });
-        var dataTable = function() {
+            var dataTable = function() {
                 var table = $('#example');
                 table.DataTable({
                     responsive: true,
@@ -140,7 +140,7 @@
                             data: 'LK',
                             name: 'LK'
                         },
- {
+                        {
                             data: 'Stat',
                             name: 'Stat'
                         },
@@ -154,6 +154,6 @@
                 });
             };
             dataTable();
-    });
- </script>
+        });
+    </script>
 @endsection

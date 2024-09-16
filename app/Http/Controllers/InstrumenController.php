@@ -20,13 +20,12 @@ class InstrumenController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('NamaAlat', function ($row) {
-                    $namaAlat = '';
+                    $NamaAlat = '';
                     foreach ($row->AlatUkur as $key => $value) {
-                        $alat = MasterAlat::where('id', $value)->get('NamaAlat');
-                        $decode = json_decode($alat,true);
-                        $namaAlat .= '<span class="badge bg-dark mb-1">' . $decode['NamaAlat'] . '</span>';
+                        $alat = MasterAlat::where('id', $value)->first();
+                        $NamaAlat .= '<span class="badge bg-dark mb-1">' . $alat->NamaAlat . '</span>';
                     }
-                    return $namaAlat;
+                    return $NamaAlat;
                 })
                 ->addColumn('action', function ($row) {
                     $btnEdit = '<a href="' . route('instrumen.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
@@ -63,7 +62,7 @@ class InstrumenController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Kategori' => 'required',
-            'Nama' => 'required',
+            'Name' => 'required',
             'Tarif' => 'required',
             'Akreditasi' => 'required',
             'AlatUkur' => 'required',

@@ -3,11 +3,11 @@
 @section('content')
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
         <button type="button" class="btn btn-primary me-3 btn-sm" data-bs-toggle="modal" data-bs-target="#kajiUlangModal">
-            <i class="fas fa-plus me-2"></i>Serah Terima
+            <i class="fas fa-plus me-2"></i>Buat Quotation
         </button>
 
 
-	</div>
+    </div>
 
     <div class="row">
         <div class="col-12">
@@ -16,39 +16,39 @@
                     <h4 class="card-title">Data Quotation</h4>
                 </div>
                 <div class="card-body">
-                        <table id="example" class="display" style="min-width: 845px">
-                            <thead>
-                                <tr>
+                    <table id="example" class="display" style="min-width: 845px">
+                        <thead>
+                            <tr>
                                 <th>#</th>
                                 <th>Kode</th>
                                 <th>Customer</th>
                                 <th>Tanggal</th>
                                 <th>Total</th>
-                                    <th width="12%">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                <th width="12%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                            </tbody>
+                        </tbody>
 
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
 
     </div>
     </div>
-            <div class="modal fade" id="kajiUlangModal" tabindex="-1" aria-labelledby="kajiUlangModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="kajiUlangModalLabel">Serah Terima Alat</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table id="example4" class="display" width="100%">
+    <div class="modal fade" id="kajiUlangModal" tabindex="-1" aria-labelledby="kajiUlangModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="kajiUlangModalLabel">Serah Terima Alat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table id="example4" class="display" width="100%">
                         <thead>
                             <tr class="text-center">
                                 <th>#</th>
@@ -59,46 +59,48 @@
                                 <th width="12%">Aksi</th>
                             </tr>
                         </thead>
-                         <tbody>
-@foreach ($dataKajiUlang as $key => $st)
-<tr>
-  <td>{{$key+1}}</td>
-  <td>{{$st->KodeSt}}</td>
-  <td>{{$st->getCustomer->Name}}</td>
-  <td>{{$st->TanggalDiterima}}</td>
-  <td>@if ($st->Status == "AKTIF")
-    <span class="badge bg-green">AKTIF</span>
-  @else
-      <span class="badge bg-danger text-white">TIDAK AKTIF</span>
-  @endif</td>
-  <td class="text-center"><a href="{{route('quotation.form-quotation', $st->id)}}" class="btn btn-primary">Quotation</a></td>
-</tr>
-@endforeach
-                            </tbody>
+                        <tbody>
+                            @foreach ($dataKajiUlang as $key => $st)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $st->KodeSt }}</td>
+                                    <td>{{ $st->getCustomer->Name }}</td>
+                                    <td>{{ $st->TanggalDiterima }}</td>
+                                    <td>
+                                        @if ($st->Status == 'AKTIF')
+                                            <span class="badge bg-green">AKTIF</span>
+                                        @else
+                                            <span class="badge bg-danger text-white">TIDAK AKTIF</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center"><a href="{{ route('quotation.form-quotation', $st->id) }}"
+                                            class="btn btn-primary">Quotation</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
 
                     </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
-     @if (session()->has('success'))
-                <script>
-                    swal.fire({
-                        title: "{{ __('Success!') }}",
-                        text: "{!! \Session::get('success') !!}",
-                        type: "success"
-                    });
-                </script>
-            @endif
- <script>
+    </div>
+    @if (session()->has('success'))
+        <script>
+            swal.fire({
+                title: "{{ __('Success!') }}",
+                text: "{!! \Session::get('success') !!}",
+                type: "success"
+            });
+        </script>
+    @endif
+    <script>
+        $(document).ready(function() {
 
-    $(document).ready(function () {
-
-        $('body').on('click', '.btn-delete', function() {
+            $('body').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
 
                 Swal.fire({
@@ -137,7 +139,7 @@
                     }
                 });
             });
-        var dataTable = function() {
+            var dataTable = function() {
                 var table = $('#example');
                 table.DataTable({
                     responsive: true,
@@ -186,6 +188,6 @@
                 });
             };
             dataTable();
-    });
- </script>
+        });
+    </script>
 @endsection
