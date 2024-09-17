@@ -12,4 +12,8 @@ class Sertifikat extends Model
     protected $table = 'sertifikats';
 
     protected $guarded = ['id'];
+    public function getCustomer()
+    {
+        return $this->hasOne(MasterCustomer::class, 'id', 'CustomerId');
+    }
 }

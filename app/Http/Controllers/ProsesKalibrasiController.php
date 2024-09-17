@@ -41,13 +41,56 @@ class ProsesKalibrasiController extends Controller
         // AMBIL SHEET YANG SPESIFIK
         $sheet = $spreadsheet->getSheetByName('LK yg diisi');
 
-        // MASUKAN DATA KE ROW
-        $sheet->setCellValue('C9', $data['no_order']);
-        $sheet->setCellValue('C10', $data['no_order']);
+        // data administrasi
+        $sheet->setCellValue('C8', $data['no_order']);
+        $sheet->setCellValue('C9', $data['merk']);
+        $sheet->setCellValue('C10', $data['type_model']);
+        $sheet->setCellValue('C11', $data['nomor_seri']);
+        $sheet->setCellValue('C12', $data['tanggal_kalibrasi']);
+        $sheet->setCellValue('C13', $data['instansi_ruangan']);
+        $sheet->setCellValue('C14', $data['resolusi']);
+        $sheet->setCellValue('F9', $data['nama_pemilik']);
+        $sheet->setCellValue('F10', $data['alamat_pemilik']);
+        //data PENGUKURAN KONDISI LINGKUNGAN
+        $sheet->setCellValue('D28', $data['KondisiAwal'][0]);
+        $sheet->setCellValue('G28', $data['KondisiAwal'][1]);
+        $sheet->setCellValue('D28', $data['KondisiAkhir'][0]);
+        $sheet->setCellValue('G28', $data['KondisiAkhir'][1]);
 
+        for ($i = 0; $i < 3; $i++) {
+            $sheet->setCellValue('D' . (30 + $i), $data['val'][$i]);
+        }
+        //PEMERIKSAAN FISIK DAN FUNGSI ALAT
+        for ($i = 0; $i < 6; $i++) {
+            $sheet->setCellValue('E' . (38 + $i), $data['Hasil'][$i]);
+        }
+        //PENGUKURAN KESELAMATAN LISTRIK
+        for ($i = 0; $i < 6; $i++) {
+            $sheet->setCellValue('E' . (50 + $i), $data['TerukurListrik2'][$i]);
+        }
+        //PENGUJIAN KINERJA
+        $row = 61;
+        for ($i = 0; $i < count($data['TestingStandart']); $i++) {
+            $sheet->setCellValue('C' . $row . '', $data['TestingStandart'][$i]);
+            $sheet->setCellValue('D' . $row . '', $data['PembacaanAlat1'][$i]);
+            $sheet->setCellValue('E' . $row . '', $data['PembacaanAlat2'][$i]);
+            $sheet->setCellValue('F' . $row . '', $data['PembacaanAlat3'][$i]);
+            $row++;
+        }
+        //PENGUJIAN KINERJA WAKTU
+        $sheet->setCellValue('C68', $data['StandarWaktu']);
+        $sheet->setCellValue('D68', $data['Waktu1']);
+        $sheet->setCellValue('E68', $data['Waktu2']);
+        $sheet->setCellValue('F68', $data['Waktu3']);
+        //TELAAH TEKNIS
+        $rowteknis = 71;
+        foreach ($data['HasilTeknis'] as $key => $value) {
+            $sheet->setCellValue('C' . $rowteknis . '', $data['HasilTeknis'][$key]);
+            $rowteknis++;
+        }
         // Generate
-        $newFileName = 'testtt-' . now()->format('Y-m-d_H-i-s') . '.xlsx';
-        $newFilePath = storage_path('app/public/file_lk/' . $newFileName);
+        $newFileName = $data['nama_pemilik'] . now()->format('Y-m-d_H-i-s') . '.xlsx';
+        $newFilePath = storage_path('app'.DIRECTORY_SEPARATOR.'public' . DIRECTORY_SEPARATOR .'Nama' . $newFileName);
 
         // Simpan Yang Telah Di modifiasi
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');

@@ -14,7 +14,7 @@ class SertifikatController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Sertifikat::orderBy('id', 'Desc')->get();
+            $data = Sertifikat::with('getCustomer')->orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -22,7 +22,16 @@ class SertifikatController extends Controller
 
                     return $btnUji;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('statsertifikat', function ($row) {
+                  if($row->Status == "DRAFT"){
+                        $stat = '<span class="badge bg-warning">DRAFT</span>';
+                  }else{
+                        $stat = '<span class="badge bg-success">TERBIT</span>';
+                  }
+
+                    return $stat;
+                })
+                ->rawColumns(['action','statsertifikat'])
                 ->make(true);
         }
         return view('sertifikat.index');

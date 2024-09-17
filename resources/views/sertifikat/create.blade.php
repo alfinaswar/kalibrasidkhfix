@@ -244,8 +244,8 @@
                                                 <div class="input-group">
                                                     <select name="Hasil[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="Baik"> Baik</option>
-                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                        <option value="1"> Baik</option>
+                                                        <option value="0"> Tidak Baik</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -262,8 +262,8 @@
                                                 <div class="input-group">
                                                     <select name="Hasil[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="Baik"> Baik</option>
-                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                        <option value="1"> Baik</option>
+                                                        <option value="0"> Tidak Baik</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -281,8 +281,8 @@
                                                 <div class="input-group">
                                                     <select name="Hasil[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="Baik"> Baik</option>
-                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                        <option value="1"> Baik</option>
+                                                        <option value="0"> Tidak Baik</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -300,8 +300,8 @@
                                                 <div class="input-group">
                                                     <select name="Hasil[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="Baik"> Baik</option>
-                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                        <option value="1"> Baik</option>
+                                                        <option value="0"> Tidak Baik</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -311,6 +311,24 @@
                                         <th scope="row">5</th>
                                         <td>
                                             <input type="text" class="form-control" name="ParameterFisikAlat[]"
+                                                value="Tombol, skalar, dan kontrol" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                                <div class="input-group">
+                                                    <select name="Hasil[]" class="form-control">
+                                                        <option value=""> --Plih Status-- </option>
+                                                        <option value="1"> Baik</option>
+                                                        <option value="0"> Tidak Baik</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">6</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="ParameterFisikAlat[]"
                                                 value="Tampilan dan Indikator" readonly>
                                         </td>
                                         <td>
@@ -318,8 +336,8 @@
                                                 <div class="input-group">
                                                     <select name="Hasil[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="Baik"> Baik</option>
-                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                        <option value="1"> Baik</option>
+                                                        <option value="0"> Tidak Baik</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -591,12 +609,12 @@
                         <div class="row">
                             <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 TELAAH TEKNIS</h3>
-                            <table class="table">
+                            <table class="table table-bordered">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Indikator</th>
-                                        <th scope="col">Hasil </th>
+                                        <th class="text-center">Hasil</th>
                                     </tr>
                                 </thead>
                                 <tbody style="vertical-align: middle">
@@ -610,8 +628,8 @@
                                                 <div class="input-group">
                                                     <select name="HasilTeknis[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="Baik"> Baik</option>
-                                                        <option value="Tidak Baik"> Tidak Baik</option>
+                                                        <option value="1"> Baik</option>
+                                                        <option value="0"> Tidak Baik</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -660,7 +678,7 @@
                                         <td>
                                             <div class="form-control-wrap">
                                                 <div class="input-group">
-                                                    <textarea name="Catatan" class="form-control"></textarea>
+                                                    <textarea name="Catatan" class="form-control" placeholder="Catatan"></textarea>
                                                 </div>
                                             </div>
                                         </td>

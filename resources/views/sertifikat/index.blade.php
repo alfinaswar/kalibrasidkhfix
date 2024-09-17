@@ -113,13 +113,13 @@
                             name: 'SertifikatOrder'
                         },
                         {
-                            data: 'CustomerId',
-                            name: 'CustomerId'
+                            data: 'get_customer.Name',
+                            name: 'get_customer.Name'
                         },
 
                         {
-                            data: 'Status',
-                            name: 'Status'
+                            data: 'statsertifikat',
+                            name: 'statsertifikat'
                         },
 
 
