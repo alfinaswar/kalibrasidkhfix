@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/create', [SerahTerimaAlatController::class, 'create'])->name('st.create');
         Route::POST('/simpan', [SerahTerimaAlatController::class, 'store'])->name('st.store');
         Route::GET('/edit/{id}', [SerahTerimaAlatController::class, 'edit'])->name('st.edit');
-        Route::PUT('/update/{id}', [SerahTerimaAlatController::class, 'update'])->name('st.update');
+        Route::POST('/update-data/{id}', [SerahTerimaAlatController::class, 'update'])->name('st.update');
         Route::delete('hapus/{id}', [SerahTerimaAlatController::class, 'destroy'])->name('st.destroy');
         Route::GET('/pdf/{id}', [SerahTerimaAlatController::class, 'GeneratePdf'])->name('st.pdf');
     });

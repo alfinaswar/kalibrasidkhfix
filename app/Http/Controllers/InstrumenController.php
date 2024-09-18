@@ -62,7 +62,7 @@ class InstrumenController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Kategori' => 'required',
-            'Name' => 'required',
+            'Nama' => 'required',
             'Tarif' => 'required',
             'Akreditasi' => 'required',
             'AlatUkur' => 'required',
@@ -76,7 +76,7 @@ class InstrumenController extends Controller
                 ->withInput();
         }
         $data = $request->all();
-        $data['Tarif'] = str_replace(".", "", $data['Tarif']);
+        $data['Tarif'] = str_replace('.', '', $data['Tarif']);
         if ($request->hasFile('LK')) {
             $file = $request->file('LK');
             $file->storeAs('public/file_lk', $file->getClientOriginalName());
@@ -120,32 +120,24 @@ class InstrumenController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'Kategori' => 'required',
             'Nama' => 'required',
             'Tarif' => 'required',
             'Akreditasi' => 'required',
             'AlatUkur' => 'required',
-            'LK' => 'required|file|max:1024',
+            'LK' => 'nullable|file|max:1024',
             'Status' => 'required',
         ]);
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-        if ($request->hasFile('LK')) {
-            $excelLK = $request->file('LK');
-            $excelLK->storeAs('public/file_lk', $excelLK->getClientOriginalName());
-            $alat['LK'] = $excelLK->getClientOriginalName();
-        } else {
-            $alat['LK'] = null;
+
+        $instrumen = Instrumen::find($id);
+        if (!$instrumen) {
+            return redirect()->route('instrumen.index')->withErrors(['Instrumen tidak ditemukan.']);
         }
 
-        $data = $request->all();
-        $alat = Instrumen::find($id);
-        $alat->update($data);
+        $validatedData['LK'] = $request->hasFile('LK') ? $request->file('LK')->storeAs($request->file('LK')->getClientOriginalName()) : null;
+
+        $instrumen->update($validatedData);
 
         return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Diupdate');
     }

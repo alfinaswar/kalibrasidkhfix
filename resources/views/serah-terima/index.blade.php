@@ -126,10 +126,9 @@
                             name: 'TanggalDiajukan'
                         },
                         {
-                            data: 'Status',
-                            name: 'Status'
+                            data: 'Stat',
+                            name: 'Stat'
                         },
-
                         {
                             data: 'action',
                             name: 'action',

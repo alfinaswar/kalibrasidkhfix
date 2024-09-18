@@ -7,12 +7,13 @@
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{ route('st.update',$st->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('st.update', $st->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        {{-- @method('PUT') --}}
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Nama Customer</label>
-                                 <select id="single-select" name="CustomerId"
+                                <select id="single-select" name="CustomerId"
                                     class="form-control-lg @error('CustomerId') is-invalid @enderror">
                                     <option>Pilih Customer</option>
                                     @foreach ($customer as $cust)
@@ -30,10 +31,11 @@
                                 <label class="form-label">Status</label>
                                 <select name="Status" class="form-control @error('Status') is-invalid @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="AKTIF" @if($st->Status == 'AKTIF') selected @endif>Aktif</option>
-                                    <option value="TIDAK" @if($st->Status == 'TIDAK') selected @endif>Tidak Aktif</option>
+                                    <option value="AKTIF" @if ($st->Status == 'AKTIF') selected @endif>Aktif</option>
+                                    <option value="TIDAK" @if ($st->Status == 'TIDAK') selected @endif>Tidak Aktif
+                                    </option>
                                 </select>
-                                 @error('Status')
+                                @error('Status')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -43,7 +45,8 @@
                                 <label class="form-label">Tanggal Diterima</label>
                                 <input type="text" id="date-format"
                                     class="form-control @error('TanggalDiterima') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="TanggalDiterima" value="{{$st->TanggalDiterima}}">
+                                    placeholder="Tanggal Diterima" name="TanggalDiterima"
+                                    value="{{ $st->TanggalDiterima }}">
                                 @error('TanggalDiterima')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -55,7 +58,8 @@
                                 <label class="form-label">Tanggal Diserahkan</label>
                                 <input type="text" id="date-format"
                                     class="form-control @error('TanggalDiajukan') is-invalid @enderror"
-                                    placeholder="Tanggal Diserahkan" name="TanggalDiajukan" value="{{$st->TanggalDiajukan}}">
+                                    placeholder="Tanggal Diserahkan" name="TanggalDiajukan"
+                                    value="{{ $st->TanggalDiajukan }}">
                                 @error('TanggalDiajukan')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -88,27 +92,29 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($st->Stdetail as $item)
-<tr>
-                                            <td><select class="form-control" tabindex="null" name="InstrumenId[]">
-                                                    @foreach ($instrumen as $inst)
-                                                        <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
-                                                    @endforeach
-                                                </select></td>
-                                            <td><input type="text" name="Merk[]" class="form-control"
-                                                    placeholder="Merk" value="{{$item->Merk}}">
-                                            </td>
-                                            <td><input type="text" name="Type[]" class="form-control"
-                                                    placeholder="Type">
-                                            </td>
-                                            <td><input type="text" name="SerialNumber[]" class="form-control"
-                                                    placeholder="Serial Number"></td>
-                                            <td><input type="number" name="Qty[]" value="1" class="form-control"
-                                                    placeholder="Qty">
-                                            </td>
-                                            <td><input type="text" name="Deskripsi[]" class="form-control"
-                                                    placeholder="Deskripsi">
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td><select class="form-control" tabindex="null" name="InstrumenId[]">
+                                                        @foreach ($instrumen as $inst)
+                                                            <option value="{{ $inst->id }}"
+                                                                @selected($item->InstrumenId == $inst->id)>{{ $inst->Nama }}</option>
+                                                        @endforeach
+                                                    </select></td>
+                                                <td><input type="text" name="Merk[]" class="form-control"
+                                                        placeholder="Merk" value="{{ $item->Merk }}">
+                                                </td>
+                                                <td><input type="text" name="Type[]" value="{{ $item->Type }}"
+                                                        class="form-control" placeholder="Type">
+                                                </td>
+                                                <td><input type="text" name="SerialNumber[]"
+                                                        value="{{ $item->SerialNumber }}" class="form-control"
+                                                        placeholder="Serial Number"></td>
+                                                <td><input type="number" name="Qty[]" value="{{ $item->total }}"
+                                                        class="form-control" placeholder="Qty">
+                                                </td>
+                                                <td><input type="text" name="Deskripsi[]" value="{{ $item->Deskripsi }}"
+                                                        class="form-control" placeholder="Deskripsi">
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

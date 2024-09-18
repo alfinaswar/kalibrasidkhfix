@@ -12,17 +12,24 @@ class SerahTerima extends Model
 
     protected $table = 'serah_terimas';
     protected $guarded = ['id'];
+
     public function Stdetail()
     {
         return $this->hasMany(SerahTerimaDetail::class, 'SerahTerimaId', 'id');
     }
+
+    public function getNamaAlat()
+    {
+        return $this->hasOne(Instrumen::class, 'id', 'InstrumanId');
+    }
+
     public function dataKaji()
     {
         return $this->hasMany(KajiUlang::class, 'SerahTerimaId', 'id');
     }
+
     public function getCustomer()
     {
         return $this->hasOne(MasterCustomer::class, 'id', 'CustomerId');
     }
-
 }

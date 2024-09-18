@@ -8,10 +8,10 @@ use App\Models\MasterCustomer;
 use App\Models\SerahTerima;
 use App\Models\SerahTerimaDetail;
 use App\Models\User;
-use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class SerahTerimaAlatController extends Controller
 {
@@ -29,9 +29,18 @@ class SerahTerimaAlatController extends Controller
                     $btnEdit = '<a href="' . route('st.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
 
-                    return $btnEdit . '  ' . $btnDelete . '  ' .$btnPdf;
+                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('Stat', function ($row) {
+                    if ($row->Status == 'AKTIF') {
+                        $Stat = '<span class="badge bg-success">AKTIF</span>';
+                    } else {
+                        $Stat = '<span class="badge bg-warning">TIDAK AKTIF</span>';
+                    }
+
+                    return $Stat;
+                })
+                ->rawColumns(['action', 'Stat'])
                 ->make(true);
         }
         return view('serah-terima.index');
@@ -57,8 +66,8 @@ class SerahTerimaAlatController extends Controller
         $latestId = SerahTerima::latest()->first()->id ?? 1;
 
         for ($i = 0; $i < count($request->InstrumenId); $i++) {
-            if($request->Qty[$i] > 0){
-                for ($j=0; $j < $request->Qty[$i]; $j++) {
+            if ($request->Qty[$i] > 0) {
+                for ($j = 0; $j < $request->Qty[$i]; $j++) {
                     SerahTerimaDetail::create([
                         'SerahTerimaId' => $latestId,
                         'InstrumenId' => $request->InstrumenId[$i],
@@ -70,7 +79,7 @@ class SerahTerimaAlatController extends Controller
                         'idUser' => auth()->user()->id,
                     ]);
                 }
-            }else{
+            } else {
                 SerahTerimaDetail::create([
                     'SerahTerimaId' => $latestId,
                     'InstrumenId' => $request->InstrumenId[$i],
@@ -82,7 +91,6 @@ class SerahTerimaAlatController extends Controller
                     'idUser' => auth()->user()->id,
                 ]);
             }
-
         }
         return redirect()->route('st.index')->with('success', 'Data Berhasil Disimpan');
     }
@@ -92,16 +100,19 @@ class SerahTerimaAlatController extends Controller
      */
     public function GeneratePdf($id)
     {
-        $data = SerahTerima::with('Stdetail')->where('id', $id)->orderBy('id', 'Desc')->first();
-        $filename = str_replace(['/', '\\'], '_', $data->KodeSt) . ".pdf";
+        $data = SerahTerima::with(['Stdetail' => function ($query) {
+            $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId')->join('instrumens', 'serah_terima_details.InstrumenId', '=', 'instrumens.id');
+        }, 'getCustomer'])->where('id', $id)->first();
+        $filename = str_replace(['/', '\\'], '_', $data->KodeSt) . '.pdf';
         $viewData = [
             'judul' => 'SERAH TERIMA BARANG',
             'KodeSt' => $data->KodeSt,
             'instrumen' => $data,
         ];
-        $pdf = app('dompdf.wrapper')->loadView('serah-terima.formatPdf', $viewData);
+        // dd($viewData);
+        $pdf = app('dompdf.wrapper')->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('serah-terima.formatPdf', $viewData);
 
-        return $pdf->download($filename);
+        return $pdf->stream($filename);
     }
 
     /**
@@ -111,20 +122,46 @@ class SerahTerimaAlatController extends Controller
     {
         $st = SerahTerima::with(['Stdetail' => function ($query) {
             $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
-        }])->where('id',$id)->get();
-        dd($st);
+        }])->where('id', $id)->first();
+        // dd($st);
         $user = User::all();
         $customer = MasterCustomer::all();
         $instrumen = Instrumen::all();
-        return view('serah-terima.edit', compact('st','user','customer','instrumen'));
+        return view('serah-terima.edit', compact('st', 'user', 'customer', 'instrumen'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $serahTerimaAlat)
+    public function update(Request $request, $id)
     {
-        //
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'CustomerId' => 'required',
+            'Status' => 'required',
+            'TanggalDiterima' => 'required',
+        ]);
+
+        $serahTerimaAlat = SerahTerima::find($id);
+        $serahTerimaAlat->update($validatedData);
+        $serahTerimaAlat->Stdetail()->delete();
+
+        foreach ($request->InstrumenId as $key => $value) {
+            $qty = $request->Qty[$key];
+            for ($i = 0; $i < $qty; $i++) {
+                SerahTerimaDetail::create([
+                    'SerahTerimaId' => $serahTerimaAlat->id,
+                    'InstrumenId' => $value,
+                    'Merk' => $request->Merk[$key],
+                    'Type' => $request->Type[$key],
+                    'SerialNumber' => $request->SerialNumber[$key],
+                    'Qty' => 1,
+                    'Deskripsi' => $request->Deskripsi[$key],
+                ]);
+            }
+        }
+
+        return redirect()->route('st.index')->with('success', 'Data Berhasil Diupdate');
     }
 
     /**

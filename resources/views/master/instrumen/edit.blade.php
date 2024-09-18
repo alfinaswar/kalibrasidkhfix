@@ -7,14 +7,14 @@
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{ route('instrumen.update', $instrumen->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('instrumen.update', $instrumen->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Kategori</label>
-                                <select name="Kategori" id=""
-                                    class="form-control @error('Kategori') is-invalid @enderror">
+                                <select name="Kategori" class="form-control @error('Kategori') is-invalid @enderror">
                                     <option value="">Pilih Kategori</option>
                                     <option value="ALKES" @selected(old('Kategori', $instrumen->Kategori) == 'ALKES')>Alkes</option>
                                     <option value="INDUSTRI" @selected(old('Kategori', $instrumen->Kategori) == 'INDUSTRI')>Industri</option>
@@ -29,9 +29,11 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Nama</label>
-                                <select name="Nama" id="single-select" class="form-control @error('Nama') is-invalid @enderror">
+                                <select name="Nama" id="single-select"
+                                    class="form-control @error('Nama') is-invalid @enderror">
                                     @foreach ($data as $i)
-                                        <option value="{{ $i->id }}" @selected(old('Nama', $instrumen->Nama) == $i->id)>{{ $i->NamaAlat }}</option>
+                                        <option value="{{ $i->NamaAlat }}" @selected(old('Nama', $instrumen->Nama) == $i->id)>{{ $i->NamaAlat }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('Nama')
@@ -80,7 +82,7 @@
                                         <option value="{{ $x->id }}" data-select2-id="{{ $x->id }}">
                                             {{ $x->NamaAlat }}</option>
                                     @endforeach --}}
- @foreach ($data as $key => $value)
+                                    @foreach ($data as $key => $value)
                                         <option value="{{ $value->id }}"
                                             {{ is_array($instrumen->AlatUkur) && in_array($value->id, $instrumen->AlatUkur) ? 'selected' : '' }}>
                                             {{ $value->NamaAlat }}
@@ -103,19 +105,23 @@
                                     </span>
                                 @enderror
                             </div>
-  <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status</label>
-                                                <select name="Status" id="" class="form-control @error('Status') is-invalid @enderror">
-                                                    <option value="">Pilih Status</option>
-                                                    <option value="AKTIF" {{ old('Status', $instrumen->Status) == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                                                    <option value="TIDAKAKTIF" {{ old('Status', $instrumen->Status) == 'TIDAKAKTIF' ? 'selected' : '' }}>Tidak Baik</option>
-                                                </select>
-                                                @error('Status')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Status</label>
+                                <select name="Status" id=""
+                                    class="form-control @error('Status') is-invalid @enderror">
+                                    <option value="">Pilih Status</option>
+                                    <option value="AKTIF"
+                                        {{ old('Status', $instrumen->Status) == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="TIDAKAKTIF"
+                                        {{ old('Status', $instrumen->Status) == 'TIDAKAKTIF' ? 'selected' : '' }}>Tidak
+                                        Baik</option>
+                                </select>
+                                @error('Status')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
 
                         </div>
                         <button type="submit" class="btn btn-md btn-primary btn-block">Simpan</button>
@@ -124,15 +130,14 @@
             </div>
         </div>
     </div>
-     <script>
-
-                         function formatRupiah(angka, prefix) {
-                            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                            split = number_string.split(','),
-                            sisa = split[0].length % 3,
-                            rupiah = split[0].substr(0, sisa) + (sisa ? '.' : '') + split[0].substr(sisa).replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                            return prefix == undefined ? rupiah : (rupiah ? rupiah + prefix : '');
-                        }
-                    </script>
+    <script>
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa) + (sisa ? '.' : '') + split[0].substr(sisa).replace(/\D/g, '').replace(
+                    /\B(?=(\d{3})+(?!\d))/g, ".");
+            return prefix == undefined ? rupiah : (rupiah ? rupiah + prefix : '');
+        }
+    </script>
 @endsection
-

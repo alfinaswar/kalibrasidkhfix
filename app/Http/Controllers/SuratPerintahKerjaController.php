@@ -41,12 +41,12 @@ class SuratPerintahKerjaController extends Controller
                     }
                     return $Karyawan;
                 })
-                ->rawColumns(['action', 'HargaQo','Karyawan'])
+                ->rawColumns(['action', 'HargaQo', 'Karyawan'])
                 ->make(true);
         }
-        $user = User::where('role','!=','Admin');
-        $po = po::with('getCustomer','DetailPo')->get();
-        return view('surat-perintah-kerja.index', compact('user','po'));
+        $user = User::where('role', '!=', 'Admin');
+        $po = po::with('getCustomer', 'DetailPo')->get();
+        return view('surat-perintah-kerja.index', compact('user', 'po'));
     }
 
     /**
@@ -55,7 +55,7 @@ class SuratPerintahKerjaController extends Controller
     public function create($id)
     {
         $user = User::all();
-        $po = po::with('getCustomer', 'DetailPo')->where('id',$id)->first();
+        $po = po::with('getCustomer', 'DetailPo')->where('id', $id)->first();
         return view('surat-perintah-kerja.create', compact('user', 'po'));
     }
 
@@ -78,7 +78,7 @@ class SuratPerintahKerjaController extends Controller
         }
         $data = $request->all();
         $data['karyawanId'] = json_encode($request->karyawanId);
-        $data['KodeSpk'] =$this->GenerateKode();
+        $data['KodeSpk'] = $this->GenerateKode();
         $data['idUser'] = auth()->user()->id;
         SuratTugas::create($data);
         return redirect()->back()->with('success', 'Data Berhasil Disimpan');
@@ -91,14 +91,15 @@ class SuratPerintahKerjaController extends Controller
     {
         //
     }
+
     public function generatePdf($id)
     {
         $SuratTugas = SuratTugas::with('getCustomer', 'DetailPo', 'getNomorPO')->where('id', $id)->first();
         $info = '';
-        $karyawan =  json_decode($SuratTugas->karyawanId);
+        $karyawan = json_decode($SuratTugas->karyawanId);
         foreach ($karyawan as $key => $value) {
             $data = User::select('name', 'role')->where('id', $value)->first();
-            $info .= '<span>'.($key+1).'. '. $data->name . '-'. $data->role.'</span><br>';
+            $info .= '<span>' . ($key + 1) . '. ' . $data->name . '-' . $data->role . '</span><br>';
         }
         $SuratTugas->info = $info;
         if (!$SuratTugas) {
@@ -108,6 +109,7 @@ class SuratPerintahKerjaController extends Controller
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('surat-perintah-kerja.surat-tugas', compact('SuratTugas'));
         return $pdf->stream('SuratPerintahKerja_' . $SuratTugas->id . '.pdf');
     }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -137,6 +139,7 @@ class SuratPerintahKerjaController extends Controller
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
     }
+
     private function GenerateKode()
     {
         $month = date('m');
