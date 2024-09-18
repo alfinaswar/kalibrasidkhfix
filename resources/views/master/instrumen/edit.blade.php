@@ -16,8 +16,8 @@
                                 <select name="Kategori" id=""
                                     class="form-control @error('Kategori') is-invalid @enderror">
                                     <option value="">Pilih Kategori</option>
-                                    <option value="{{ old('Kategori', $instrumen->Kategori) }}">Alkes</option>
-                                    <option value="{{ old('Kategori', $instrumen->Kategori) }}">Industri</option>
+                                    <option value="ALKES" @selected(old('Kategori', $instrumen->Kategori) == 'ALKES')>Alkes</option>
+                                    <option value="INDUSTRI" @selected(old('Kategori', $instrumen->Kategori) == 'INDUSTRI')>Industri</option>
                                 </select>
 
                                 @error('Kategori')
@@ -29,9 +29,11 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Nama</label>
-                                <input type="text" name="Nama"
-                                    class="form-control @error('Nama') is-invalid @enderror" placeholder="Nama"
-                                    value="{{ old('Nama', $instrumen->Nama) }}">
+                                <select name="Nama" id="single-select" class="form-control @error('Nama') is-invalid @enderror">
+                                    @foreach ($data as $i)
+                                        <option value="{{ $i->id }}" @selected(old('Nama', $instrumen->Nama) == $i->id)>{{ $i->NamaAlat }}</option>
+                                    @endforeach
+                                </select>
                                 @error('Nama')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -44,7 +46,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Rp.</span>
                                     </div>
-                                    <input type="text" name="Tarif"
+                                    <input type="text" name="Tarif" id="Tarif"
                                         class="form-control @error('Tarif') is-invalid @enderror" placeholder="Tarif"
                                         value="{{ old('Tarif', $instrumen->Tarif) }}"
                                         onkeyup="this.value=formatRupiah(this.value)">
@@ -101,20 +103,19 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Tanggal Kalibrasi</label>
-                                <select name="Status" id=""
-                                    class="form-control @error('Status') is-invalid @enderror">
-                                    <option value="">Pilih Status</option>
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Tidak Aktif">Tidak Baik</option>
-                                </select>
-                                @error('Status')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+  <div class="mb-3 col-md-6">
+                                                <label class="form-label">Status</label>
+                                                <select name="Status" id="" class="form-control @error('Status') is-invalid @enderror">
+                                                    <option value="">Pilih Status</option>
+                                                    <option value="AKTIF" {{ old('Status', $instrumen->Status) == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
+                                                    <option value="TIDAKAKTIF" {{ old('Status', $instrumen->Status) == 'TIDAKAKTIF' ? 'selected' : '' }}>Tidak Baik</option>
+                                                </select>
+                                                @error('Status')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
 
                         </div>
                         <button type="submit" class="btn btn-md btn-primary btn-block">Simpan</button>
@@ -123,4 +124,15 @@
             </div>
         </div>
     </div>
+     <script>
+
+                         function formatRupiah(angka, prefix) {
+                            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                            split = number_string.split(','),
+                            sisa = split[0].length % 3,
+                            rupiah = split[0].substr(0, sisa) + (sisa ? '.' : '') + split[0].substr(sisa).replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            return prefix == undefined ? rupiah : (rupiah ? rupiah + prefix : '');
+                        }
+                    </script>
 @endsection
+

@@ -10,6 +10,7 @@ use App\Models\SerahTerimaDetail;
 use App\Models\User;
 use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class SerahTerimaAlatController extends Controller
@@ -20,7 +21,7 @@ class SerahTerimaAlatController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = SerahTerima::orderBy('id', 'Desc')->get();
+            $data = SerahTerima::with('getCustomer')->orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -83,7 +84,7 @@ class SerahTerimaAlatController extends Controller
             }
 
         }
-        return redirect()->back()->with('success', 'Data Berhasil Disimpan');
+        return redirect()->route('st.index')->with('success', 'Data Berhasil Disimpan');
     }
 
     /**
@@ -108,7 +109,10 @@ class SerahTerimaAlatController extends Controller
      */
     public function edit($id)
     {
-        $st = SerahTerima::find($id);
+        $st = SerahTerima::with(['Stdetail' => function ($query) {
+            $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
+        }])->where('id',$id)->get();
+        dd($st);
         $user = User::all();
         $customer = MasterCustomer::all();
         $instrumen = Instrumen::all();

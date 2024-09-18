@@ -76,6 +76,7 @@ class InstrumenController extends Controller
                 ->withInput();
         }
         $data = $request->all();
+        $data['Tarif'] = str_replace(".", "", $data['Tarif']);
         if ($request->hasFile('LK')) {
             $file = $request->file('LK');
             $file->storeAs('public/file_lk', $file->getClientOriginalName());

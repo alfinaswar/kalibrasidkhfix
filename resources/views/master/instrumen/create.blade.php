@@ -14,8 +14,8 @@
                                                 <label class="form-label">Kategori</label>
                                                 <select name="Kategori" id="" class="form-control @error('Kategori') is-invalid @enderror">
                                                     <option value="">Pilih Kategori</option>
-                                                    <option value="Alkes">Alkes</option>
-                                                    <option value="Industri">Industri</option>
+                                                    <option value="ALKES">Alkes</option>
+                                                    <option value="INDUSTRI">Industri</option>
                                                 </select>
                                                 @error('Kategori')
                                                 <span class="invalid-feedback" role="alert">
@@ -25,7 +25,7 @@
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Nama</label>
-                                                 <select id="single-select" name="Name" class="form-control @error('Nama') is-invalid @enderror">
+                                                 <select id="single-select" name="Nama" class="form-control @error('Nama') is-invalid @enderror">
                                                     @foreach ($data as $i)
                                                         <option value="{{$i->id}}">{{$i->NamaAlat}}</option>
                                                     @endforeach
@@ -90,8 +90,8 @@
                                                 <label class="form-label">Status</label>
                                                 <select name="Status" id="" class="form-control @error('Status') is-invalid @enderror">
                                                     <option value="">Pilih Status</option>
-                                                    <option value="Aktif">Aktif</option>
-                                                    <option value="Tidak Aktif">Tidak Baik</option>
+                                                    <option value="AKTIF">Aktif</option>
+                                                    <option value="TIDAKAKTIF">Tidak Baik</option>
                                                 </select>
                                                 @error('Status')
                                                 <span class="invalid-feedback" role="alert">

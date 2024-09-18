@@ -114,8 +114,8 @@
                             name: 'KodeSt'
                         },
                         {
-                            data: 'CustomerId',
-                            name: 'CustomerId'
+                            data: 'get_customer.Name',
+                            name: 'get_customer.Name'
                         },
                         {
                             data: 'TanggalDiterima',

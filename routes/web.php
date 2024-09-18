@@ -113,7 +113,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/', [SertifikatController::class, 'index'])->name('job.index');
         Route::GET('/kalibrasi/{id}', [SertifikatController::class, 'create'])->name('job.kalibrasi');
         // Route::GET('/surat-tugas/', [SuratPerintahKerjaController::class, 'create'])->name('spk.form');
-        Route::POST('/simpan', [ProsesKalibrasiController::class, 'store'])->name('job.store');
+        Route::POST('/simpan', [SertifikatController::class, 'store'])->name('job.store');
         // Route::GET('/edit/{id}', [SuratPerintahKerjaController::class, 'edit'])->name('spk.edit');
         // Route::PUT('/update/{id}', [SuratPerintahKerjaController::class, 'update'])->name('spk.update');
         // Route::delete('hapus/{id}', [SuratPerintahKerjaController::class, 'destroy'])->name('spk.destroy');

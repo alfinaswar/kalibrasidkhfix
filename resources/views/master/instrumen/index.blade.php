@@ -13,11 +13,12 @@
                     <h4 class="card-title">Data Instrumen</h4>
                 </div>
                 <div class="card-body">
-                    <table id="example" class="display" style="min-width: 845px">
+
+                    <table id="example" class="display" style="min-width: 845px" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Kode Instrumen</th>
+                                <th>Nomor</th>
                                 <th>Kategori</th>
                                 <th>Nama</th>
                                 <th>Tarif</th>
@@ -25,7 +26,7 @@
                                 <th>Alat Ukur</th>
                                 <th>LK</th>
                                 <th>Status</th>
-                                <th width="12%">Aksi</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,6 +34,7 @@
                         </tbody>
 
                     </table>
+
                 </div>
             </div>
         </div>

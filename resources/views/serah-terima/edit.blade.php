@@ -28,17 +28,22 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
-                                <select name="Status" class="form-control">
+                                <select name="Status" class="form-control @error('Status') is-invalid @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Tidak Aktif">Tidak Aktif</option>
+                                    <option value="AKTIF" @if($st->Status == 'AKTIF') selected @endif>Aktif</option>
+                                    <option value="TIDAK" @if($st->Status == 'TIDAK') selected @endif>Tidak Aktif</option>
                                 </select>
+                                 @error('Status')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal Diterima</label>
                                 <input type="text" id="date-format"
                                     class="form-control @error('TanggalDiterima') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="TanggalDiterima">
+                                    placeholder="Tanggal Diterima" name="TanggalDiterima" value="{{$st->TanggalDiterima}}">
                                 @error('TanggalDiterima')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -50,7 +55,7 @@
                                 <label class="form-label">Tanggal Diserahkan</label>
                                 <input type="text" id="date-format"
                                     class="form-control @error('TanggalDiajukan') is-invalid @enderror"
-                                    placeholder="Tanggal Diserahkan" name="TanggalDiajukan">
+                                    placeholder="Tanggal Diserahkan" name="TanggalDiajukan" value="{{$st->TanggalDiajukan}}">
                                 @error('TanggalDiajukan')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -82,15 +87,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-
+                                        @foreach ($st->Stdetail as $item)
+<tr>
                                             <td><select class="form-control" tabindex="null" name="InstrumenId[]">
                                                     @foreach ($instrumen as $inst)
                                                         <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
                                                     @endforeach
                                                 </select></td>
                                             <td><input type="text" name="Merk[]" class="form-control"
-                                                    placeholder="Merk">
+                                                    placeholder="Merk" value="{{$item->Merk}}">
                                             </td>
                                             <td><input type="text" name="Type[]" class="form-control"
                                                     placeholder="Type">
@@ -104,6 +109,7 @@
                                                     placeholder="Deskripsi">
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

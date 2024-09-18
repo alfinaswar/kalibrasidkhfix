@@ -1,12 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
-        <button type="button" class="btn btn-primary me-3 btn-sm" data-bs-toggle="modal" data-bs-target="#kajiUlangModal">
-            <i class="fas fa-plus me-2"></i>Surat Tugas Dengan Po
-        </button>
-        <a href="" class="btn btn-sm btn-secondary">Surat Tugas</a>
-    </div>
 
     <div class="row">
         <div class="col-12">
