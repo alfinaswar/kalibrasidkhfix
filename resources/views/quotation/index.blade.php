@@ -5,8 +5,6 @@
         <button type="button" class="btn btn-primary me-3 btn-sm" data-bs-toggle="modal" data-bs-target="#kajiUlangModal">
             <i class="fas fa-plus me-2"></i>Buat Quotation
         </button>
-
-
     </div>
 
     <div class="row">
@@ -24,7 +22,7 @@
                                 <th>Customer</th>
                                 <th>Tanggal</th>
                                 <th>Total</th>
-                                <th width="12%">Aksi</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,7 +54,7 @@
                                 <th>Customer</th>
                                 <th>Tanggal Diterima</th>
                                 <th>Status</th>
-                                <th width="12%">Aksi</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -164,8 +162,8 @@
                             name: 'KodeQuotation'
                         },
                         {
-                            data: 'CustomerId',
-                            name: 'CustomerId'
+                            data: 'get_customer.Name',
+                            name: 'get_customer.Name'
                         },
                         {
                             data: 'Tanggal',

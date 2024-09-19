@@ -40,8 +40,8 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
                                 <select name="Status" class="form-control @error('Status') is-invalid @enderror">
-                                    <option value="ya">Ya</option>
-                                    <option value="tidak">Tidak</option>
+                                    <option value="AKTIF">AKTIF</option>
+                                    <option value="TIDAK">TIDAK AKTIF</option>
                                 </select>
                                 @error('Status')
                                     <span class="invalid-feedback" role="alert">

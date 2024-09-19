@@ -20,7 +20,7 @@ class PoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = po::orderBy('id', 'Desc')->get();
+            $data = po::with('getCustomer')->orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

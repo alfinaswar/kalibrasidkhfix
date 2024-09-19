@@ -12,4 +12,9 @@ class QuotationDetail extends Model
     protected $table = 'quotation_details';
 
     protected $guarded = ['id'];
+
+    public function getNamaAlat()
+    {
+        return $this->hasOne(Instrumen::class, 'id', 'InstrumenId');
+    }
 }

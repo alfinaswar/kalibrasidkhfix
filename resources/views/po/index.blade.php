@@ -160,8 +160,8 @@
                             name: 'KodePo'
                         },
                         {
-                            data: 'CustomerId',
-                            name: 'CustomerId'
+                            data: 'get_customer.Name',
+                            name: 'get_customer.Name'
                         },
                         {
                             data: 'TanggalPo',

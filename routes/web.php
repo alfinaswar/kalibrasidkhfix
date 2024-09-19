@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [QuotationController::class, 'edit'])->name('quotation.edit');
         Route::PUT('/update/{id}', [QuotationController::class, 'update'])->name('quotation.update');
         Route::delete('hapus/{id}', [QuotationController::class, 'destroy'])->name('quotation.destroy');
+        Route::GET('/cetak-pdf/{id}', [QuotationController::class, 'GeneratePdf'])->name('quotation.pdf');
     });
     Route::prefix('po')->group(function () {
         Route::GET('/', [PoController::class, 'index'])->name('po.index');
@@ -98,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [PoController::class, 'edit'])->name('po.edit');
         Route::PUT('/update/{id}', [PoController::class, 'update'])->name('po.update');
         Route::delete('hapus/{id}', [PoController::class, 'destroy'])->name('po.destroy');
+        Route::GET('/cetak-pdf/{id}', [PoController::class, 'GeneratePdf'])->name('po.pdf');
     });
     Route::prefix('surat-tugas')->group(function () {
         Route::GET('/', [SuratPerintahKerjaController::class, 'index'])->name('spk.index');

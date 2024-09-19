@@ -11,6 +11,7 @@ use App\Models\SerahTerima;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class QuotationController extends Controller
 {
@@ -22,13 +23,14 @@ class QuotationController extends Controller
         // $data = KajiUlang::with('getInstrumen')->orderBy('id', 'Desc')->get();
         // dd($data);
         if ($request->ajax()) {
-            $data = Quotation::orderBy('id', 'Desc')->get();
+            $data = Quotation::with('getCustomer')->orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btnEdit = '<a href="' . route('ku.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btnEdit = '<a href="' . route('quotation.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-                    return $btnEdit . '  ' . $btnDelete;
+                    $btnPdf = '<a href="' . route('quotation.pdf', $row->id) . '" target="_blank" class="btn btn-secondary btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>';
+                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
                 })
                 ->addColumn('HargaQo', function ($row) {
                     $HargaQo = 'Rp '.number_format($row->Total, 0, ',', '.');
@@ -102,7 +104,21 @@ class QuotationController extends Controller
             }
         }
     }
-
+    public function generatePdf($id)
+    {
+        $data = Quotation::with([
+            'DetailQuotation' => function ($query) {
+                return $query
+                    ->GroupBy('InstrumenId')
+                    ->select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat'));
+            }
+        ,'getCustomer','DetailQuotation.getNamaAlat'])
+            ->where('id', $id)
+            ->first();
+        // dd($data);
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('quotation.cetak-pdf', compact('data'));
+        return $pdf->stream('quotation.cetak-pdf' . $data->id . '.pdf');
+    }
     public function show(string $id)
     {
         //
