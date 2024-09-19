@@ -12,4 +12,9 @@ class poDetail extends Model
 
     protected $table = 'po_details';
     protected $guarded = ['id'];
+
+    public function getNamaAlat()
+    {
+        return $this->hasOne(Instrumen::class, 'id', 'InstrumenId');
+    }
 }

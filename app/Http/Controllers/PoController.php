@@ -14,6 +14,7 @@ use App\Models\Sertifikat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class PoController extends Controller
 {
@@ -111,9 +112,7 @@ class PoController extends Controller
             }
         }
 
-
         return redirect()->back()->with('success', 'Data Berhasil Ditambahkan');
-
     }
 
     /**
@@ -139,24 +138,25 @@ class PoController extends Controller
     {
         //
     }
+
     public function generatePdf($id)
     {
         $data = po::with([
-            'DetailQuotation' => function ($query) {
+            'DetailPo' => function ($query) {
                 return $query
                     ->GroupBy('InstrumenId')
                     ->select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat'));
-            }
-            ,
+            },
             'getCustomer',
-            'DetailQuotation.getNamaAlat'
+            'DetailPo.getNamaAlat'
         ])
             ->where('id', $id)
             ->first();
         // dd($data);
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('quotation.cetak-pdf', compact('data'));
-        return $pdf->stream('quotation.cetak-pdf' . $data->id . '.pdf');
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('po.cetak-pdf', compact('data'));
+        return $pdf->stream('po.cetak-pdf' . $data->id . '.pdf');
     }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -181,6 +181,7 @@ class PoController extends Controller
         }
         return $Kode;
     }
+
     private function GenerateNoSertifikat()
     {
         $month = date('m');
@@ -194,6 +195,7 @@ class PoController extends Controller
         }
         return $NoReg;
     }
+
     private function GenerateSertifikatOrder()
     {
         $month = date('m');

@@ -20,6 +20,6 @@ class po extends Model
 
     public function DetailPo()
     {
-        return $this->hasMany(poDetail::class, 'id', 'PoId');
+        return $this->hasMany(poDetail::class, 'PoId', 'id');
     }
 }
