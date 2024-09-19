@@ -24,7 +24,7 @@
                                 <th>Customer</th>
                                 <th>Tanggal PO</th>
                                 <th>Status</th>
-                                    <th width="12%">Aksi</th>
+                                    <th width="15%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,7 +56,7 @@
                                 <th>Customer</th>
                                 <th>Tanggal</th>
                                 <th>Status</th>
-                                <th width="12%">Aksi</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                          <tbody>

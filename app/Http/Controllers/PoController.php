@@ -26,7 +26,8 @@ class PoController extends Controller
                 ->addColumn('action', function ($row) {
                     $btnEdit = '<a href="' . route('po.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-                    return $btnEdit . '  ' . $btnDelete;
+                    $btnPdf = '<a href="' . route('po.pdf', $row->id) . '" target="_blank" class="btn btn-secondary btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>';
+                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -138,7 +139,24 @@ class PoController extends Controller
     {
         //
     }
-
+    public function generatePdf($id)
+    {
+        $data = po::with([
+            'DetailQuotation' => function ($query) {
+                return $query
+                    ->GroupBy('InstrumenId')
+                    ->select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat'));
+            }
+            ,
+            'getCustomer',
+            'DetailQuotation.getNamaAlat'
+        ])
+            ->where('id', $id)
+            ->first();
+        // dd($data);
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('quotation.cetak-pdf', compact('data'));
+        return $pdf->stream('quotation.cetak-pdf' . $data->id . '.pdf');
+    }
     /**
      * Remove the specified resource from storage.
      */
