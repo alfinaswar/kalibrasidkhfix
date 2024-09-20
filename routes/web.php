@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/buat/{id}', [PoController::class, 'create'])->name('po.form-po');
         Route::POST('/simpan', [PoController::class, 'store'])->name('po.store');
         Route::GET('/edit/{id}', [PoController::class, 'edit'])->name('po.edit');
-        Route::PUT('/update/{id}', [PoController::class, 'update'])->name('po.update');
+        Route::POST('/update/{id}', [PoController::class, 'update'])->name('po.update');
         Route::delete('hapus/{id}', [PoController::class, 'destroy'])->name('po.destroy');
         Route::GET('/cetak-pdf/{id}', [PoController::class, 'GeneratePdf'])->name('po.pdf');
     });

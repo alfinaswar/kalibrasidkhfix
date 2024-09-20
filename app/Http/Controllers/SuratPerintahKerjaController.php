@@ -113,9 +113,18 @@ class SuratPerintahKerjaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SuratPerintahKerja $suratPerintahKerja)
+    public function edit($id)
     {
-        //
+        $data = po::with([
+            'DetailPo' => function ($query) {
+                $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
+            }
+        ])->where('id', $id)->first();
+        // dd($data);
+        $user = User::all();
+        $customer = MasterCustomer::all();
+        $instrumen = Instrumen::all();
+        return view('surat-perintah-kerja.edit', compact('data', 'user', 'customer', 'instrumen'));
     }
 
     /**

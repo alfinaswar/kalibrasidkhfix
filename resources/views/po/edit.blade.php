@@ -7,7 +7,7 @@
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{ route('po.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('po.update',$data->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -40,6 +40,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
                                 <select name="Status" class="form-control @error('Status') is-invalid @enderror">
+                                    <option>Pilih Status</option>
                                     <option value="AKTIF" @if($data->Status == "AKTIF") selected @endif>AKTIF</option>
                                     <option value="TIDAK" @if($data->Status == "TIDAK") selected @endif>TIDAK AKTIF</option>
                                 </select>
@@ -76,9 +77,10 @@
                                         <tr>
                                             <td>
                                                 <select class="form-control" name="InstrumenId[]">
+                                                    <option>Pilih Instrumen</option>
                                                     @foreach ($instrumen as $inst)
                                                         <option value="{{ $inst->id }}"
-                                                            @if ($inst->id == $item->InstumenId) selected @endif>
+                                                            @if ($inst->id == $item->InstrumenId) selected @endif>
                                                             {{ $inst->Nama }}</option>
                                                     @endforeach
                                                 </select>
@@ -127,13 +129,13 @@
                                                 <div class="col-md-6">
                                                     <select name="TipeDiskon" id="TipeDiskon" class="form-control">
                                                         <option value="">Pilih Tipe Diskon</option>
-                                                        <option value="flat">Flat</option>
-                                                        <option value="persentase">Persentase</option>
+                                                        <option value="flat" @if($data->TipeDiskon == "flat") selected @endif>Flat</option>
+                                                        <option value="persentase" @if($data->TipeDiskon == "persentase") selected @endif>Persentase</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control text-end" id="TotalDiskon"
-                                                        name="TotalDiskon" placeholder="Nominal Diskon">
+                                                        name="TotalDiskon" value="{{$data->Diskon}}" placeholder="Nominal Diskon">
                                                 </div>
 
                                             </div>

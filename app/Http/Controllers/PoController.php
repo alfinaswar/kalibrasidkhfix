@@ -14,6 +14,7 @@ use App\Models\Sertifikat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
 
@@ -76,7 +77,7 @@ class PoController extends Controller
         $data = $request->all();
         $data['KodePo'] = $this->GenerateKode();
         $data['QuotationId'] = $request->QuotationId;
-        $data['Diskon'] = $request->TotalDiskon;
+        $data['Diskon'] = str_replace('.', '', $request->TotalDiskon);
         $data['Subtotal'] = str_replace('.', '', $request->subtotal);
         $data['Total'] = str_replace('.', '', $request->Total);
         $data['idUser'] = auth()->user()->id;
@@ -158,11 +159,7 @@ class PoController extends Controller
         $validator = Validator::make($request->all(), [
             'CustomerId' => 'required',
             'Status' => 'required',
-            'Perihal' => 'required',
-            'Header' => 'required',
-            'Deskripsi' => 'required',
-            'Tanggal' => 'required',
-            'DueDate' => 'required',
+            'TanggalPo' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()
@@ -171,30 +168,30 @@ class PoController extends Controller
                 ->withInput();
         }
         $data = $request->all();
-        $data['SubTotal'] = str_replace('.', '', $request->subtotal);
+        $data['Diskon'] = str_replace('.', '', $request->TotalDiskon);
+        $data['Subtotal'] = str_replace('.', '', $request->subtotal);
         $data['Total'] = str_replace('.', '', $request->Total);
 
-        $Quotation = Quotation::find($id);
+        $Quotation = po::find($id);
         $Quotation->update($data);
-        $Quotation->DetailQuotation()->delete();
+        $Quotation->DetailPo()->delete();
 
         foreach ($request->InstrumenId as $key => $value) {
             $harga = str_replace('.', '', $request->Harga[$key]);
             $subtotal = str_replace('.', '', $request->SubTotal[$key]);
             $qty = $request->Qty[$key];
             for ($i = 0; $i < $qty; $i++) {
-                QuotationDetail::create([
-                    'idQuotation' => $request->id,
+                poDetail::create([
+                    'PoId' => $request->id,
                     'InstrumenId' => $value,
                     'Qty' => 1,
                     'Harga' => $harga,
-                    'SubTotal' => $subtotal,
-                    'Deskripsi' => $request->Deskripsi[$key],
+                    'idUser' => auth()->user()->id,
                 ]);
             }
         }
 
-        return redirect()->route('quotation.index')->with('success', 'Data Berhasil Diupdate');
+        return redirect()->route('po.index')->with('success', 'Data Berhasil Diupdate');
     }
 
     public function generatePdf($id)
@@ -218,9 +215,16 @@ class PoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(po $po)
+    public function destroy($id)
     {
-        //
+        $data = po::find($id);
+        $data->DetailPo()->delete();
+        if ($data) {
+            $data->delete();
+            return response()->json(['message' => 'data berhasil dihapus'], 200);
+        } else {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
     }
 
     private function GenerateKode()
