@@ -8,8 +8,10 @@ use App\Models\MasterCustomer;
 use App\Models\Quotation;
 use App\Models\QuotationDetail;
 use App\Models\SerahTerima;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
 
@@ -49,6 +51,7 @@ class QuotationController extends Controller
     public function create($id)
     {
         $data = SerahTerima::with('dataKaji', 'Stdetail')->where('id', $id)->latest()->first();
+        // dd($data);
         $GetKajiUlang = KajiUlang::select('*', DB::raw('COUNT(InstrumenId) as Qty'))
             ->with('getInstrumen')
             ->where('SerahTerimaId', $id)
@@ -103,6 +106,7 @@ class QuotationController extends Controller
                 ]);
             }
         }
+        return redirect()->route(route: 'quotation.index')->with('success', 'Data Berhasil Disimpan');
     }
     public function generatePdf($id)
     {
@@ -127,9 +131,18 @@ class QuotationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $data = Quotation::with([
+            'DetailQuotation' => function ($query) {
+                $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
+            }
+        ])->where('id', $id)->first();
+        // dd($data);
+        $user = User::all();
+        $customer = MasterCustomer::all();
+        $instrumen = Instrumen::all();
+        return view('quotation.edit', compact('data', 'user', 'customer', 'instrumen'));
     }
 
     /**
@@ -137,15 +150,61 @@ class QuotationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'CustomerId' => 'required',
+            'Status' => 'required',
+            'Perihal' => 'required',
+            'Header' => 'required',
+            'Deskripsi' => 'required',
+            'Tanggal' => 'required',
+            'DueDate' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $data = $request->all();
+        $data['SubTotal'] = str_replace('.', '', $request->subtotal);
+        $data['Total'] = str_replace('.', '', $request->Total);
+
+        $Quotation = Quotation::find($id);
+        $Quotation->update($data);
+        $Quotation->DetailQuotation()->delete();
+
+        foreach ($request->InstrumenId as $key => $value) {
+            $harga = str_replace('.', '', $request->Harga[$key]);
+            $subtotal = str_replace('.', '', $request->SubTotal[$key]);
+            $qty = $request->Qty[$key];
+            for ($i = 0; $i < $qty; $i++) {
+                QuotationDetail::create([
+                    'idQuotation' => $request->id,
+                    'InstrumenId' => $value,
+                    'Qty' => 1,
+                    'Harga' => $harga,
+                    'SubTotal' => $subtotal,
+                    'Deskripsi' => $request->Deskripsi[$key],
+                ]);
+            }
+        }
+
+        return redirect()->route('quotation.index')->with('success', 'Data Berhasil Diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $data = Quotation::find($id);
+        $data->DetailQuotation()->delete();
+        if ($data) {
+            $data->delete();
+            return response()->json(['message' => 'data berhasil dihapus'], 200);
+        } else {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
     }
 
     private function GenerateKode()

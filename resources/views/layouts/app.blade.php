@@ -23,8 +23,9 @@
     <!-- Page Title -->
     <title>Kalibrasi ALat</title>
 
+<link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
     <!-- Favicon icon -->
-    <link rel="{{ asset('') }}assets/shortcut icon" type="image/png" href="images/favicon.png">
+    <link rel="assets/shortcut icon" type="image/png" href="images/favicon.png">
 
     <!-- All StyleSheet -->
     <link href="{{ asset('') }}assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">

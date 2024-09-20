@@ -11,6 +11,7 @@ use App\Models\Quotation;
 use App\Models\QuotationDetail;
 use App\Models\SerahTerima;
 use App\Models\Sertifikat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -30,7 +31,16 @@ class PoController extends Controller
                     $btnPdf = '<a href="' . route('po.pdf', $row->id) . '" target="_blank" class="btn btn-secondary btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>';
                     return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('Stat', function ($row) {
+                    if ($row->Status == 'AKTIF') {
+                        $Stat = '<span class="badge bg-success">AKTIF</span>';
+                    } else {
+                        $Stat = '<span class="badge bg-warning">TIDAK AKTIF</span>';
+                    }
+
+                    return $Stat;
+                })
+                ->rawColumns(['action', 'Stat'])
                 ->make(true);
         }
         $dataQuotation = Quotation::with('getCustomer')->where('Status', '!=', 'DITOLAK')->latest()->get();
@@ -126,17 +136,65 @@ class PoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(po $po)
+    public function edit($id)
     {
-        //
+        $data = po::with([
+            'DetailPo' => function ($query) {
+                $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
+            }
+        ])->where('id', $id)->first();
+        // dd($data);
+        $user = User::all();
+        $customer = MasterCustomer::all();
+        $instrumen = Instrumen::all();
+        return view('po.edit', compact('data', 'user', 'customer', 'instrumen'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, po $po)
+    public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'CustomerId' => 'required',
+            'Status' => 'required',
+            'Perihal' => 'required',
+            'Header' => 'required',
+            'Deskripsi' => 'required',
+            'Tanggal' => 'required',
+            'DueDate' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $data = $request->all();
+        $data['SubTotal'] = str_replace('.', '', $request->subtotal);
+        $data['Total'] = str_replace('.', '', $request->Total);
+
+        $Quotation = Quotation::find($id);
+        $Quotation->update($data);
+        $Quotation->DetailQuotation()->delete();
+
+        foreach ($request->InstrumenId as $key => $value) {
+            $harga = str_replace('.', '', $request->Harga[$key]);
+            $subtotal = str_replace('.', '', $request->SubTotal[$key]);
+            $qty = $request->Qty[$key];
+            for ($i = 0; $i < $qty; $i++) {
+                QuotationDetail::create([
+                    'idQuotation' => $request->id,
+                    'InstrumenId' => $value,
+                    'Qty' => 1,
+                    'Harga' => $harga,
+                    'SubTotal' => $subtotal,
+                    'Deskripsi' => $request->Deskripsi[$key],
+                ]);
+            }
+        }
+
+        return redirect()->route('quotation.index')->with('success', 'Data Berhasil Diupdate');
     }
 
     public function generatePdf($id)

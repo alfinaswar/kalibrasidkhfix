@@ -85,14 +85,14 @@
     <table style="margin-top: 0.5cm;">
         <thead>
             <tr>
-                <td width="20%">Nomor PO</td>
-                <td width="2%">:</td>
-                <td width="80%">{{ $data->KodePo }}</td>
+                <td width="10%">Nomor PO</td>
+                <td width="5%">:</td>
+                <td width="75%">{{ $data->KodePo }}</td>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Kepada</td>
+                <td width="75%">Kepada</td>
                 <td>:</td>
                 <td style="text-transform: uppercase;">{{ $data->getCustomer->Name }}</td>
             </tr>

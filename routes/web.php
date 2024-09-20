@@ -88,7 +88,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/buat/{id}', [QuotationController::class, 'create'])->name('quotation.form-quotation');
         Route::POST('/simpan', [QuotationController::class, 'store'])->name('quotation.store');
         Route::GET('/edit/{id}', [QuotationController::class, 'edit'])->name('quotation.edit');
-        Route::PUT('/update/{id}', [QuotationController::class, 'update'])->name('quotation.update');
+        Route::POST('/update/{id}', [QuotationController::class, 'update'])->name('quotation.update');
         Route::delete('hapus/{id}', [QuotationController::class, 'destroy'])->name('quotation.destroy');
         Route::GET('/cetak-pdf/{id}', [QuotationController::class, 'GeneratePdf'])->name('quotation.pdf');
     });

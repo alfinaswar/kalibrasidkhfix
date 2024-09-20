@@ -3,11 +3,11 @@
     <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Buat Quotation</h4>
+                <h4 class="card-title">Edit Quotation</h4>
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{ route('quotation.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('quotation.update',$data->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -30,9 +30,9 @@
                                 <label class="form-label">Status</label>
                                 <select name="Status" class="form-control @error('Status') is-invalid @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="DRAFT">Draft</option>
-                                    <option value="DISETUJUI">Disetujui</option>
-                                    <option value="DITOLAK">Tidak Disetujui</option>
+                                    <option value="DRAFT" @if($data->Status == "DRAFT") selected @endif>Draft</option>
+                                    <option value="DISETUJUI" @if($data->Status == "DISETUJUI") selected @endif>Disetujui</option>
+                                    <option value="DITOLAK" @if($data->Status == "DITOLAK") selected @endif>Tidak Disetujui</option>
                                 </select>
                                 @error('Status')
                                     <span class="invalid-feedback" role="alert">
@@ -42,50 +42,26 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Perihal</label>
-                                <textarea name="Perihal" id="texteditor1" class="form-control" placeholder="Isi Perihal"></textarea>
+                                <textarea name="Perihal" id="texteditor1" class="form-control" placeholder="Isi Perihal">{!! $data->Perihal!!}</textarea>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Lampiran</label>
-                                <textarea name="Lampiran" id="texteditor2" class="form-control" placeholder="Lampiran"></textarea>
+                                <textarea name="Lampiran" id="texteditor2" class="form-control" placeholder="Lampiran"> {!!$data->Lampiran!!}</textarea>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Header</label>
-                                <textarea name="Header" id="texteditor3" class="form-control" placeholder="Header Quotation">
-            <p>Dengan Hormat,</p>
-                                    <p>Semoga Bpk/ Ibu selalu dalam keadaan sehat dan sukses menjalankan aktivitas sehari-hari.</p>
-            <p>PT Digital Kalibrasi Hebat adalah institusi pengujian dan kalibrasi alat kesehatan yang telah memiliki ijin operasional dengan nomor 09092200348530001. Sehubungan dengan rencana pengujian dan kalibrasi alat kesehatan di RS Awal Bros A.Yani, bersama ini kami sampaikan penawaran harga mengenai pengujian dan kalibrasi alat kesehatan sebagai berikut:</p></textarea>
+                                <textarea name="Header" id="texteditor3" class="form-control" placeholder="Header Quotation">{!! $data->Header!!}</textarea>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Deskripsi</label>
-                                <textarea name="Deskripsi" id="texteditor4" class="form-control" placeholder="Deskripsi">  <div class="section">
-            <p>Kondisi Penawaran Harga:</p>
-            <p>Kedua belah pihak mengikuti aturan perpajakan yang berlaku.</p>
-            <p>Pembayaran DP 30%, Pelunasan setelah penyerahan sertifikat dan terbit sertifikat ASPAK.</p>
-            <p>Waktu pelaksanaan sesuai permintaan pemberi kerja.</p>
-        </div>
-
-        <div class="section">
-            <p>Cara Pembayaran:</p>
-            <p>Pembayaran melalui transfer ke rekening Bank Mandiri a/n PT Digital Kalibrasi Hebat No. 1080024737729.</p>
-            <p>Jika menggunakan SPK / PO dengan Term Of Payment (TOP):</p>
-            <ul>
-                <li>Minimal Biaya Kalibrasi Rp. 4.000.000,00- (Empat Juta Rupiah).</li>
-                <li>TOP (Term Of Payment) 30 hari setelah tagihan.</li>
-                <li>Sertifikat Kalibrasi diberikan jika sudah dilakukan pelunasan.</li>
-            </ul>
-        </div>
-
-        <div class="section contact">
-            <p>Untuk memudahkan koordinasi terkait penawaran ini, kami siap dihubungi dengan PIC:</p>
-            <p>Samuel Clinton +62 811-760-5052</p>
-        </div>
-
-        <p>Demikian penawaran ini kami sampaikan, besar harapan kerjasama ini dapat terwujud. Untuk perhatian dan kerjasama yang baik diucapkan terima kasih.</p></textarea>
+                                <textarea name="Deskripsi" id="texteditor4" class="form-control" placeholder="Deskripsi">
+{!! $data->Deskripsi!!}
+        </textarea>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal</label>
                                 <input type="date" class="form-control @error('Tanggal') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="Tanggal">
+                                    placeholder="Tanggal Diterima" name="Tanggal" value="{{ $data->Tanggal}}">
                                 @error('Tanggal')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -126,26 +102,26 @@
                                 </thead>
                                 <tbody>
                                     <!-- Existing Rows -->
-                                    @foreach ($GetKajiUlang as $item)
+                                    @foreach ($data->DetailQuotation as $item)
                                         <tr>
                                             <td>
                                                 <select class="form-control" name="InstrumenId[]">
                                                     @foreach ($instrumen as $inst)
                                                         <option value="{{ $inst->id }}"
-                                                            @if ($inst->id == $item->getInstrumen->id) selected @endif>
+                                                            @if ($inst->id == $item->InstrumenId) selected @endif>
                                                             {{ $inst->Nama }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
                                             <td><input type="text" name="Qty[]" class="form-control qty"
-                                                    placeholder="Jumlah Alat" value="{{ $item->Qty }}"></td>
+                                                    placeholder="Jumlah Alat" value="{{ $item->total }}"></td>
                                             <td>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">Rp.</span>
                                                     </div>
                                                     <input type="text" name="Harga[]" class="form-control text-end harga"
-                                                        placeholder="Harga" value="{{ $item->getInstrumen->Tarif }}">
+                                                        placeholder="Harga" value="{{ $item->Harga }}">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">.00</span>
                                                     </div>
