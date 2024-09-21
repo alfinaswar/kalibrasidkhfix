@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class SertifikatController extends Controller
 {
@@ -179,7 +180,8 @@ class SertifikatController extends Controller
             'filename' => $newFileName,
         ]);
 
-        return redirect()->back()->with('success', 'Kalibrasi Selesai');
+        // return redirect()->back()->with('success', 'Kalibrasi Selesai');
+        return response()->download($newFilePath);
     }
 
     /**
@@ -189,7 +191,12 @@ class SertifikatController extends Controller
     {
         //
     }
-
+    public function HasilPdf($id)
+    {
+        $data = Sertifikat::with('getNamaAlat','getCustomer')->where('id', $id)->first();
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('sertifikat.sertifikat-pdf', compact('data'));
+        return $pdf->stream('Sertifikat_' . $data->id . '.pdf');
+    }
     /**
      * Show the form for editing the specified resource.
      */
