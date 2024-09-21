@@ -73,10 +73,10 @@ class SertifikatController extends Controller
                     $view = 'sertifikat.create';
                     break;
                 case 3:
-                    $view = 'sertifikat.Form-Timbangan-Bayi-Mekanik';
+                    $view = 'sertifikat.create';
                     break;
                 case 4:
-                    $view = 'sertifikat.Form-Timbangan-Bayi-Mekanik';
+                    $view = 'sertifikat.create';
                     break;
                 case 5:
                     $view = 'sertifikat.create';
