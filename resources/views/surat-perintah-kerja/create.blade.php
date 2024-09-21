@@ -41,7 +41,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Ditugaskan Ke</label>
-                                <select class="multi-pilih-placeholder select2-hidden-accessible  @error('karyawanId') is-invalid @enderror" name="karyawanId" multiple="" data-select2-id="3" tabindex="-1"  aria-hidden="true">
+                                <select class="multi-pilih-placeholder select2-hidden-accessible  @error('karyawanId') is-invalid @enderror" name="karyawanId[]" multiple="" data-select2-id="3" tabindex="-1"  aria-hidden="true">
                                     <option value="">Pilih Petugas (Multiple)</option>
                                     @foreach ($user as $x)
                                            <option value="{{$x->id}}" data-select2-id="{{$x->id}}">{{$x->name}}</option>
