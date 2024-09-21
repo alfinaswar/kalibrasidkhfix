@@ -100,7 +100,7 @@ class SertifikatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $filePath = storage_path('app\public\file_lk\Centrifuge.xlsx');
+        $filePath = storage_path('app/public/file_lk/Centrifuge.xlsx');
 
         // dd($filePath);
 
