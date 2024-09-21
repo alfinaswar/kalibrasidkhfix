@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 Auth::routes();
@@ -114,8 +114,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('job-order')->group(function () {
         Route::GET('/', [SertifikatController::class, 'index'])->name('job.index');
         Route::GET('/kalibrasi/{id}', [SertifikatController::class, 'create'])->name('job.kalibrasi');
+        Route::GET('/hasil-pdf/{id}', [SertifikatController::class, 'HasilPdf'])->name('job.hasilpdf');
+        Route::GET('/hasil-excel/{id}', [SertifikatController::class, 'HasilExcel'])->name('job.hasilexcel');
         // Route::GET('/surat-tugas/', [SuratPerintahKerjaController::class, 'create'])->name('spk.form');
         Route::POST('/simpan', [SertifikatController::class, 'store'])->name('job.store');
+
         // Route::GET('/edit/{id}', [SuratPerintahKerjaController::class, 'edit'])->name('spk.edit');
         // Route::PUT('/update/{id}', [SuratPerintahKerjaController::class, 'update'])->name('spk.update');
         // Route::delete('hapus/{id}', [SuratPerintahKerjaController::class, 'destroy'])->name('spk.destroy');

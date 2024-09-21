@@ -19,10 +19,10 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Kode</th>
-                                <th>Customer</th>
-                                <th>Tanggal</th>
-                                <th>Ditugaskan Ke</th>
+                                <th width="20%">Kode</th>
+                                <th width="20%">Customer</th>
+                                <th width="20%">Tanggal</th>
+                                <th width="20%">Ditugaskan Ke</th>
                                 <th width="20%">Aksi</th>
                             </tr>
                         </thead>
@@ -47,7 +47,7 @@
                             <tr class="text-center">
                                 <th>#</th>
                                 <th>Kode</th>
-                                <th>CustomerId</th>
+                                <th>Customer</th>
                                 <th>Tanggal</th>
                                 <th width="12%">Aksi</th>
                             </tr>

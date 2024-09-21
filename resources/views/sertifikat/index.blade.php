@@ -1,20 +1,36 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Data Surat Tugas</h4>
+                    <h4 class="card-title">Data Sertifikat</h4>
+                    <!-- Filter Inputs -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" id="filter-nama-alat" class="form-control" placeholder="Filter Nama Alat">
+                        </div>
+                        <div class="col-md-4">
+                            <select id="filter-status-sertifikat" class="form-control">
+                                <option value="">Filter Status Sertifikat</option>
+                                <option value="DRAFT">DRAFT</option>
+                                <option value="TERBIT">TERBIT</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button id="filter-apply" class="btn btn-primary">Apply Filter</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <table id="example" class="display" style="min-width: 845px">
+                    <table id="example" class="display" style="min-width: 845px" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>No Sertifikat</th>
                                 <th>No Order</th>
+                                <th>Nama Alat</th>
                                 <th>Customer</th>
                                 <th>Status</th>
                                 <th width="20%">Aksi</th>
@@ -92,8 +108,13 @@
                             previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
                         }
                     },
-                    serverSide: true,
-                    ajax: "{{ route('job.index') }}",
+                    ajax: {
+                        url: "{{ route('job.index') }}",
+                        data: function(d) {
+                            d.nama_alat = $('#filter-nama-alat').val();
+                            d.status_sertifikat = $('#filter-status-sertifikat').val();
+                        }
+                    },
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
@@ -107,16 +128,17 @@
                             name: 'SertifikatOrder'
                         },
                         {
+                            data: 'get_nama_alat.Nama',
+                            name: 'get_nama_alat.Nama'
+                        },
+                        {
                             data: 'get_customer.Name',
                             name: 'get_customer.Name'
                         },
-
                         {
                             data: 'statsertifikat',
                             name: 'statsertifikat'
                         },
-
-
                         {
                             data: 'action',
                             name: 'action',
@@ -126,7 +148,12 @@
                     ]
                 });
             };
+
             dataTable();
+
+            $('#filter-apply').click(function() {
+                $('#example').DataTable().ajax.reload();
+            });
         });
     </script>
 @endsection

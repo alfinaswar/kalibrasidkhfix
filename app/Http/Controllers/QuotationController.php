@@ -35,13 +35,13 @@ class QuotationController extends Controller
                     return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
                 })
                 ->addColumn('HargaQo', function ($row) {
-                    $HargaQo = 'Rp '.number_format($row->Total, 0, ',', '.');
+                    $HargaQo = 'Rp ' . number_format($row->Total, 0, ',', '.');
                     return $HargaQo;
                 })
-                ->rawColumns(['action','HargaQo'])
+                ->rawColumns(['action', 'HargaQo'])
                 ->make(true);
         }
-        $dataKajiUlang = SerahTerima::with('dataKaji', 'Stdetail','getCustomer')->latest()->get();
+        $dataKajiUlang = SerahTerima::with('dataKaji', 'Stdetail', 'getCustomer')->where('Status', 'AKTIF')->latest()->get();
         return view('quotation.index', compact('dataKajiUlang'));
     }
 
@@ -108,6 +108,7 @@ class QuotationController extends Controller
         }
         return redirect()->route(route: 'quotation.index')->with('success', 'Data Berhasil Disimpan');
     }
+
     public function generatePdf($id)
     {
         $data = Quotation::with([
@@ -115,14 +116,15 @@ class QuotationController extends Controller
                 return $query
                     ->GroupBy('InstrumenId')
                     ->select('*', DB::raw('COUNT(InstrumenId) as jumlahAlat'));
-            }
-        ,'getCustomer','DetailQuotation.getNamaAlat'])
+            }, 'getCustomer', 'DetailQuotation.getNamaAlat'
+        ])
             ->where('id', $id)
             ->first();
         // dd($data);
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('quotation.cetak-pdf', compact('data'));
         return $pdf->stream('quotation.cetak-pdf' . $data->id . '.pdf');
     }
+
     public function show(string $id)
     {
         //

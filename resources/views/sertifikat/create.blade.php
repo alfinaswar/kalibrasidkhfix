@@ -689,6 +689,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="idsert" value="{{ $idsert }}">
         <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
     </div>
