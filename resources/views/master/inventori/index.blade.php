@@ -2,17 +2,17 @@
 
 @section('content')
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
-					<a href="{{route('alat.create')}}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah Alat</a>
+					<a href="{{route('inv.create')}}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah Inventori</a>
 	</div>
 
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Data Alat Medis</h4>
+                    <h4 class="card-title">Data Inventori</h4>
                 </div>
                 <div class="card-body">
-                        <table id="example" class="display" style="min-width: 845px">
+                        <table id="example" class="display" style="min-width: 845px" width="100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -63,7 +63,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ route('alat.destroy', ':id') }}'.replace(':id',
+                            url: '{{ route('inv.destroy', ':id') }}'.replace(':id',
                                 id),
                             type: 'DELETE',
                             data: {
@@ -105,7 +105,7 @@
                         }
                     },
                     serverSide: true,
-                    ajax: "{{ route('alat.index') }}",
+                    ajax: "{{ route('inv.index') }}",
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'

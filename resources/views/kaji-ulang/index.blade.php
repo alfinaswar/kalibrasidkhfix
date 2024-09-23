@@ -117,7 +117,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ route('alat.destroy', ':id') }}'.replace(':id',
+                            url: '{{ route('inv.destroy', ':id') }}'.replace(':id',
                                 id),
                             type: 'DELETE',
                             data: {

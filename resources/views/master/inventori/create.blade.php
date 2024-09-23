@@ -3,11 +3,11 @@
 <div class="col-xl-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Form Master Alat</h4>
+                                <h4 class="card-title">Form Master Inventori</h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="{{route('alat.store')}}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{route('inv.store')}}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
                                             <div class="mb-3 col-md-6">
@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Tanggal Pembelian</label>
-                                                <input type="date" name="BuyDate" class="form-control @error('BuyDate') is-invalid @enderror" placeholder="Tanggal Pembelian">
+                                                <input type="date" name="BuyDate" class="form-control @error('BuyDate') is-invalid @enderror" placeholder="Tanggal Pembelian" id="mdate">
                                                 @error('BuyDate')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -67,7 +67,7 @@
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Tanggal Kalibrasi</label>
-                                                <input type="date" name="TanggalKalibrasi" class="form-control @error('TanggalKalibrasi') is-invalid @enderror" placeholder="Tanggal Kalibrasi">
+                                                <input type="date" name="TanggalKalibrasi" class="form-control @error('TanggalKalibrasi') is-invalid @enderror" placeholder="Tanggal Kalibrasi" id="mdate3">
                                                 @error('TanggalKalibrasi')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -76,7 +76,7 @@
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Tanggal Jatuh Tempo</label>
-                                                <input type="date" name="DueDate" class="form-control @error('DueDate') is-invalid @enderror" placeholder="Tanggal Jatuh Tempo">
+                                                <input type="date" name="DueDate" class="form-control @error('DueDate') is-invalid @enderror" placeholder="Tanggal Jatuh Tempo" id="mdate2">
                                                 @error('DueDate')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>

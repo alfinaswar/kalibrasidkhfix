@@ -1075,7 +1075,7 @@
                             <span class="nav-text">Data Master</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('alat.index') }}">Alat Medis</a></li>
+                            <li><a href="{{ route('inv.index') }}">Inventory</a></li>
                             <li><a href="{{ route('customer.index') }}">Customer</a></li>
                             <li><a href="{{ route('instrumen.index') }}">Instrumen</a></li>
                             <li><a href="{{ route('metode.index') }}">Metode</a></li>
@@ -1086,7 +1086,7 @@
                             <span class="nav-text">System</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('alat.index') }}">Pengguna</a></li>
+                            <li><a href="{{ route('inv.index') }}">Pengguna</a></li>
                             <li><a href="{{ route('customer.index') }}">Master Role</a></li>
                             <li><a href="{{ route('instrumen.index') }}">Master Permission</a></li>
                         </ul>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlatUkurController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstrumenController;
+use App\Http\Controllers\InventoriController;
 use App\Http\Controllers\KajiUlangController;
 use App\Http\Controllers\MasterAlatController;
 use App\Http\Controllers\MasterCustomerController;
@@ -37,13 +38,13 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::prefix('master-alat')->group(function () {
-        Route::GET('/', [MasterAlatController::class, 'index'])->name('alat.index');
-        Route::GET('/create', [MasterAlatController::class, 'create'])->name('alat.create');
-        Route::POST('/simpan', [MasterAlatController::class, 'store'])->name('alat.store');
-        Route::GET('/edit/{id}', [MasterAlatController::class, 'edit'])->name('alat.edit');
-        Route::PUT('/update/{id}', [MasterAlatController::class, 'update'])->name('alat.update');
-        Route::delete('hapus/{id}', [MasterAlatController::class, 'destroy'])->name('alat.destroy');
+    Route::prefix('master-inventori')->group(function () {
+        Route::GET('/', [InventoriController::class, 'index'])->name('inv.index');
+        Route::GET('/create', [InventoriController::class, 'create'])->name('inv.create');
+        Route::POST('/simpan', [InventoriController::class, 'store'])->name('inv.store');
+        Route::GET('/edit/{id}', [InventoriController::class, 'edit'])->name('inv.edit');
+        Route::PUT('/update/{id}', [InventoriController::class, 'update'])->name('inv.update');
+        Route::delete('hapus/{id}', [InventoriController::class, 'destroy'])->name('inv.destroy');
     });
     Route::prefix('master-instrumen')->group(function () {
         Route::GET('/', [InstrumenController::class, 'index'])->name('instrumen.index');

@@ -2,10 +2,11 @@
     "use strict";
 
     // MAterial Date picker
-    $("#mdate").bootstrapMaterialDatePicker({
+    $("#mdate,#mdate2,#mdate3, #mdate4").bootstrapMaterialDatePicker({
         weekStart: 0,
         time: false,
     });
+
     $("#timepicker").bootstrapMaterialDatePicker({
         format: "HH:mm",
         time: true,
