@@ -41,10 +41,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('master-inventori')->group(function () {
         Route::GET('/', [InventoriController::class, 'index'])->name('inv.index');
         Route::GET('/create', [InventoriController::class, 'create'])->name('inv.create');
+        Route::GET('/create-kategori', [InventoriController::class, 'KategoriInventori'])->name('inv.create-kategori');
         Route::POST('/simpan', [InventoriController::class, 'store'])->name('inv.store');
+        Route::POST('/simpan-kategori', [InventoriController::class, 'storeKategori'])->name('inv.store-kategori');
         Route::GET('/edit/{id}', [InventoriController::class, 'edit'])->name('inv.edit');
+        Route::GET('/edit-kategori/{id}', [InventoriController::class, 'editKategori'])->name('inv.edit-kategori');
         Route::PUT('/update/{id}', [InventoriController::class, 'update'])->name('inv.update');
+        Route::PUT('/update-kategori/{id}', [InventoriController::class, 'updateKategori'])->name('inv.update-kategori');
         Route::delete('hapus/{id}', [InventoriController::class, 'destroy'])->name('inv.destroy');
+        Route::delete('hapus-kategori/{id}', [InventoriController::class, 'destroyKategori'])->name('inv.destroy-kategori');
     });
     Route::prefix('master-instrumen')->group(function () {
         Route::GET('/', [InstrumenController::class, 'index'])->name('instrumen.index');

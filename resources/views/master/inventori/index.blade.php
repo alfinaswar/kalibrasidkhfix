@@ -111,20 +111,20 @@
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'KodeAlat',
-                            name: 'KodeAlat'
+                            data: 'Kode',
+                            name: 'Kode'
                         },
                         {
-                            data: 'NamaAlat',
-                            name: 'NamaAlat'
+                            data: 'Nama',
+                            name: 'Nama'
                         },
                         {
                             data: 'Merk',
                             name: 'Merk'
                         },
                         {
-                            data: 'SerialNumber',
-                            name: 'SerialNumber'
+                            data: 'Sn',
+                            name: 'Sn'
                         },
                         {
                             data: 'Tertelusur',

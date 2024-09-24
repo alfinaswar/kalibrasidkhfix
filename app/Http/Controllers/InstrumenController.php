@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instrumen;
+use App\Models\inventori;
 use App\Models\MasterAlat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -51,7 +52,9 @@ class InstrumenController extends Controller
      */
     public function create()
     {
-        $data = MasterAlat::get();
+        //ganti kategorinya
+        $data = inventori::where('Kategori',2)->get();
+        // dd($data);
         return view('master.instrumen.create', compact('data'));
     }
 

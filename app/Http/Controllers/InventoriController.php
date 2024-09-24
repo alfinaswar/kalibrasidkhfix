@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\inventori;
+use App\Models\kategoriInventori;
+use App\Models\MasterAlat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class InventoriController extends Controller
 {
@@ -34,25 +37,31 @@ class InventoriController extends Controller
      */
     public function create()
     {
-        return view('master.inventori.create');
+        $data = kategoriInventori::get();
+        // dd($data);
+        return view('master.inventori.create',compact('data'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+       public function KategoriInventori(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = kategoriInventori::orderBy('id', 'Desc')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btnEdit = '<a href="' . route('inv.edit-kategori', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
+                    return $btnEdit . '  ' . $btnDelete;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        $data = kategoriInventori::all();
+        return view('master.inventori.create-kategori');
+    }
+    public function storeKategori(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlat' => 'required',
-            'Merk' => 'required',
-            'Type' => 'required',
-            'SerialNumber' => 'required',
-            'Foto' => 'required|image|max:5000',
-            'BuyDate' => 'required',
-            'TanggalKalibrasi' => 'required',
-            'DueDate' => 'required',
-            'Tertelusur' => 'required',
-            'Status' => 'required',
+            'Kategori' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()
@@ -61,16 +70,47 @@ class InventoriController extends Controller
                 ->withInput();
         }
         $data = $request->all();
+        kategoriInventori::create($data);
+        return redirect()->route('inv.create-kategori')->with('success', 'Data Berhasil Disimpan');
+    }
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //  $data = $request->all();
+        // dd($data);
+        $validator = Validator::make($request->all(), [
+            'Nama' => 'required',
+            'Kategori' => 'required',
+            'Merk' => 'required',
+            'Tipe' => 'required',
+            'Sn' => 'required',
+            'BuyDate' => 'required',
+            'KalibrasiDate' => 'required',
+            'KalibrasiDueDate' => 'required',
+            'Tertelusur' => 'required',
+            'Status' => 'required',
+        ]);
+        if ($validator->fails()) {
+
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $data = $request->all();
         if ($request->hasFile('Foto')) {
             $foto = $request->file('Foto');
-            $foto->storeAs('public/foto_alat', $foto->getClientOriginalName());
-            $foto = $request->file('Foto');
+            $foto->storeAs('public/foto_inventori', $foto->hashName());
+            $foto = $foto->hashName();
+        }else{
+           $foto = null;
         }
-        $data['KodeAlat'] = $this->GenerateKode();
-        $data['Foto'] = $foto->getClientOriginalName();
-        $data['idUser'] = auth()->user()->id;
-        MasterAlat::create($data);
-        return redirect()->route('alat.index')->with('success', 'Data Berhasil Disimpan');
+        $data['Foto'] = $foto;
+        $data['UserId'] = auth()->user()->id;
+        inventori::create($data);
+        return redirect()->route('inv.index')->with('success', 'Data Berhasil Disimpan');
     }
 
     /**
@@ -86,8 +126,14 @@ class InventoriController extends Controller
      */
     public function edit($id)
     {
-        $alat = MasterAlat::find($id);
-        return view('master.inventori.edit', compact('alat'));
+        $alat = inventori::find($id);
+        $data = kategoriInventori::all();
+        return view('master.inventori.edit', compact('alat','data'));
+    }
+    public function editKategori($id)
+    {
+        $data = kategoriInventori::find($id);
+        return view('master.inventori.edit-Kategori', compact('data'));
     }
 
     /**
@@ -96,14 +142,14 @@ class InventoriController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlat' => 'required',
+            'Nama' => 'required',
+            'Kategori' => 'required',
             'Merk' => 'required',
-            'Type' => 'required',
-            'SerialNumber' => 'required',
-            'Foto' => 'image|max:5000',
+            'Tipe' => 'required',
+            'Sn' => 'required',
             'BuyDate' => 'required',
-            'TanggalKalibrasi' => 'required',
-            'DueDate' => 'required',
+            'KalibrasiDate' => 'required',
+            'KalibrasiDueDate' => 'required',
             'Tertelusur' => 'required',
             'Status' => 'required',
         ]);
@@ -115,14 +161,33 @@ class InventoriController extends Controller
         }
         if ($request->hasFile('Foto')) {
             $foto = $request->file('Foto');
-            $foto->storeAs('public/foto_alat', $foto->getClientOriginalName());
-            $validator['Foto'] = $foto->getClientOriginalName();
+            $foto->storeAs('public/foto_inventori', $foto->hashName());
+            $foto = $foto->hashName();
+        } else {
+            $foto = null;
         }
+        $data = $request->all();
+        $data['Foto'] = $foto;
+        $alat = inventori::find($id);
+        $alat->update($data);
 
-        $alat = MasterAlat::find($id);
-        $alat->update($request->all());
+        return redirect()->route('inv.index')->with('success', 'Data Berhasil Diupdate');
+    }
+    public function updateKategori(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'Kategori' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $data = kategoriInventori::find($id);
+        $data->update($request->all());
 
-        return redirect()->route('alat.index')->with('success', 'Data Berhasil Diupdate');
+        return redirect()->route('inv.create-kategori')->with('success', 'Data Berhasil Diupdate');
     }
 
     /**
@@ -130,29 +195,32 @@ class InventoriController extends Controller
      */
     public function destroy($id)
     {
-        $alat = MasterAlat::find($id);
+        $alat = inventori::find($id);
         if ($alat) {
             $alat->delete();
-            return response()->json(['message' => 'fasilitas berhasil dihapus'], 200);
+            return response()->json(['message' => 'data berhasil dihapus'], 200);
         } else {
-            return response()->json(['message' => 'room tidak ditemukan'], 404);
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
+    }
+    public function destroyKategori($id)
+    {
+        // dd($id);
+        $cek = inventori::where('Kategori',$id)->get();
+        if(count($cek)<=0){
+
+            $data = kategoriInventori::find($id);
+            if ($data) {
+                $data->delete();
+                return response()->json(['message' => 'data berhasil dihapus'], 200);
+            } else {
+                return response()->json(['message' => 'data tidak ditemukan'], 404);
+            }
+        }else{
+            return response()->json(['message' => 'Data Sedang Digunakan'], 404);
+        }
+
     }
 
-    private function GenerateKode()
-    {
-        $month = date('m');
-        $month2 = date('m');
-        $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        $month = $romanMonths[$month - 1];
-        $year = date('Y');
-        $lastKodeAlat = MasterAlat::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
-        if ($lastKodeAlat) {
-            $lastKodeAlat = (int) substr($lastKodeAlat->KodeAlat, 0, 4);
-            $KodeAlat = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/AS-DKH/' . $month . '/' . $year;
-        } else {
-            $KodeAlat = '0001/AS-DKH/' . $month . '/' . $year;
-        }
-        return $KodeAlat;
-    }
+
 }

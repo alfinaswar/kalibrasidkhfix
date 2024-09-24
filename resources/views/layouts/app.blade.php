@@ -1079,6 +1079,7 @@
                             <li><a href="{{ route('customer.index') }}">Customer</a></li>
                             <li><a href="{{ route('instrumen.index') }}">Instrumen</a></li>
                             <li><a href="{{ route('metode.index') }}">Metode</a></li>
+                            <li><a href="{{ route('inv.create-kategori') }}">Kategori Inventori</a></li>
                         </ul>
                     </li>
                     <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">

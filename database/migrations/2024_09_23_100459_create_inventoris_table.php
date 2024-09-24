@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('inventoris', function (Blueprint $table) {
             $table->id();
-            $table->enum('Kategori', ['ALATUKUR', 'ARTEFAK', 'LAINNYA'])->nullable();
+            $table->string('Kategori')->nullable();
             $table->string('Kode')->unique();
             $table->string('Nama')->nullable();
-            $table->string('merk')->nullable();
+            $table->string('Merk')->nullable();
             $table->string('Tipe')->nullable();
             $table->string('Sn')->nullable();
             $table->string('Foto')->nullable();
             $table->date('BuyDate')->nullable();
             $table->date('KalibrasiDate')->nullable();
-            $table->date('kalibrasiDueDate')->nullable();
-            $table->boolean('Tertelusur')->nullable();
+            $table->date('KalibrasiDueDate')->nullable();
+            $table->string('Tertelusur')->nullable();
             $table->enum('Status', ['AKTIF', 'TIDAK'])->nullable();
             $table->unsignedBigInteger('UserId')->nullable();
             $table->softDeletes();
