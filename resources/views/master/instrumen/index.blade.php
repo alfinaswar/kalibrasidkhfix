@@ -4,6 +4,7 @@
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
         <a href="{{ route('instrumen.create') }}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah
             Instrumen</a>
+
     </div>
 
     <div class="row">
@@ -22,11 +23,11 @@
                                 <th>Kategori</th>
                                 <th>Nama</th>
                                 <th>Tarif</th>
-                                <th>Akreditasi</th>
+                                {{-- <th>Akreditasi</th> --}}
                                 <th>Alat Ukur</th>
                                 <th>LK</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                <th width="12%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -127,13 +128,13 @@
                             name: 'Nama'
                         },
                         {
-                            data: 'Tarif',
-                            name: 'Tarif'
+                            data: 'TarifRp',
+                            name: 'TarifRp'
                         },
-                        {
-                            data: 'Akreditasi',
-                            name: 'Akreditasi'
-                        },
+                        // {
+                        //     data: 'Akreditasi',
+                        //     name: 'Akreditasi'
+                        // },
                         {
                             data: 'NamaAlat',
                             name: 'NamaAlat'

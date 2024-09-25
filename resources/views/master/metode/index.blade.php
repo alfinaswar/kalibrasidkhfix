@@ -3,18 +3,18 @@
 <div class="col-xl-12 col-lg-12">
                         <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h4 class="card-title">Form Tambah Kategori Inventori</h4>
+                                    <h4 class="card-title">Form Tambah Metode</h4>
                                     <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
                             </div>
                             <div class="card-body">
-                                <div class="basic-form">
-                                    <form action="{{route('inv.store-kategori')}}" method="POST" enctype="multipart/form-data">
+                                <div class="basic-form mb-4">
+                                    <form action="{{route('metode.store')}}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
                                             <div class="mb-3 col-md-12">
-                                                <label class="form-label">Kategori</label>
-                                                <input type="text" name="Kategori" class="form-control @error('Kategori') is-invalid @enderror" placeholder="Kategori" value="{{old('Kategori')}}">
-                                                @error('Kategori')
+                                                <label class="form-label">Nama Metode</label>
+                                                <input type="text" name="Nama" class="form-control @error('Nama') is-invalid @enderror" placeholder="Nama Metode" value="{{old('Nama')}}">
+                                                @error('Nama')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -55,14 +55,14 @@
                                             }
                                         },
                                         serverSide: true,
-                                        ajax: "{{ route('inv.create-kategori') }}",
+                                        ajax: "{{ route('metode.index') }}",
                                         columns: [{
                                                 data: 'DT_RowIndex',
                                                 name: 'DT_RowIndex'
                                             },
                                             {
-                                                data: 'Kategori',
-                                                name: 'Kategori'
+                                                data: 'Nama',
+                                                name: 'Nama'
                                             },
                                             {
                                                 data: 'action',
@@ -86,7 +86,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ route('inv.destroy-kategori', ':id') }}'.replace(':id',
+                            url: '{{ route('metode.destroy', ':id') }}'.replace(':id',
                                 id),
                             type: 'DELETE',
                             data: {
@@ -115,4 +115,13 @@
             });
                         });
                     </script>
+                     @if (session()->has('success'))
+        <script>
+            swal.fire({
+                title: "{{ __('Success!') }}",
+                text: "{!! \Session::get('success') !!}",
+                type: "success"
+            });
+        </script>
+    @endif
 @endsection

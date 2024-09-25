@@ -127,12 +127,12 @@
                             name: 'Sn'
                         },
                         {
-                            data: 'Tertelusur',
-                            name: 'Tertelusur'
+                            data: 'gambar',
+                            name: 'gambar'
                         },
                         {
-                            data: 'Foto',
-                            name: 'Foto'
+                            data: 'Tertelusur',
+                            name: 'Tertelusur'
                         },
 
                         {

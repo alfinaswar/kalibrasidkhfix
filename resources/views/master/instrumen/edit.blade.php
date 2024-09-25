@@ -2,9 +2,10 @@
 @section('content')
     <div class="col-xl-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Form Instrumen Alat</h4>
-            </div>
+            <div class="card-header d-flex justify-content-between align-items-center">
+    <h4 class="card-title">Form Edit Instrumen Alat</h4>
+    <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
+</div>
             <div class="card-body">
                 <div class="basic-form">
                     <form action="{{ route('instrumen.update', $instrumen->id) }}" method="POST"
@@ -29,14 +30,8 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Nama</label>
-                                <select name="Nama" id="single-select"
-                                    class="form-control @error('Nama') is-invalid @enderror">
-                                    @foreach ($data as $i)
-                                        <option value="{{ $i->NamaAlat }}" @selected(old('Nama', $instrumen->Nama) == $i->id)>{{ $i->NamaAlat }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('Nama')
+ <input type="text" name="Nama" class="form-control @error('Nama') is-invalid @enderror" value="{{ old('Nama',$instrumen->Nama) }}">
+            @error('Nama')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -85,7 +80,7 @@
                                     @foreach ($data as $key => $value)
                                         <option value="{{ $value->id }}"
                                             {{ is_array($instrumen->AlatUkur) && in_array($value->id, $instrumen->AlatUkur) ? 'selected' : '' }}>
-                                            {{ $value->NamaAlat }}
+                                            {{ $value->Nama }}
                                         </option>
                                     @endforeach
                                 </select>

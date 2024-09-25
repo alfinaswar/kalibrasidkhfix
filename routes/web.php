@@ -7,6 +7,7 @@ use App\Http\Controllers\InventoriController;
 use App\Http\Controllers\KajiUlangController;
 use App\Http\Controllers\MasterAlatController;
 use App\Http\Controllers\MasterCustomerController;
+use App\Http\Controllers\MasterMetodeController;
 use App\Http\Controllers\PoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProsesKalibrasiController;
@@ -86,8 +87,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::PUT('/update/{id}', [KajiUlangController::class, 'update'])->name('ku.update');
         Route::delete('hapus/{id}', [KajiUlangController::class, 'destroy'])->name('ku.destroy');
     });
-    Route::prefix('Master-Metode')->group(function () {
-        Route::GET('/', [KajiUlangController::class, 'index'])->name('metode.index');
+    Route::prefix('master-metode')->group(function () {
+        Route::GET('/', [MasterMetodeController::class, 'index'])->name('metode.index');
+        Route::delete('hapus/{id}', [MasterMetodeController::class, 'destroy'])->name('metode.destroy');
+        Route::GET('/edit/{id}', [MasterMetodeController::class, 'edit'])->name('metode.edit');
+        Route::POST('/simpan', [MasterMetodeController::class, 'store'])->name('metode.store');
+        Route::PUT('/update/{id}', [MasterMetodeController::class, 'update'])->name('metode.update');
     });
     Route::prefix('quotation')->group(function () {
         Route::GET('/', [QuotationController::class, 'index'])->name('quotation.index');

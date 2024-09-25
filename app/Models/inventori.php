@@ -13,24 +13,5 @@ class inventori extends Model
     protected $table = 'inventoris';
     protected $guarded =['id'];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->kode = self::generateKode();
-        });
-    }
-
-    public static function generateKode()
-    {
-        $latest = self::latest('id')->first();
-        $nextNumber = $latest ? $latest->id + 1 : 1;
-        $number = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-        $bulan = date('n');
-        $tahun = date('Y');
-
-        return "{$number}/AS-DKH/{$bulan}/{$tahun}";
-    }
 
 }

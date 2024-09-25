@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('NoAspak')->nullable();
             $table->string('Name')->nullable();
             $table->string('Email')->nullable();
-            $table->bigInteger('Telepon')->nullable();
+            $table->string('Telepon')->nullable();
             $table->string('Alamat')->nullable();
             $table->string('Deskripsi')->nullable();
             $table->string('Status')->nullable();

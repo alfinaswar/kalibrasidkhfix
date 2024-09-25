@@ -25,7 +25,11 @@ class MasterCustomerController extends Controller
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     return $btnEdit . '  ' . $btnDelete;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('Kontak', function ($row) {
+                    $Kontak = '<span>'.$row->Email.'</span><hr><span>'.$row->Telepon.'<span>';
+                    return $Kontak;
+                })
+                ->rawColumns(['action','Kontak'])
                 ->make(true);
         }
         return view('master.customer.index');

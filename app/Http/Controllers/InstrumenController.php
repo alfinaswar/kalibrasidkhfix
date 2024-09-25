@@ -33,15 +33,19 @@ class InstrumenController extends Controller
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     return $btnEdit . '  ' . $btnDelete;
                 })
+                ->addColumn('TarifRp', function ($row) {
+                    $TarifRp = 'Rp ' . number_format($row->Tarif, 0, ',', '.');
+                    return $TarifRp;
+                })
                 ->addColumn('Stat', function ($row) {
-                    if ($row->Status == 'Baik') {
-                        $Stat = '<span class="badge bg-primary">Aktif</span>';
+                    if ($row->Status == 'AKTIF') {
+                        $Stat = '<span class="badge bg-success">Aktif</span>';
                     } else {
-                        $Stat = '<span class="badge bg-primary">Tidak AKtif</span>';
+                        $Stat = '<span class="badge bg-danger">Tidak AKtif</span>';
                     }
                     return $Stat;
                 })
-                ->rawColumns(['action', 'NamaAlat', 'Stat'])
+                ->rawColumns(['action', 'NamaAlat', 'Stat','TarifRp'])
                 ->make(true);
         }
         return view('master.instrumen.index');
@@ -114,7 +118,7 @@ class InstrumenController extends Controller
     public function edit($id)
     {
         $instrumen = Instrumen::find($id);
-        $data = MasterAlat::get();
+        $data = inventori::where('Kategori',2)->get();
         return view('master.instrumen.edit', compact('instrumen', 'data'));
     }
 

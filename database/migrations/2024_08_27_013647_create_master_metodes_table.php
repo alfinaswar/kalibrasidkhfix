@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('master_metodes', function (Blueprint $table) {
             $table->id();
             $table->string('Nama', 100)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

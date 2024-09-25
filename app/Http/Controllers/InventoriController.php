@@ -26,7 +26,11 @@ class InventoriController extends Controller
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     return $btnEdit . '  ' . $btnDelete;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('gambar', function ($row) {
+                    $gambar = '<img src="' . url('storage/foto_inventori/' . $row->Foto) . '" width="100" height="100">';
+                    return $gambar;
+                })
+                ->rawColumns(['action','gambar'])
                 ->make(true);
         }
         return view('master.inventori.index');
@@ -107,6 +111,7 @@ class InventoriController extends Controller
         }else{
            $foto = null;
         }
+        $data['Kode'] = $this->GenerateKode();
         $data['Foto'] = $foto;
         $data['UserId'] = auth()->user()->id;
         inventori::create($data);
@@ -220,6 +225,23 @@ class InventoriController extends Controller
             return response()->json(['message' => 'Data Sedang Digunakan'], 404);
         }
 
+    }
+
+    private function GenerateKode()
+    {
+        $month = date('m');
+        $month2 = date('m');
+        $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $month = $romanMonths[$month - 1];
+        $year = date('Y');
+        $lastKodeAlat = inventori::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
+        if ($lastKodeAlat) {
+            $lastKodeAlat = (int) substr($lastKodeAlat->Kode, 0, 4);
+            $KodeAlat = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/AS-DKH/' . $month . '/' . $year;
+        } else {
+            $KodeAlat = '0001/AS-DKH/' . $month . '/' . $year;
+        }
+        return $KodeAlat;
     }
 
 

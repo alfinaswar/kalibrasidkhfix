@@ -19,12 +19,12 @@
                                 <th>#</th>
                                 <th>Kode Customer</th>
                                 <th>Kategori</th>
-                                <th>No Aspak</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Telepon</th>
+                                {{-- <th>No Aspak</th> --}}
+                                <th>Nama</th>
+                                <th>Kontak</th>
+                                {{-- <th>Telepon</th> --}}
                                 <th>Alamat</th>
-                                <th>Deskripsi</th>
+                                {{-- <th>Deskripsi</th> --}}
                                 <th>Status</th>
                                 <th width="12%">Aksi</th>
                             </tr>
@@ -121,30 +121,30 @@
                             data: 'Kategori',
                             name: 'Kategori'
                         },
-                        {
-                            data: 'NoAspak',
-                            name: 'NoAspak'
-                        },
+                        // {
+                        //     data: 'NoAspak',
+                        //     name: 'NoAspak'
+                        // },
                         {
                             data: 'Name',
                             name: 'Name'
                         },
                         {
-                            data: 'Email',
-                            name: 'Email'
+                            data: 'Kontak',
+                            name: 'Kontak'
                         },
-                        {
-                            data: 'Telepon',
-                            name: 'Telepon'
-                        },
+                        // {
+                        //     data: 'Telepon',
+                        //     name: 'Telepon'
+                        // },
                         {
                             data: 'Alamat',
                             name: 'Alamat'
                         },
-                        {
-                            data: 'Deskripsi',
-                            name: 'Deskripsi'
-                        },
+                        // {
+                        //     data: 'Deskripsi',
+                        //     name: 'Deskripsi'
+                        // },
                         {
                             data: 'Status',
                             name: 'Status'
