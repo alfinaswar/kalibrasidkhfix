@@ -7,7 +7,7 @@
                                     <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
                             </div>
                             <div class="card-body">
-                                <div class="basic-form">
+                                <div class="basic-form mb-4">
                                     <form action="{{route('inv.store-kategori')}}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">

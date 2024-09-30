@@ -39,6 +39,10 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
+    //USER
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+
     Route::prefix('master-inventori')->group(function () {
         Route::GET('/', [InventoriController::class, 'index'])->name('inv.index');
         Route::GET('/create', [InventoriController::class, 'create'])->name('inv.create');
@@ -74,9 +78,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/create', [SerahTerimaAlatController::class, 'create'])->name('st.create');
         Route::POST('/simpan', [SerahTerimaAlatController::class, 'store'])->name('st.store');
         Route::GET('/edit/{id}', [SerahTerimaAlatController::class, 'edit'])->name('st.edit');
+        Route::GET('/detail/{id}', [SerahTerimaAlatController::class, 'detail'])->name('st.detail');
         Route::POST('/update-data/{id}', [SerahTerimaAlatController::class, 'update'])->name('st.update');
         Route::delete('hapus/{id}', [SerahTerimaAlatController::class, 'destroy'])->name('st.destroy');
         Route::GET('/pdf/{id}', [SerahTerimaAlatController::class, 'GeneratePdf'])->name('st.pdf');
+        Route::GET('/cetak-stiker/{id}', [SerahTerimaAlatController::class, 'CetakStiker'])->name('st.cetak-stiker');
     });
     Route::prefix('kaji-ulang')->group(function () {
         Route::GET('/', [KajiUlangController::class, 'index'])->name('ku.index');
@@ -84,6 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/form-kaji-ulang/{id}', [KajiUlangController::class, 'formKaji'])->name('ku.form-kaji-ulang');
         Route::POST('/simpan', [KajiUlangController::class, 'store'])->name('ku.store');
         Route::GET('/edit/{id}', [KajiUlangController::class, 'edit'])->name('ku.edit');
+        Route::GET('/detail/{id}', [KajiUlangController::class, 'show'])->name('ku.cetak');
         Route::PUT('/update/{id}', [KajiUlangController::class, 'update'])->name('ku.update');
         Route::delete('hapus/{id}', [KajiUlangController::class, 'destroy'])->name('ku.destroy');
     });

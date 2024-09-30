@@ -16,11 +16,11 @@
                                 <select name="Kategori" id=""
                                     class="form-control @error('Kategori') is-invalid @enderror">
                                     <option value="">Pilih Kategori</option>
-                                    <option value="Rumah Sakit">Rumah Sakit</option>
-                                    <option value="Klinik">Klinik</option>
-                                    <option value="Puskesmas">Puskesmas</option>
-                                    <option value="Laboratorium">Laboratorium</option>
-                                     <option value="Perusahaan">Perusahaan</option>
+                                    <option value="RS" {{ old('Kategori') == 'RS' ? 'selected' : '' }}>Rumah Sakit</option>
+                                    <option value="Klinik" {{ old('Kategori') == 'Klinik' ? 'selected' : '' }}>Klinik</option>
+                                    <option value="Puskesmas" {{ old('Kategori') == 'Puskesmas' ? 'selected' : '' }}>Puskesmas</option>
+                                    <option value="Laboratorium" {{ old('Kategori') == 'Laboratorium' ? 'selected' : '' }}>Laboratorium</option>
+                                    <option value="Perusahaan" {{ old('Kategori') == 'Perusahaan' ? 'selected' : '' }}>Perusahaan</option>
                                 </select>
                                 @error('Kategori')
                                     <span class="invalid-feedback" role="alert">
@@ -31,7 +31,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">No Aspak</label>
                                 <input type="text" name="NoAspak"
-                                    class="form-control @error('NoAspak') is-invalid @enderror" placeholder="No Aspak">
+                                    class="form-control @error('NoAspak') is-invalid @enderror" value="{{ old('NoAspak') }}" placeholder="No Aspak">
                                 @error('NoAspak')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -41,7 +41,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Nama</label>
                                 <input type="text" name="Nama"
-                                    class="form-control @error('Nama') is-invalid @enderror" placeholder="Nama">
+                                    class="form-control @error('Nama') is-invalid @enderror" value="{{ old('Nama') }}" placeholder="Nama">
                                 @error('Nama')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -51,7 +51,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Email</label>
                                 <input type="email" name="Email"
-                                    class="form-control @error('Email') is-invalid @enderror" placeholder="Email">
+                                    class="form-control @error('Email') is-invalid @enderror" value="{{ old('Email') }}" placeholder="Email">
                                 @error('Email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -61,7 +61,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Telepon</label>
                                 <input type="text" name="Telepon"
-                                    class="form-control @error('Telepon') is-invalid @enderror" placeholder="Telepon">
+                                    class="form-control @error('Telepon') is-invalid @enderror" value="{{ old('Telepon') }}" placeholder="Telepon">
                                 @error('Telepon')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -70,7 +70,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Alamat</label>
-                                <textarea name="Alamat" class="form-control @error('Alamat') is-invalid @enderror" placeholder="Alamat"></textarea>
+                                <textarea name="Alamat" class="form-control @error('Alamat') is-invalid @enderror" placeholder="Alamat">{{ old('Alamat') }}</textarea>
                                 @error('Alamat')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Deskripsi</label>
-                                <textarea name="Deskripsi" class="form-control @error('Deskripsi') is-invalid @enderror" placeholder="Deskripsi"></textarea>
+                                <textarea name="Deskripsi" class="form-control @error('Deskripsi') is-invalid @enderror" placeholder="Deskripsi">{{ old('Deskripsi') }}</textarea>
                                 @error('Deskripsi')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -91,8 +91,8 @@
                                 <select name="Status" id=""
                                     class="form-control @error('Status') is-invalid @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Tidak Aktif">Tidak Aktif</option>
+                                    <option value="AKTIF" {{ old('Status') == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="TIDAKAKTIF" {{ old('Status') == 'TIDAKAKTIF' ? 'selected' : '' }}>Tidak Aktif</option>
                                 </select>
                                 @error('Status')
                                     <span class="invalid-feedback" role="alert">

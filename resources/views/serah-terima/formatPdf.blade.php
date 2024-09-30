@@ -41,13 +41,13 @@
             z-index: -10;
         }
 
-        .footer {
-            position: fixed;
-            bottom: 0;
+        footer {
+            color: #000;
             width: 100%;
-            text-align: center;
-            font-size: 10px;
-            margin-top: 20px;
+            height: 45px;
+            position: absolute;
+            bottom: 0;
+            padding: 8px 0;
         }
 
         #tabelitem {
@@ -61,6 +61,21 @@
             padding: 5px;
             text-align: left;
             vertical-align: middle;
+        }
+
+        #logo {
+            float: left;
+            margin-top: 8px;
+        }
+
+        #logo img {
+            height: 70px;
+        }
+
+        #company {
+            margin-top: 8px;
+            margin-right: 110px;
+            float: right;
         }
     </style>
 </head>
@@ -102,76 +117,100 @@
                 @endforeach
             </tbody>
         </table>
-        <table border="0" width="100%">
+        <br>
+        <table>
             <thead>
                 <tr>
-                    <th>Sebelum Pengujian/Kalirasi</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>Diserahkan Oleh,</th>
-                    <th>Diterima Oleh</th>
+                    <td colspan="3"><u>Sebelum Pengujian/Kalibrasi</u></td>
+                    <td style="text-align: center !important;">Diserahkan Oleh,</td>
+                    <td style="text-align: center !important;">Diterima Oleh,</td>
                 </tr>
-            </thead>
-            <tbody>
                 <tr>
-                    <td>Tanggal Alat Diterima</td>
-                    <td>:</td>
-                    <td>{{ $instrumen->TanggalDiterima }}</td>
-                    <td></td>
+                    <td>Hari/Tgl alat diterima</td>
+                    <td style="width: 2%;">:</td>
+                    <td>{{ \Carbon\Carbon::parse($instrumen->TanggalDiterima)->format('d M Y') }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Jam</td>
                     <td>:</td>
-                    <td>jam</td>
-                    <td></td>
+                    <td>{{ \Carbon\Carbon::parse($instrumen->TanggalDiterima)->format('H:i:s') }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td colspan="4"></td>
-                    <td>Nama Lengkap &amp; TTD</td>
-                    <td>Nama Lengkap &amp; TTD</td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-top:0; padding: 0;"></td>
+                    <td style="border-top:0; padding: 0;text-align: center !important;">
+                        <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
+                    </td>
+                    <td style="border-top:0; padding: 0;text-align: center !important;">
+                        <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
+                    </td>
                 </tr>
-            </tbody>
-        </table>
-        <table border="0" width="100%">
-            <thead>
                 <tr>
-                    <th>Sebelum Pengujian/Kalirasi</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>Diserahkan Oleh,</th>
-                    <th>Diterima Oleh</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center !important;">Nama Lengkap & TTD</td>
+                    <td style="text-align: center !important;">Nama Lengkap & TTD</td>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Tanggal Alat Diterima</td>
-                    <td>:</td>
-                    <td>{{ $instrumen->TanggalDiterima }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Jam</td>
-                    <td>:</td>
-                    <td>jam</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="4"></td>
-                    <td>Nama Lengkap &amp; TTD</td>
-                    <td>Nama Lengkap &amp; TTD</td>
-                </tr>
-            </tbody>
         </table>
+        @if ($instrumen->TanggalDiserahkan == null)
+        @else
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="3"><u>Setelah Pengujian/Kalibrasi</u></td>
+                        <td style="text-align: center !important;">Diserahkan Oleh,</td>
+                        <td style="text-align: center !important;">Diterima Oleh,</td>
+                    </tr>
+                    <tr>
+                        <td>Hari/Tgl alat diterima</td>
+                        <td style="width: 2%;">:</td>
+                        <td><?= date('Y-m-d', strtotime($instrumen->tanggalDiterima)) ?></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Jam</td>
+                        <td>:</td>
+                        <td><?= date('H:i:s', strtotime($instrumen->tanggalDiterima)) ?></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td style="border-top:0; padding: 0;"></td>
+                        <td style="border-top:0; padding: 0;text-align: center !important;">
+                            <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
+                        </td>
+                        <td style="border-top:0; padding: 0;text-align: center !important;">
+                            <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center !important;">Nama Lengkap & TTD</td>
+                        <td style="text-align: center !important;">Nama Lengkap & TTD</td>
+                    </tr>
+                </thead>
+            </table>
+        @endif
+        <footer>
+            <div id="logo">
+                <p style="float:left;">DIGICAL-4021</p>
+            </div>
+            <div id="company">
+                <p>DigiCal/004/STB-DKH/2022/Rev.01</p>
+            </div>
+        </footer>
     </div>
 </body>
 

@@ -2,8 +2,7 @@
 
 @section('content')
     <div class="d-flex justify-content-end align-items-center mb-4 flex-wrap">
-        <a href="{{ route('st.create') }}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah
-            Alat</a>
+        <a href="{{ route('st.create') }}" class="btn btn-primary me-3 btn-sm"><i class="fas fa-plus me-2"></i>Tambah</a>
     </div>
 
     <div class="row">
@@ -22,7 +21,7 @@
                                 <th>Tanggal Diterima</th>
                                 <th>Tanggal Diserahkan</th>
                                 <th>Status</th>
-                                <th width="15%">Aksi</th>
+                                <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

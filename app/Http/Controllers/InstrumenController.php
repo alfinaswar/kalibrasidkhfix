@@ -23,8 +23,8 @@ class InstrumenController extends Controller
                 ->addColumn('NamaAlat', function ($row) {
                     $NamaAlat = '';
                     foreach ($row->AlatUkur as $key => $value) {
-                        $alat = MasterAlat::where('id', $value)->first();
-                        $NamaAlat .= '<span class="badge bg-dark mb-1">' . $alat->NamaAlat . '</span>';
+                        $alat = inventori::where('id', $value)->first();
+                        $NamaAlat .= '<span class="badge bg-dark m-1">' . $alat->Nama . '</span>';
                     }
                     return $NamaAlat;
                 })

@@ -10,14 +10,16 @@
                     <form action="{{ route('st.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                        <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label">Nama Customer</label>
-                                 <select id="single-select" name="CustomerId"
+                                <select id="single-select" name="CustomerId"
                                     class="form-control-lg @error('CustomerId') is-invalid @enderror">
-                                    <option>Pilih Customer</option>
+                                    <option value="">Pilih Customer</option>
                                     @foreach ($customer as $cust)
-                                        <option value="{{ $cust->id }}">
-                                            {{ $cust->Name }}</option>
+                                        <option value="{{ $cust->id }}"
+                                            {{ old('CustomerId') == $cust->id ? 'selected' : '' }}>
+                                            {{ $cust->Name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('CustomerId')
@@ -26,19 +28,27 @@
                                     </span>
                                 @enderror
                             </div>
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
-                                <select name="Status" class="form-control">
+                                <select name="Status" class="form-control @error('Status') is-invalid @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="AKTIF">Aktif</option>
-                                    <option value="TIDAK">Tidak Aktif</option>
+                                    <option value="AKTIF" {{ old('Status') == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="TIDAKAKTIF" {{ old('Status') == 'TIDAKAKTIF' ? 'selected' : '' }}>Tidak
+                                        Aktif</option>
                                 </select>
+                                @error('Status')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal Diterima</label>
                                 <input type="text" id="date-format"
                                     class="form-control @error('TanggalDiterima') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="TanggalDiterima">
+                                    placeholder="Tanggal Diterima" name="TanggalDiterima"
+                                    value="{{ old('TanggalDiterima') }}">
                                 @error('TanggalDiterima')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -46,7 +56,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal Diserahkan</label>
                                 <input type="text" id="date-format"
                                     class="form-control @error('TanggalDiajukan') is-invalid @enderror"
@@ -56,7 +66,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="text-center mt-4">
                             <u>
@@ -84,12 +94,20 @@
                                     <tbody>
                                         <tr>
 
-                                            <td><select class="form-control" tabindex="null" name="InstrumenId[]">
+                                            <td><select class="form-control @error('InstrumenId') is-invalid @enderror"
+                                                    tabindex="null" name="InstrumenId[]" required>
+                                                    <option value="">Pilih Alat</option>
                                                     @foreach ($instrumen as $inst)
                                                         <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
                                                     @endforeach
-                                                </select></td>
-                                            <td><input type="text" name="Merk[]" class="form-control"
+                                                </select>
+                                                @error('InstrumenId')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </td>
+                                            <td> <input type="text" name="Merk[]" class="form-control"
                                                     placeholder="Merk">
                                             </td>
                                             <td><input type="text" name="Type[]" class="form-control"
@@ -97,8 +115,14 @@
                                             </td>
                                             <td><input type="text" name="SerialNumber[]" class="form-control"
                                                     placeholder="Serial Number"></td>
-                                            <td><input type="number" name="Qty[]" value="1" class="form-control"
+                                            <td><input type="number" name="Qty[]" value="1"
+                                                    class="form-control @error('Qty') is-invalid @enderror"
                                                     placeholder="Qty">
+                                                @error('Qty')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                             </td>
                                             <td><input type="text" name="Deskripsi[]" class="form-control"
                                                     placeholder="Deskripsi">

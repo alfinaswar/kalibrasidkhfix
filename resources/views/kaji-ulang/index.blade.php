@@ -16,18 +16,14 @@
                     <h4 class="card-title">Data Kaji Ulang Alat</h4>
                 </div>
                 <div class="card-body">
-                    <table id="example" class="display" style="min-width: 845px">
+                    <table id="example" class="display" style="min-width: 845px" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Kode</th>
-                                <th>Nama Alat</th>
-                                <th>Metode1</th>
-                                <th>Metode2</th>
+                                <th>Nomor Serah Terima</th>
+                                <th>Customer</th>
                                 <th>Status</th>
-                                <th>Kondisi</th>
-                                <th>Catatan</th>
-                                <th width="12%">Aksi</th>
+                                <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,7 +74,8 @@
                                             <span class="badge bg-danger text-white">Tidak AKtif</span>
                                         @endif
                                     </td>
-                                    <td><a href="{{ route('ku.form-kaji-ulang', $st->id) }}" class="btn btn-primary">Kaji</a>
+                                    <td><a href="{{ route('ku.form-kaji-ulang', $st->id) }}"
+                                            class="btn btn-primary">Kaji</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -165,34 +162,17 @@
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'KodeKajiUlang',
-                            name: 'KodeKajiUlang'
+                            data: 'KodeSt',
+                            name: 'KodeSt'
                         },
                         {
-                            data: 'get_instrumen.Nama',
-                            name: 'get_instrumen.Nama'
-                        },
-                        {
-                            data: 'Metode1',
-                            name: 'Metode1'
-                        },
-                        {
-                            data: 'Metode2',
-                            name: 'Metode2'
+                            data: 'get_customer.Name',
+                            name: 'get_customer.Name'
                         },
                         {
                             data: 'StatusKaji',
                             name: 'StatusKaji'
                         },
-                        {
-                            data: 'KondisiKaji',
-                            name: 'KondisiKaji'
-                        },
-                        {
-                            data: 'Catatan',
-                            name: 'Catatan'
-                        },
-
                         {
                             data: 'action',
                             name: 'action',

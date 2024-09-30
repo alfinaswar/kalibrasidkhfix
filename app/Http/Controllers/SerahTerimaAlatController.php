@@ -10,6 +10,7 @@ use App\Models\SerahTerimaDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
 
@@ -28,8 +29,8 @@ class SerahTerimaAlatController extends Controller
                     $btnPdf = '<a href="' . route('st.pdf', $row->id) . '" class="btn btn-primary btn-sm" title="Pdf"><i class="fas fa-print"></i></a>';
                     $btnEdit = '<a href="' . route('st.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-
-                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
+                    $LinkDetail = '<a href="' . route('st.detail', $row->id) . '" title="Detail" class="btn btn-secondary"><i class="fas fa-tags"></i></a>';
+                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf . ' ' . $LinkDetail;
                 })
                 ->addColumn('Stat', function ($row) {
                     if ($row->Status == 'AKTIF') {
@@ -52,13 +53,64 @@ class SerahTerimaAlatController extends Controller
     public function create()
     {
         $user = User::all();
-        $customer = MasterCustomer::all();
-        $instrumen = Instrumen::all();
+        $customer = MasterCustomer::where('Status', 'AKTIF')->get();
+        $instrumen = Instrumen::where('Status', 'AKTIF')->get();
         return view('serah-terima.form-serah-terima', compact('user', 'instrumen', 'customer'));
     }
 
+    public function detail($id)
+    {
+        $st = SerahTerima::with([
+            'Stdetail' => function ($query) {
+                $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
+            }
+        ])->where('id', $id)->first();
+        // dd($st);
+        $user = User::all();
+        $customer = MasterCustomer::all();
+        $instrumen = Instrumen::all();
+        return view('serah-terima.detail', compact('st', 'user', 'customer', 'instrumen'));
+    }
+    public function CetakStiker($id)
+    {
+        $data = SerahTerima::with(
+            'Stdetail',
+            'getCustomer',
+            'Stdetail.getNamaAlat'
+        )->where('id', $id)->first();
+        $viewData = [
+            'KodeSt' => $data->KodeSt,
+            'data' => $data,
+        ];
+        // return $viewData;
+        // die;
+
+        $pdf = app('dompdf.wrapper')->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('serah-terima.format-stiker', $viewData)->setPaper([0, 0, 161.57, 70.00], 'portrait');
+
+        return $pdf->stream('cetak.pdf');
+    }
     public function store(Request $request)
     {
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            'CustomerId' => 'required',
+            'TanggalDiterima' => 'required',
+            'Status' => 'required',
+            'InstrumenId' => 'required|array',
+            'InstrumenId.*' => 'required|integer|exists:instrumens,id',
+            'Qty' => 'required|array',
+            'Qty.*' => 'required|integer|min:0', // Pastikan setiap Qty adalah integer dan minimal 0
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+
+        // Proses data setelah validasi
         $data = $request->all();
         $data['KodeSt'] = $this->GenerateKode();
         $data['idUser'] = auth()->user()->id;
@@ -92,17 +144,22 @@ class SerahTerimaAlatController extends Controller
                 ]);
             }
         }
+
         return redirect()->route('st.index')->with('success', 'Data Berhasil Disimpan');
     }
+
 
     /**
      * Display the specified resource.
      */
     public function GeneratePdf($id)
     {
-        $data = SerahTerima::with(['Stdetail' => function ($query) {
-            $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId')->join('instrumens', 'serah_terima_details.InstrumenId', '=', 'instrumens.id');
-        }, 'getCustomer'])->where('id', $id)->first();
+        $data = SerahTerima::with([
+            'Stdetail' => function ($query) {
+                $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId')->join('instrumens', 'serah_terima_details.InstrumenId', '=', 'instrumens.id');
+            },
+            'getCustomer'
+        ])->where('id', $id)->first();
         $filename = str_replace(['/', '\\'], '_', $data->KodeSt) . '.pdf';
         $viewData = [
             'judul' => 'SERAH TERIMA BARANG',
@@ -120,9 +177,11 @@ class SerahTerimaAlatController extends Controller
      */
     public function edit($id)
     {
-        $st = SerahTerima::with(['Stdetail' => function ($query) {
-            $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
-        }])->where('id', $id)->first();
+        $st = SerahTerima::with([
+            'Stdetail' => function ($query) {
+                $query->select('*', DB::raw('COUNT(InstrumenId) as total'))->groupBy('InstrumenId');
+            }
+        ])->where('id', $id)->first();
         // dd($st);
         $user = User::all();
         $customer = MasterCustomer::all();

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Instrumen;
 use App\Models\KajiUlang;
 use App\Models\MasterCustomer;
+use App\Models\MasterMetode;
 use App\Models\SerahTerima;
 use App\Models\SerahTerimaDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class KajiUlangController extends Controller
 {
@@ -18,41 +20,54 @@ class KajiUlangController extends Controller
      */
     public function index(Request $request)
     {
-        // $data = KajiUlang::with('getInstrumen')->orderBy('id', 'Desc')->get();
-        // dd($data);
+        // $data = SerahTerima::with('dataKaji', 'getCustomer')->orderBy('id', 'Desc')->get();
+        // if (!empty($data[0]->dataKaji)) {
+        //     $stat = "ada isi";
+        // } else {
+        //     $stat = "kosong";
+        // }
+        // dd($stat);
         if ($request->ajax()) {
-            $data = KajiUlang::with('getInstrumen')->orderBy('id', 'Desc')->get();
+            $data = SerahTerima::with('dataKaji', 'getCustomer')->orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btnEdit = '<a href="' . route('ku.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
-                    $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-                    return $btnEdit . '  ' . $btnDelete;
+                    $detail = '<a href="' . route('ku.cetak', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-file-pdf"></i></a>';
+                    return $detail;
                 })
                 ->addColumn('StatusKaji', function ($row) {
-                    if($row->Status == 1){
-                        $StatusKaji = '<span class="badge bg-green">Diterima</span>';
-                    }elseif($row->Status == 2){
-                        $StatusKaji = '<span class="badge bg-denger text-white">Ditolak</span>';
-                    }else{
-                        $StatusKaji = '<span class="badge bg-warning">Diterima Sebagian</span>';
+                    if (!empty($row->dataKaji)) {
+                        $stat = '<span class="badge bg-success">Telah Dikaji Ulang</span>';
+                    } else {
+                        $stat = '<span class="badge bg-danger">Belum Dikaji Ulang</span>';
                     }
-                    return $StatusKaji;
+
+                    return $stat;
                 })
-                ->addColumn('KondisiKaji', function ($row) {
-                    if ($row->Status == 1) {
-                        $KondisiKaji = '<span class="badge bg-green">Berfungsi</span>';
-                    }else{
-                        $KondisiKaji = '<span class="badge bg-warning">Tidak Berfungsi</span>';
-                    }
-                    return $KondisiKaji;
-                })
-                ->rawColumns(['action','StatusKaji','KondisiKaji'])
+                // ->addColumn('StatusKaji', function ($row) {
+                //     if ($row->Status == 1) {
+                //         $StatusKaji = '<span class="badge bg-green">Diterima</span>';
+                //     } elseif ($row->Status == 2) {
+                //         $StatusKaji = '<span class="badge bg-denger text-white">Ditolak</span>';
+                //     } else {
+                //         $StatusKaji = '<span class="badge bg-warning">Diterima Sebagian</span>';
+                //     }
+                //     return $StatusKaji;
+                // })
+                // ->addColumn('KondisiKaji', function ($row) {
+                //     if ($row->Status == 1) {
+                //         $KondisiKaji = '<span class="badge bg-green">Berfungsi</span>';
+                //     } else {
+                //         $KondisiKaji = '<span class="badge bg-warning">Tidak Berfungsi</span>';
+                //     }
+                //     return $KondisiKaji;
+                // })
+                ->rawColumns(['action', 'StatusKaji'])
                 ->make(true);
         }
         $dataSerahTerima = SerahTerima::with('getCustomer')->latest()->get();
         // dd($dataSerahTerima);
-        return view('kaji-ulang.index',compact('dataSerahTerima'));
+        return view('kaji-ulang.index', compact('dataSerahTerima'));
     }
 
     /**
@@ -81,22 +96,26 @@ class KajiUlangController extends Controller
                 'idUser' => auth()->user()->id,
             ]);
         }
-        return redirect()->back()->with('success','Data Berhasil Disimpan');
+        return redirect()->route('ku.index')->with('success', 'Data Berhasil Disimpan');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(KajiUlang $kajiUlang)
+    public function show($id)
     {
-        //
+        $data = SerahTerima::with('Stdetail', 'dataKaji', 'getCustomer', 'dataKaji.getInstrumen')->where('id', $id)->first();
+        // dd($data);
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('kaji-ulang.CetakInstruksiKerja', compact('data'));
+        return $pdf->stream('Instruksi Kerja' . $data->id . '.pdf');
     }
     public function formKaji($id)
     {
         $data = SerahTerima::with('Stdetail')->find($id);
-        $customer = MasterCustomer::all();
-        $instrumen = Instrumen::all();
-        return view('kaji-ulang.form-kaji-ulang',compact('data','instrumen','customer'));
+        $customer = MasterCustomer::where('Status', 'AKTIF')->get();
+        $instrumen = Instrumen::where('Status', 'AKTIF')->get();
+        $metode = MasterMetode::get();
+        return view('kaji-ulang.form-kaji-ulang', compact('metode', 'data', 'instrumen', 'customer'));
     }
     /**
      * Show the form for editing the specified resource.

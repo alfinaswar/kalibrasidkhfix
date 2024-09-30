@@ -1087,9 +1087,9 @@
                             <span class="nav-text">System</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('inv.index') }}">Pengguna</a></li>
-                            <li><a href="{{ route('customer.index') }}">Master Role</a></li>
-                            <li><a href="{{ route('instrumen.index') }}">Master Permission</a></li>
+                            <li><a href="{{ route('users.index') }}">Pengguna</a></li>
+                            <li><a href="{{ route('roles.index') }}">Master Role</a></li>
+                            <li><a href="{{ route('users.index') }}">Master Permission</a></li>
                         </ul>
                     </li>
                 </ul>

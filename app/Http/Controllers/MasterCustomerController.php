@@ -50,12 +50,12 @@ class MasterCustomerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Kategori' => 'required',
-            'NoAspak' => 'required',
+            // 'NoAspak' => 'required',
             'Nama' => 'required',
             'Email' => 'required|email',
             'Telepon' => 'required',
             'Alamat' => 'required',
-            'Deskripsi' => 'required',
+            // 'Deskripsi' => 'required',
             'Status' => 'required',
         ]);
         if ($validator->fails()) {
