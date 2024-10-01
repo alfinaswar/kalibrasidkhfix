@@ -9,6 +9,7 @@ use App\Models\MasterMetode;
 use App\Models\SerahTerima;
 use App\Models\SerahTerimaDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
@@ -32,8 +33,9 @@ class KajiUlangController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $detail = '<a href="' . route('ku.cetak', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-file-pdf"></i></a>';
-                    return $detail;
+                    $ikl = '<a href="' . route('ku.cetak', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Instruksi Kerja PDF"><i class="fas fa-file-pdf"></i></a>';
+                    $ku = '<a href="' . route('ku.cetak-kup', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Kaji Ulang Permntaan Tender"><i class="fas fa-file-pdf"></i></a>';
+                    return $ikl . ' ' . $ku;
                 })
                 ->addColumn('StatusKaji', function ($row) {
                     if (!empty($row->dataKaji)) {
@@ -107,6 +109,26 @@ class KajiUlangController extends Controller
         $data = SerahTerima::with('Stdetail', 'dataKaji', 'getCustomer', 'dataKaji.getInstrumen')->where('id', $id)->first();
         // dd($data);
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('kaji-ulang.CetakInstruksiKerja', compact('data'));
+        return $pdf->stream('Instruksi Kerja' . $data->id . '.pdf');
+    }
+    public function cetakKup($id)
+    {
+        $data = SerahTerima::with([
+            'Stdetail',
+            'dataKaji' => function ($query) use ($id) {
+                $query->select('*', DB::raw('COUNT(InstrumenId) as Qty'))
+                    ->with('getInstrumen')
+                    ->where('SerahTerimaId', $id)
+                    // ->where('Status', '!=', 2)
+                    ->groupBy('InstrumenId');
+            },
+            'getCustomer',
+            'dataKaji.getInstrumen',
+            'dataKaji.getMetode1',
+            'dataKaji.getMetode2'
+        ])->where('id', $id)->first();
+        // dd($data);
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('kaji-ulang.KajiUlangPermintaan', compact('data'));
         return $pdf->stream('Instruksi Kerja' . $data->id . '.pdf');
     }
     public function formKaji($id)

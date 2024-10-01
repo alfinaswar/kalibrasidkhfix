@@ -145,8 +145,8 @@
                                                 </select></td>
                                             <td><select class="form-control" tabindex="null" name="Kondisi[]" required>
                                                     <option value="">Pilih Kondisi Alat</option>
-                                                    <option value="1">Berfungsi</option>
-                                                    <option value="2">Tidak Bergungsi</option>
+                                                    <option value="BERFUNGSI">Berfungsi</option>
+                                                    <option value="TIDAKBERFUNGSI">Tidak Bergungsi</option>
                                                     </option>
 
                                                 </select>

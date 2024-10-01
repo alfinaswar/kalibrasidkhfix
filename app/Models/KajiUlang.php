@@ -19,4 +19,12 @@ class KajiUlang extends Model
     {
         return $this->hasOne(MasterCustomer::class, 'id', 'CustomerId');
     }
+    public function getMetode1()
+    {
+        return $this->hasOne(MasterMetode::class, 'id', 'Metode1');
+    }
+    public function getMetode2()
+    {
+        return $this->hasOne(MasterMetode::class, 'id', 'Metode2');
+    }
 }
