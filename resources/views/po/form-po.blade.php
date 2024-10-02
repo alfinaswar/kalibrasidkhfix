@@ -2,9 +2,10 @@
 @section('content')
     <div class="col-xl-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Buat Purchase Order</h4>
-            </div>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+    <h4 class="card-title">Buat Purchase Order</h4> 
+    <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
+</div>
             <div class="card-body">
                 <div class="basic-form">
                     <form action="{{ route('po.store') }}" method="POST" enctype="multipart/form-data">

@@ -20,7 +20,7 @@
                             <thead>
                                 <tr>
                                 <th>#</th>
-                                <th>Kode</th>
+                                <th>Nomor PO</th>
                                 <th>Customer</th>
                                 <th>Tanggal PO</th>
                                 <th>Status</th>
@@ -52,7 +52,7 @@
                         <thead>
                             <tr class="text-center">
                                 <th>#</th>
-                                <th>Kode</th>
+                                <th>Nomor Quotation</th>
                                 <th>Customer</th>
                                 <th>Tanggal</th>
                                 <th>Status</th>
@@ -69,7 +69,7 @@
   <td class="text-center">@if ($qt->Status == "DISETUJUI")
 <span class="badge bg-success text-dark">DISETUJUI</span>
   @endif</td>
-  <td class="text-center"><a href="{{route('po.form-po', $qt->id)}}" class="btn btn-primary">Purchase Order <i class="fas fa-arrow-right"></i></a></td>
+  <td class="text-center"><a href="{{route('po.form-po', $qt->id)}}" class="btn btn-primary">Buat Po <i class="fas fa-arrow-right"></i></a></td>
 </tr>
 @endforeach
                             </tbody>
@@ -78,7 +78,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+
                     </div>
                 </div>
             </div>

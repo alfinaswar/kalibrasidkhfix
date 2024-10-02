@@ -119,6 +119,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('/update/{id}', [PoController::class, 'update'])->name('po.update');
         Route::delete('hapus/{id}', [PoController::class, 'destroy'])->name('po.destroy');
         Route::GET('/cetak-pdf/{id}', [PoController::class, 'GeneratePdf'])->name('po.pdf');
+        Route::GET('/cetak-stiker/{id}', [PoController::class, 'CetakStiker'])->name('po.stiker');
     });
     Route::prefix('surat-tugas')->group(function () {
         Route::GET('/', [SuratPerintahKerjaController::class, 'index'])->name('spk.index');

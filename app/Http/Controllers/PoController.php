@@ -12,11 +12,15 @@ use App\Models\QuotationDetail;
 use App\Models\SerahTerima;
 use App\Models\Sertifikat;
 use App\Models\User;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
+use Picqer\Barcode\BarcodeGeneratorHTML;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class PoController extends Controller
 {
@@ -27,10 +31,11 @@ class PoController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btnEdit = '<a href="' . route('po.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
-                    $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-                    $btnPdf = '<a href="' . route('po.pdf', $row->id) . '" target="_blank" class="btn btn-secondary btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>';
-                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf;
+                   $btnEdit = '<a href="' . route('po.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+$btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
+$btnPdf = '<a href="' . route('po.pdf', $row->id) . '" target="_blank" class="btn btn-info btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>'; // Changed to btn-info
+$stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" target="_blank" class="btn btn-warning btn-sm"><i class="fas fa-tags"></i></a>'; // Changed to btn-warning
+                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf.' '.$stiker;
                 })
                 ->addColumn('Stat', function ($row) {
                     if ($row->Status == 'AKTIF') {
@@ -123,7 +128,7 @@ class PoController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Data Berhasil Ditambahkan');
+        return redirect()->route('po.index')->with('success', 'Data Berhasil Ditambahkan');
     }
 
     /**
@@ -211,7 +216,40 @@ class PoController extends Controller
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('po.cetak-pdf', compact('data'));
         return $pdf->stream('po.cetak-pdf' . $data->id . '.pdf');
     }
+    public function CetakStiker($id)
+    {
+        $data = po::with(
+            'DetailPo',
+            'getCustomer',
+            'DetailPo.getNamaAlat'
+        )->where('id', $id)->first();
+// dd($data->DetailPo);
+        // Generate Barcode garis Garis
+        // $generator = new BarcodeGeneratorPNG();
+        // $barcode = [];
+        // foreach ($data->DetailPo as $item) {
+        //     $barcode[$item->id] = base64_encode($generator->getBarcode($item->id, $generator::TYPE_CODE_128));
+        // }
+        //barcode QR
+        // Generate QR code
+        $writer = new PngWriter();
+        $barcode = [];
+        foreach ($data->DetailPo as $item) {
+            $qrCode = QrCode::create($item->id)
+                ->setSize(40)
+                ->setMargin(0);
+            $barcode[$item->id] = base64_encode($writer->write($qrCode)->getString());
+        }
+        $viewData = [
+            'KodePo' => $data->KodePo,
+            'data' => $data,
+            'barcode' => $barcode, // Add barcode to view data
+        ];
 
+        $pdf = app('dompdf.wrapper')->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('po.format-stiker', $viewData)->setPaper([0, 0, 161.57, 70.00], 'portrait');
+
+        return $pdf->stream('stiker.pdf');
+    }
     /**
      * Remove the specified resource from storage.
      */

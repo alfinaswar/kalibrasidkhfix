@@ -85,7 +85,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal</label>
                                 <input type="date" class="form-control @error('Tanggal') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="Tanggal">
+                                    placeholder="Tanggal Diterima" name="Tanggal" id="mdate">
                                 @error('Tanggal')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -96,7 +96,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal Dilaksanakan</label>
                                 <input type="date" class="form-control @error('DueDate') is-invalid @enderror"
-                                    placeholder="Tanggal DueDate" name="DueDate">
+                                    placeholder="Tanggal DueDate" name="DueDate" id="mdate">
                                 @error('DueDate')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

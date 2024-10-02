@@ -12,12 +12,35 @@
                     <h4 class="card-title">Data Serah Terima Alat</h4>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                    <div class="col-3 my-1">
+                                                <label class="me-sm-2">Kategori</label>
+                                                <select id="filter-kategori" class="multi-select" name="filter-kategori">
+                                                <option selected>Pilih...</option>
+                                                   @foreach ($customer as $kat)
+                                                   <option value="{{ $kat->Kategori }}">{{ $kat->Kategori }}</option>
+                                                   @endforeach
+
+                                                </select>
+                                            </div>
+                                              <div class="col-3 my-1">
+                                                <label class="me-sm-2">Customer</label>
+                                                <select id="filter-customer" class="multi-select" name="filter-Customer">
+                                                <option selected>Pilih...</option>
+                                                   @foreach ($customer as $kat)
+                                                   <option value="{{ $kat->Name }}">{{ $kat->Name }}</option>
+                                                   @endforeach
+
+                                                </select>
+                                            </div>
+                                            </div>
                     <table id="example" class="display" style="min-width: 845px" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>KodeSt</th>
-                                <th>Nama Customer</th>
+                                <th width="15%">Nomor</th>
+                                <th>Kategori</th>
+                                <th>Customer</th>
                                 <th>Tanggal Diterima</th>
                                 <th>Tanggal Diserahkan</th>
                                 <th>Status</th>
@@ -112,6 +135,10 @@
                             data: 'KodeSt',
                             name: 'KodeSt'
                         },
+                         {
+                            data: 'get_customer.Kategori',
+                            name: 'get_customer.Kategori'
+                        },
                         {
                             data: 'get_customer.Name',
                             name: 'get_customer.Name'
@@ -138,6 +165,7 @@
                 });
             };
             dataTable();
+            //filter data
         });
     </script>
 @endsection

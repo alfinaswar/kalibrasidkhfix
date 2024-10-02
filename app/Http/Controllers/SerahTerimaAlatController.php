@@ -29,7 +29,7 @@ class SerahTerimaAlatController extends Controller
                     $btnPdf = '<a href="' . route('st.pdf', $row->id) . '" class="btn btn-primary btn-sm" title="Pdf"><i class="fas fa-print"></i></a>';
                     $btnEdit = '<a href="' . route('st.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-                    $LinkDetail = '<a href="' . route('st.detail', $row->id) . '" title="Detail" class="btn btn-secondary"><i class="fas fa-tags"></i></a>';
+                    $LinkDetail = '<a href="' . route('st.detail', $row->id) . '" target="_blank" title="Detail" class="btn btn-secondary btn-sm"><i class="fas fa-tags"></i></a>';
                     return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf . ' ' . $LinkDetail;
                 })
                 ->addColumn('Stat', function ($row) {
@@ -44,7 +44,8 @@ class SerahTerimaAlatController extends Controller
                 ->rawColumns(['action', 'Stat'])
                 ->make(true);
         }
-        return view('serah-terima.index');
+        $customer = MasterCustomer::latest()->get();
+        return view('serah-terima.index',compact('customer'));
     }
 
     /**
@@ -87,7 +88,7 @@ class SerahTerimaAlatController extends Controller
 
         $pdf = app('dompdf.wrapper')->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('serah-terima.format-stiker', $viewData)->setPaper([0, 0, 161.57, 70.00], 'portrait');
 
-        return $pdf->stream('cetak.pdf');
+        return $pdf->stream('stiker.pdf');
     }
     public function store(Request $request)
     {
