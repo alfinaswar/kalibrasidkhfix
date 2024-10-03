@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instrumen;
 use App\Models\Sertifikat;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -60,38 +61,13 @@ class SertifikatController extends Controller
     public function create($id)
     {
         $sertifikat = Sertifikat::where('id', $id)->first();
-        if ($sertifikat) {
-            $InstrumenId = $sertifikat->InstrumenId;
-            $idsert = $sertifikat->id;
-            // dd($InstrumenId)
 
-            switch ($InstrumenId) {
-                case 1:
-                    $view = 'sertifikat.create';
-                    break;
-                case 2:
-                    $view = 'sertifikat.create';
-                    break;
-                case 3:
-                    $view = 'sertifikat.create';
-                    break;
-                case 4:
-                    $view = 'sertifikat.create';
-                    break;
-                case 5:
-                    $view = 'sertifikat.create';
-                    break;
-                default:
-                    // Anda bisa menambahkan kasus default jika diperlukan
-                    $view = 'default.view';  // atau nilai default lainnya
-                    break;
-            }
-        } else {
-            // Handle kasus ketika sertifikat tidak ditemukan
-            $view = 'error.not_found';
-        }
+        $InstrumenId = $sertifikat->InstrumenId;
+        $cek = Instrumen::where('id', $InstrumenId)->first()->NamaFile;
+        $FormLK = 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $cek;
+        $idsert = $sertifikat->id;
         // dd($view);
-        return view($view, compact('idsert'));
+        return view($FormLK, compact('idsert'));
     }
 
     /**
@@ -193,7 +169,7 @@ class SertifikatController extends Controller
     }
     public function HasilPdf($id)
     {
-        $data = Sertifikat::with('getNamaAlat','getCustomer')->where('id', $id)->first();
+        $data = Sertifikat::with('getNamaAlat', 'getCustomer')->where('id', $id)->first();
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('sertifikat.sertifikat-pdf', compact('data'));
         return $pdf->stream('Sertifikat_' . $data->id . '.pdf');
     }

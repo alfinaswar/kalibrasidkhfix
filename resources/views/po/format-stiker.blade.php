@@ -37,48 +37,50 @@
         font-size: 5pt;
         margin-top: 10px;
     }
-    .barcode{
-            position: fixed;
-            bottom: 10px;
-            left: 15px;
-            top: 0.42cm;
-            right: 0px;
-            z-index: -10;
+
+    .barcode {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        top: 15px;
+        right: 0px;
+        z-index: -10;
     }
 </style>
 
 <body>
     @foreach ($data->DetailPo as $item)
         <div class="container">
-           <table id="main" border="0" width="100%">
-    <thead>
-        <tr>
-            <th><img src="{{ asset('assets/images/avatar/logo-dkh.png') }}" width="40px"></th>
-            <th colspan="2"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th rowspan="2" style="padding: 0; margin: 0;"></th>
-            <td>:</td>
-            <td>{{ $data->getCustomer->Name }}</td>
-        </tr>
-        <tr>
-            <td>:</td>
-            <td>{{ $item->getNamaAlat->Nama }}</td>
-        </tr>
-    </tbody>
-</table>
+            <table id="main" border="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td><img src="{{ asset('assets/images/avatar/logo-dkh.png') }}" width="40px"></td>
+                        <td colspan="">:</td>
+                        <td colspan="">
+                            {{ strlen($data->getCustomer->Name) > 18 ? substr($data->getCustomer->Name, 0, 18) . '...' : $data->getCustomer->Name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4" style="padding: 0; margin: 0;"></td>
+                        <td>:</td>
+                        <td>{{ strlen($item->getNamaAlat->Nama) > 18 ? substr($item->getNamaAlat->Nama, 0, 18) . '...' : $item->getNamaAlat->Nama }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>:</td>
+                        <td>{{ $item->getSertifikat->SertifikatOrder }}</td>
+                    </tr>
+                    <tr>
+                        <td>:</td>
+                        <td>{{ $item->getSertifikat->NoSertifikat }}</td>
+                    </tr>
 
-            <table width="100%" id="footer">
-                <tr>
-                    <td style="text-align: left;">DIGICAL-4039</td>
-                    <td style="text-align: right;">DigiCal/004/LI-DKH/2022/Rev.0</td>
-                </tr>
+                </tbody>
             </table>
+
             <!-- Display the barcode -->
             <div class="barcode">
-<img src="data:image/png;base64,{{ $barcode[$item->id] }}" alt="barcode" width="65px"/>
+                <img src="data:image/png;base64,{{ $barcode[$item->id] }}" alt="barcode" width="75px" />
             </div>
         </div>
     @endforeach

@@ -45,7 +45,7 @@ class InstrumenController extends Controller
                     }
                     return $Stat;
                 })
-                ->rawColumns(['action', 'NamaAlat', 'Stat','TarifRp'])
+                ->rawColumns(['action', 'NamaAlat', 'Stat', 'TarifRp'])
                 ->make(true);
         }
         return view('master.instrumen.index');
@@ -57,7 +57,7 @@ class InstrumenController extends Controller
     public function create()
     {
         //ganti kategorinya
-        $data = inventori::where('Kategori',2)->get();
+        $data = inventori::where('Kategori', 2)->get();
         // dd($data);
         return view('master.instrumen.create', compact('data'));
     }
@@ -76,6 +76,7 @@ class InstrumenController extends Controller
             'LK' => 'required|file|max:1024',
             'Status' => 'required',
         ]);
+        // dd($request->NamaFile);
         if ($validator->fails()) {
             return redirect()
                 ->back()
@@ -94,6 +95,12 @@ class InstrumenController extends Controller
         $data['KodeInstrumen'] = $this->GenerateKode();
         $data['idUser'] = auth()->user()->id;
         Instrumen::create($data);
+
+        $viewContent = "@extends('layouts.app')\n@section('content')\n<h1>{{ \$post->title }}</h1>\n<p>{{ \$post->content }}</p>\n@endsection";
+        $viewPath = resource_path('views' . DIRECTORY_SEPARATOR . 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $request->NamaFile . '.blade.php');
+
+        file_put_contents($viewPath, $viewContent);
+
         return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Disimpan');
     }
 
@@ -110,7 +117,9 @@ class InstrumenController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(MasterAlat $masterAlat) {}
+    public function show(MasterAlat $masterAlat)
+    {
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -118,7 +127,7 @@ class InstrumenController extends Controller
     public function edit($id)
     {
         $instrumen = Instrumen::find($id);
-        $data = inventori::where('Kategori',2)->get();
+        $data = inventori::where('Kategori', 2)->get();
         return view('master.instrumen.edit', compact('instrumen', 'data'));
     }
 

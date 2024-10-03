@@ -31,11 +31,11 @@ class PoController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                   $btnEdit = '<a href="' . route('po.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
-$btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
-$btnPdf = '<a href="' . route('po.pdf', $row->id) . '" target="_blank" class="btn btn-info btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>'; // Changed to btn-info
-$stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" target="_blank" class="btn btn-warning btn-sm"><i class="fas fa-tags"></i></a>'; // Changed to btn-warning
-                    return $btnEdit . '  ' . $btnDelete . '  ' . $btnPdf.' '.$stiker;
+                    $btnEdit = '<a href="' . route('po.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
+                    $btnPdf = '<a href="' . route('po.pdf', $row->id) . '" target="_blank" class="btn btn-info btn-sm btn-pdf" title="PDF"><i class="fas fa-file-pdf"></i></a>'; // Changed to btn-info
+                    $stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" target="_blank" class="btn btn-warning btn-sm"><i class="fas fa-tags"></i></a>'; // Changed to btn-warning
+                    return $btnEdit . '  ' . $btnDelete . ' <br/><br/> ' . $btnPdf . ' ' . $stiker;
                 })
                 ->addColumn('Stat', function ($row) {
                     if ($row->Status == 'AKTIF') {
@@ -105,6 +105,8 @@ $stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" t
                         'NoSertifikat' => $this->GenerateNoSertifikat(),
                         'SertifikatOrder' => $this->GenerateSertifikatOrder(),
                         'PoId' => $getid,
+                        'Status' => 'DRAFT',
+                        'Diserahkan' => 'N',
                         'InstrumenId' => $request->InstrumenId[$i],
                         'CustomerId' => $request->CustomerId,
                     ]);
@@ -122,6 +124,8 @@ $stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" t
                     'NoSertifikat' => $this->GenerateNoSertifikat(),
                     'SertifikatOrder' => $this->GenerateSertifikatOrder(),
                     'PoId' => $getid,
+                    'Status' => 'DRAFT',
+                    'Diserahkan' => 'N',
                     'InstrumenId' => $request->InstrumenId[$i],
                     'CustomerId' => $request->CustomerId,
                 ]);
@@ -155,7 +159,15 @@ $stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" t
         $instrumen = Instrumen::all();
         return view('po.edit', compact('data', 'user', 'customer', 'instrumen'));
     }
-
+    public function infoKalibrasi($NoSertifikat)
+    {
+        $data = sertifikat::where('NoSertifikat', $NoSertifikat)->first();
+        if ($data->Diserahkan == "N") {
+            return view('sertifikat.create');
+        } else {
+            route('job.hasilPdf', $data->id);
+        }
+    }
     /**
      * Update the specified resource in storage.
      */
@@ -221,9 +233,11 @@ $stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" t
         $data = po::with(
             'DetailPo',
             'getCustomer',
-            'DetailPo.getNamaAlat'
+            'DetailPo.getNamaAlat',
+            'DetailPo.getSertifikat',
         )->where('id', $id)->first();
-// dd($data->DetailPo);
+        // dd($data);
+        // dd($data->DetailPo);
         // Generate Barcode garis Garis
         // $generator = new BarcodeGeneratorPNG();
         // $barcode = [];
@@ -235,11 +249,14 @@ $stiker = '<a href="' . route('po.stiker', $row->id) . '" title="Cetak Stiker" t
         $writer = new PngWriter();
         $barcode = [];
         foreach ($data->DetailPo as $item) {
-            $qrCode = QrCode::create($item->id)
-                ->setSize(40)
+            $link = route('po.info', $item->getSertifikat->NoSertifikat);
+            $qrCode = QrCode::create($link)
+                ->setSize(50)
                 ->setMargin(0);
+
             $barcode[$item->id] = base64_encode($writer->write($qrCode)->getString());
         }
+
         $viewData = [
             'KodePo' => $data->KodePo,
             'data' => $data,

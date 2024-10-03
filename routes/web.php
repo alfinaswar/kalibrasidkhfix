@@ -37,7 +37,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
+Route::GET('/info-kalibrasi/{NoSertifikat}', [PoController::class, 'infoKalibrasi'])->name('po.info');
 Route::group(['middleware' => ['auth']], function () {
     //USER
     Route::resource('roles', RoleController::class);

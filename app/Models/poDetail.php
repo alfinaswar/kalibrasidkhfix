@@ -17,4 +17,8 @@ class poDetail extends Model
     {
         return $this->hasOne(Instrumen::class, 'id', 'InstrumenId');
     }
+    public function getSertifikat()
+    {
+        return $this->hasOne(Sertifikat::class, 'InstrumenId', 'InstrumenId');
+    }
 }
