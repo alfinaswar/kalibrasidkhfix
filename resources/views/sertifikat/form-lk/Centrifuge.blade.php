@@ -5,24 +5,27 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title text-center">LEMBAR KERJA PENGUJIAN DAN KALIBRASI</h4>
+                    <h4 class="card-title fw-bold">LK PENGUJIAN DAN KALIBRASI <span
+                            class="text-primary text-uppercase">{{ $sertifikat->getNamaAlat->Nama }}</span></h4>
+                    <span></span>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('job.store') }}">
                         @csrf
                         <div class="row">
-                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
-                                ADMINISTRASI</h3>
+                            <center class="mb-4">
+                                <h3 class="fw-bold" style="text-decoration: underline;">
+                                    ADMINISTRASI</h3>
+                                <span class="text-primary fw-bold">{{ $sertifikat->SertifikatOrder }} /
+                                    {{ $sertifikat->NoSertifikat }}</span>
+                            </center>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="no_order" class="form-label">No. Order</label>
-                                    <input type="text" class="form-control" id="no_order" name="no_order"
-                                        placeholder="Masukkan No. Order">
-                                </div>
                                 <div class="mb-3">
                                     <label for="merk" class="form-label">Merk</label>
                                     <input type="text" class="form-control" id="merk" name="merk"
                                         placeholder="Masukkan Merk">
+                                    <input type="hidden" class="form-control" id="merk" name="no_order"
+                                        value="{{ $sertifikat->SertifikatOrder }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="type_model" class="form-label">Type/ Model</label>
@@ -36,8 +39,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="tanggal_kalibrasi" class="form-label">Tanggal Kalibrasi</label>
-                                    <input type="date" class="form-control" id="tanggal_kalibrasi"
-                                        name="tanggal_kalibrasi" placeholder="Masukkan Tanggal Kalibrasi">
+                                    <input type="date" class="form-control" id="mdate" name="tanggal_kalibrasi"
+                                        placeholder="Masukkan Tanggal Terima">
                                 </div>
                                 <div class="mb-3">
                                     <label for="instansi_ruangan" class="form-label">Instansi/ Ruangan</label>
@@ -56,23 +59,26 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="metoda_kerja" class="form-label">Metoda Kerja</label>
-                                    <textarea class="form-control" id="metoda_kerja" name="metoda_kerja" rows="3" placeholder="Masukkan Metoda Kerja"></textarea>
+                                    <textarea class="form-control" id="metoda_kerja" name="metoda_kerja" rows="3" placeholder="Masukkan Metoda Kerja"
+                                        onclick="$('#ModalMetoda').modal('show');"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="nama_pemilik" class="form-label">Nama Pemilik</label>
                                     <input type="text" class="form-control" id="nama_pemilik" name="nama_pemilik"
-                                        placeholder="Masukkan Nama Pemilik">
+                                        placeholder="Masukkan Nama Pemilik"
+                                        value="{{ $sertifikat->getCustomer->Kategori }} {{ $sertifikat->getCustomer->Name }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="alamat_pemilik" class="form-label">Alamat Pemilik</label>
                                     <input type="text" class="form-control" id="alamat_pemilik" name="alamat_pemilik"
-                                        placeholder="Masukkan Alamat Pemilik">
+                                        placeholder="Masukkan Alamat Pemilik"
+                                        value="{{ $sertifikat->getCustomer->Alamat }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="tanggal_terima" class="form-label">Tanggal Terima</label>
-                                    <input type="date" class="form-control" id="tanggal_terima" name="tanggal_terima"
+                                    <input type="date" class="form-control" id="mdate" name="tanggal_terima"
                                         placeholder="Masukkan Tanggal Terima">
                                 </div>
                             </div>
@@ -80,8 +86,8 @@
                         <div class="row">
                             <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN KONDISI LINGKUNGAN</h3>
-                            <table class="table">
-                                <thead class="thead-dark">
+                            <table class="table table-striped">
+                                <thead class="thead-dark bg-primary text-white">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Parameter</th>
@@ -222,8 +228,8 @@
                             <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN FISIK DAN FUNGSI</h3>
 
-                            <table class="table">
-                                <thead class="thead-dark">
+                            <table class="table table-striped">
+                                <thead class="thead-dark bg-primary text-white">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Parameter</th>
@@ -349,8 +355,8 @@
                         <div class="row">
                             <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN KESELAMATAN LISTRIK</h3>
-                            <table class="table">
-                                <thead class="thead-dark">
+                            <table class="table table-striped">
+                                <thead class="thead-dark bg-primary text-white">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">#</th>
@@ -398,8 +404,8 @@
                             </table>
                         </div>
                         <div class="row">
-                            <table class="table">
-                                <thead class="thead-dark">
+                            <table class="table table-striped">
+                                <thead class="thead-dark bg-primary text-white">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Parameter</th>
@@ -523,18 +529,20 @@
                         <div class="row">
                             <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 PENGUJIAN KINERJA</h3>
-                            <div class="text-end">
+                            <div class="text-end mb-3">
                                 <a class="btn btn-secondary" onclick="addRow()"><i class="fas fa-plus"></i></a>
                                 <a class="btn btn-danger" onclick="deleteRow()"><i class="fas fa-minus"></i></a>
                             </div>
                             <br>
-                            <table id="myTable" class="table" style="vertical-align: mid; text-align:center;">
-                                <thead class="thead-dark">
+                            <table id="myTable" class="table table-striped"
+                                style="vertical-align: mid; text-align:center;">
+                                <thead class="thead-dark bg-primary text-white">
                                     <tr>
-                                        <th scope="col" rowspan="2" style="vertical-align: middle;">Titik Ukur</th>
-                                        <th>1</th>
-                                        <th>2</th>
-                                        <th>3</th>
+                                        <th scope="col" style="vertical-align: middle;">Titik Ukur</th>
+                                        <th>Running Pertama</th>
+                                        <th>Running Kedua</th>
+                                        <th>Running Ketiga</th>
+                                        <th>Rata-Rata</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -551,24 +559,28 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" name="PembacaanAlat1[]" placeholder="Uji 1"
-                                                class="form-control" onchange="checkValue(this)">
+                                            <input type="text" name="PembacaanAlat1[]" id="PembacaanAlat1"
+                                                placeholder="Uji 1" class="form-control" onchange="checkValue(this)">
                                         </td>
                                         <td>
-                                            <input type="text" name="PembacaanAlat2[]" placeholder="Uji 2"
-                                                class="form-control" onchange="checkValue(this)">
+                                            <input type="text" name="PembacaanAlat2[]" id="PembacaanAlat2"
+                                                placeholder="Uji 2" class="form-control" onchange="checkValue(this)">
                                         </td>
                                         <td>
-                                            <input type="text" name="PembacaanAlat3[]" placeholder="Uji 3"
-                                                class="form-control" onchange="checkValue(this)">
+                                            <input type="text" name="PembacaanAlat3[]" id="PembacaanAlat3"
+                                                placeholder="Uji 3" class="form-control" onchange="checkValue(this)">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="RataRata[]" placeholder="Rata-rata"
+                                                class="form-control" id="RataRata">
                                         </td>
                                     </tr>
 
                                 </tbody>
                             </table>
-                            <table id="myTable" class="table" style="vertical-align: mid; text-align:center;">
-                                <thead class="thead-dark text-center">
-
+                            <table id="myTable" class="table table-striped"
+                                style="vertical-align: mid; text-align:center;">
+                                <thead class="thead-dark bg-primary text-white">
                                     <tr class="text-center">
                                         <th scope="col" rowspan="2" style="vertical-align: middle;">Standar Waktu
                                         </th>
@@ -609,8 +621,9 @@
                         <div class="row">
                             <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
                                 TELAAH TEKNIS</h3>
-                            <table class="table table-bordered">
-                                <thead class="thead-dark">
+                            <table id="myTable" class="table table-striped"
+                                style="vertical-align: mid; text-align:center;">
+                                <thead class="thead-dark bg-primary text-white">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Indikator</th>
@@ -689,10 +702,41 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="idsert" value="{{ $idsert }}">
+        <input type="hidden" name="idsert" value="{{ $sertifikat->InstrumenId }}">
         <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="ModalMetoda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Metoda Kerja</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="example" class="display" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="10%">#</th>
+                                <th>Nama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
     @if (session()->has('success'))
         <script>
             swal.fire({
@@ -707,7 +751,7 @@
             var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow(table.rows.length);
             var cells = [];
-            for (var i = 0; i < 4; i++) {
+            for (var i = 0; i < 5; i++) {
                 cells[i] = newRow.insertCell(i);
                 if (i === 0) {
                     cells[i].innerHTML = `
@@ -719,9 +763,13 @@
                         </span>
                     </div>
                 </div>`;
+                } else if (i < 4) {
+                    cells[i].innerHTML = `
+                <input type="text" name="PembacaanAlat${i}[]" placeholder="Uji ${i}" class="form-control" onclick="checkValue(this)">
+            `;
                 } else {
                     cells[i].innerHTML = `
-                <input type="text" name="PembacaanAlat${i}[]" placeholder="Uji ${i}" class="form-control" onchange="checkValue(this)">
+                <input type="text" name="RataRata${i}[]" placeholder="Rata-rata" class="form-control">
             `;
                 }
             }
@@ -751,17 +799,65 @@
                 lastRowTestingStandartInput.value = prevRowTestingStandartInput.value;
             }
         }
-        // function checkValue(input) {
-        //     var row = input.parentNode.parentNode;
-        //     var testingStandartInput = row.querySelector('input[name="TestingStandart[]"]');
-        //     var testingStandartValue = parseFloat(testingStandartInput.value);
-        //     var pembacaanAlatValue = parseFloat(input.value);
-        //     var allowedRange = testingStandartValue * 0.1;
-        //     if (pembacaanAlatValue < (testingStandartValue - allowedRange) || pembacaanAlatValue > (testingStandartValue + allowedRange)) {
-        //         input.classList.add('is-invalid');
-        //     } else {
-        //         input.classList.remove('is-invalid');
-        //     }
-        // }
+
+        function saveMetodaKerja() {
+            var modalValue = document.getElementById('modal_metoda_kerja').value;
+            document.getElementById('metoda_kerja').value = modalValue;
+            $('#ModalMetoda').modal('hide');
+        }
+        $(document).ready(function() {
+            var dataTable = function() {
+                var table = $('#example').DataTable({
+                    responsive: true,
+                    serverSide: true,
+                    destroy: true,
+                    processing: true,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Memuat...</span> ',
+                        paginate: {
+                            next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                            previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                        }
+                    },
+                    columnDefs: [{
+                        width: '10%',
+                        targets: 0
+                    }],
+                    ajax: "{{ route('metode.index') }}",
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'Nama',
+                            name: 'Nama'
+                        },
+                    ]
+                });
+
+                $('#example tbody').on('click', 'tr', function() {
+                    var data = table.row(this).data();
+                    $("#metoda_kerja").val(data.Nama);
+                    $('#ModalMetoda').modal('hide');
+                });
+            };
+            dataTable();
+        });
+
+        function checkValue(input) {
+            var row = input.parentNode.parentNode;
+            var testingStandartInput = row.querySelector('input[name="TestingStandart[]"]');
+            var testingStandartValue = parseFloat(testingStandartInput.value);
+            var pembacaanAlatValue = parseFloat(input.value);
+            var allowedRange = testingStandartValue * 0.1;
+            if (pembacaanAlatValue < (testingStandartValue - allowedRange) || pembacaanAlatValue > (testingStandartValue +
+                    allowedRange)) {
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+
+
+        }
     </script>
 @endsection

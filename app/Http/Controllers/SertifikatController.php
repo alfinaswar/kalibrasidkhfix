@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instrumen;
+use App\Models\MasterMetode;
 use App\Models\Sertifikat;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -60,14 +61,13 @@ class SertifikatController extends Controller
      */
     public function create($id)
     {
-        $sertifikat = Sertifikat::where('id', $id)->first();
+        $sertifikat = Sertifikat::with('getCustomer', 'getNamaAlat')->where('id', $id)->first();
 
         $InstrumenId = $sertifikat->InstrumenId;
         $cek = Instrumen::where('id', $InstrumenId)->first()->NamaFile;
         $FormLK = 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $cek;
-        $idsert = $sertifikat->id;
-        // dd($view);
-        return view($FormLK, compact('idsert'));
+        $metode = MasterMetode::get();
+        return view($FormLK, compact('sertifikat', 'metode'));
     }
 
     /**

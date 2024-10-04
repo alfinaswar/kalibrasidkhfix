@@ -2,10 +2,10 @@
 @section('content')
     <div class="col-xl-12 col-lg-12">
         <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-    <h4 class="card-title">Buat Purchase Order</h4> 
-    <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
-</div>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">Buat Purchase Order</h4>
+                <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
+            </div>
             <div class="card-body">
                 <div class="basic-form">
                     <form action="{{ route('po.store') }}" method="POST" enctype="multipart/form-data">
@@ -29,7 +29,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal PO</label>
-                                <input type="text" name="TanggalPo" value="{{ now()->format('Y-m-d') }}"
+                                <input type="date" name="TanggalPo" value="{{ now()->format('Y-m-d') }}"
                                     class="form-control  @error('TanggalPo') is-invalid @enderror"
                                     placeholder="{{ $getQuotation->TanggalPo }}" id="mdate">
                                 @error('TanggalPo')
@@ -293,10 +293,7 @@
         });
         $(document).ready(function() {
 
-            $('#Diskon').on('keyup', function() {
-                let diskon = $(this).val();
-                $('#TotalDiskon').val(diskon);
-            });
+
             $('#TotalDiskon').on('input', function() {
                 var DiskonTipe = document.getElementById("TipeDiskon").value;
                 var SubTotal = parseFloat(document.getElementById("subtotal").value.replace(/\D/g, '') ||
