@@ -77,7 +77,7 @@
                                     @foreach ($data as $x)
                                         <option value="{{ $x->id }}"
                                             {{ collect(old('AlatUkur'))->contains($x->id) ? 'selected' : '' }}>
-                                            {{ $x->Nama }}
+                                            {{ $x->Nama }} -  {{ $x->Merk }} - {{ $x->Sn }}
                                         </option>
                                     @endforeach
                                 </select>

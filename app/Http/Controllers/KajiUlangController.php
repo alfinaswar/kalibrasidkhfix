@@ -21,25 +21,22 @@ class KajiUlangController extends Controller
      */
     public function index(Request $request)
     {
-        // $data = SerahTerima::with('dataKaji', 'getCustomer')->orderBy('id', 'Desc')->get();
-        // if (!empty($data[0]->dataKaji)) {
-        //     $stat = "ada isi";
-        // } else {
-        //     $stat = "kosong";
-        // }
-        // dd($stat);
         if ($request->ajax()) {
             $data = SerahTerima::with('dataKaji', 'getCustomer')->orderBy('id', 'Desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $ikl = '<a href="' . route('ku.cetak', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Instruksi Kerja PDF"><i class="fas fa-file-pdf"></i></a>';
-                    $ku = '<a href="' . route('ku.cetak-kup', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Kaji Ulang Permntaan Tender"><i class="fas fa-file-pdf"></i></a>';
-                    return $ikl . ' ' . $ku;
+                    $ikl = '<a href="' . route('ku.cetak', $row->id) . '" target="_blank" class="btn btn-secondary btn-sm btn-edit" title="Instruksi Kerja PDF"><i class="fas fa-file-pdf"></i></a>';
+                    $ku = '<a href="' . route('ku.cetak-kup', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Kaji Ulang Permintaan Tender"><i class="fas fa-file-pdf"></i></a>';
+                    $edit = '<a href="' . route('ku.edit', $row->id) . '" class="btn btn-warning btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
+                    $delete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
+
+                    return $edit . ' ' . $delete . ' ' . $ikl . ' ' . $ku;
                 })
+
                 ->addColumn('StatusKaji', function ($row) {
                     if (!empty($row->dataKaji)) {
-                        $stat = '<span class="badge bg-success">Telah Dikaji Ulang</span>';
+                        $stat = '<span class="badge bg-success">Sudah Dikaji Ulang</span>';
                     } else {
                         $stat = '<span class="badge bg-danger">Belum Dikaji Ulang</span>';
                     }
@@ -107,7 +104,9 @@ class KajiUlangController extends Controller
     public function show($id)
     {
         $data = SerahTerima::with('Stdetail', 'dataKaji', 'getCustomer', 'dataKaji.getInstrumen')->where('id', $id)->first();
-        // dd($data);
+        if ($data->dataKaji->isEmpty()) {
+            return redirect()->back()->with('error', 'Kaji ulang belum dilakukan.');
+        }
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('kaji-ulang.CetakInstruksiKerja', compact('data'));
         return $pdf->stream('Instruksi Kerja' . $data->id . '.pdf');
     }
@@ -127,9 +126,16 @@ class KajiUlangController extends Controller
             'dataKaji.getMetode1',
             'dataKaji.getMetode2'
         ])->where('id', $id)->first();
-        // dd($data);
+
+        // Cek apakah dataKaji kosong
+        if ($data->dataKaji->isEmpty()) {
+            return redirect()->back()->with('error', 'Kaji ulang belum dilakukan.');
+        }
+
+        // Lanjutkan dengan pembuatan PDF jika dataKaji tidak kosong
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('kaji-ulang.KajiUlangPermintaan', compact('data'));
         return $pdf->stream('Instruksi Kerja' . $data->id . '.pdf');
+
     }
     public function formKaji($id)
     {
@@ -142,9 +148,10 @@ class KajiUlangController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(KajiUlang $kajiUlang)
+    public function edit($id)
     {
-        //
+        $data = KajiUlang::where('SerahTerimaId',$id)->get();
+        return view('kaji-ulang.edit',compact('data'));
     }
 
     /**

@@ -72,14 +72,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Existing Rows -->
+
                                     @foreach ($getQuotation->DetailQuotation as $item)
                                         <tr>
                                             <td>
-                                                <select class="form-control" name="InstrumenId[]">
+                                                <select class="multi-select" name="InstrumenId[]">
+                                                     <option>Pilih Instrumen</option>
                                                     @foreach ($instrumen as $inst)
                                                         <option value="{{ $inst->id }}"
-                                                            @if ($inst->id == $item->InstumenId) selected @endif>
+                                                            @if ($inst->id == $item->InstrumenId) selected @endif>
                                                             {{ $inst->Nama }}</option>
                                                     @endforeach
                                                 </select>
@@ -246,11 +247,14 @@
                 const newRow = `
                 <tr>
                     <td>
-                        <select class="form-control instrumen-select" name="InstrumenId[]" onchange="getHarga(this)">
-                @foreach ($instrumen as $inst)
-                <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
-                @endforeach
-            </select>
+                      <select class="multi-select" name="InstrumenId[]">
+                                                     <option>Pilih Instrumen</option>
+                                                    @foreach ($instrumen as $inst)
+                                                        <option value="{{ $inst->id }}"
+                                                            @if ($inst->id == $item->InstrumenId) selected @endif>
+                                                            {{ $inst->Nama }}</option>
+                                                    @endforeach
+                                                </select>
                     </td>
                     <td><input type="text" name="Qty[]" class="form-control qty" placeholder="Jumlah Alat" value=""></td>
                     <td>

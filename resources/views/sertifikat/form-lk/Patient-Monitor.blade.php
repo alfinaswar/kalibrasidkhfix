@@ -15,6 +15,9 @@
                         {{-- Komponen Administrasi --}}
                         @include('sertifikat.form-komponen.administrasi');
 
+                         {{-- Komponen Alat Ukur --}}
+                        @include('sertifikat.form-komponen.alat-ukur');
+
                         {{-- Komponen Pengukuran Kondisi Lingkungan --}}
                         @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan');
 
@@ -24,8 +27,17 @@
                         {{-- Komponen Pengukuran Keselamatan Listrik --}}
                         @include('sertifikat.form-komponen.pengukuran-keselamatan-listrik');
 
-                        {{-- Komponen Pengujian Kinerja --}}
-                        @include('sertifikat.form-komponen.pengujian-kinerja');
+                        {{-- Komponen Pengujian Kinerja Heart Rate --}}
+@include('sertifikat.form-komponen.pengukuran-kinerja-heart-rate');
+
+                        {{-- Komponen Pengujian Kinerja Respirasi --}}
+@include('sertifikat.form-komponen.pengukuran-kinerja-respirasi');
+
+                        {{-- Komponen Pengujian Kinerja Saturasi Oksigen --}}
+@include('sertifikat.form-komponen.pengukuran-kinerja-saturasi-oksigen');
+
+                        {{-- Komponen Pengujian Kinerja Tekanan Darah--}}
+@include('sertifikat.form-komponen.pengukuran-kinerja-tekanan-darah');
 
                         {{-- Komponen Teknis --}}
                         @include('sertifikat.form-komponen.telaah-teknis');
@@ -33,6 +45,7 @@
             </div>
         </div>
         <input type="hidden" name="idsert" value="{{ $sertifikat->InstrumenId }}">
+         <input type="hidden" name="sertifikatid" value="{{ $sertifikat->id }}">
         <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
     </div>

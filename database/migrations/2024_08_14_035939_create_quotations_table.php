@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('TipeDiskon')->nullable();
             $table->string('Diskon')->nullable();
             $table->text('Header')->nullable();
-            $table->string('Deskripsi')->nullable();
+            $table->text('Deskripsi')->nullable();
             $table->date('Tanggal')->nullable();
             $table->date('DueDate')->nullable();
             $table->string('Status')->nullable();

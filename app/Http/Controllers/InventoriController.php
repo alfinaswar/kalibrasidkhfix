@@ -74,6 +74,7 @@ class InventoriController extends Controller
                 ->withInput();
         }
         $data = $request->all();
+        $data['idKategori'] = strtoupper(str_replace(' ', '', $data['Kategori']));
         kategoriInventori::create($data);
         return redirect()->route('inv.create-kategori')->with('success', 'Data Berhasil Disimpan');
     }

@@ -69,7 +69,8 @@ class PoController extends Controller
             ->first();
         // dd($getQuotation);
         $customer = MasterCustomer::all();
-        $instrumen = Instrumen::all();
+        $instrumen = Instrumen::get();
+        // dd($instrumen);
         return view('po.form-po', compact('customer', 'getQuotation', 'instrumen'));
     }
 

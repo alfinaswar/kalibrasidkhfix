@@ -51,11 +51,11 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th width="auto">Nomor</th>
-                                <th width="auto">Nama Customer</th>
-                                <th width="auto">Tanggal Diterima</th>
-                                <th width="auto">Tanggal Diserahkan</th>
-                                <th width="auto">Status</th>
+                                <th width="25%">Nomor</th>
+                                <th>Nama Customer</th>
+                                <th>Tanggal Diterima</th>
+                                <th>Tanggal Diserahkan</th>
+                                <th>Status</th>
                                 <th width="12%">Aksi</th>
                             </tr>
                         </thead>
@@ -75,7 +75,7 @@
                                         @endif
                                     </td>
                                     <td><a href="{{ route('ku.form-kaji-ulang', $st->id) }}"
-                                            class="btn btn-primary">Kaji</a>
+                                            class="btn btn-primary">Pilih</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -90,6 +90,18 @@
             </div>
         </div>
     </div>
+   @if (session()->has('error'))
+    <script>
+        setTimeout(function() {
+            swal.fire({
+                title: "{{ __('Error!') }}",
+                text: "{!! \Session::get('error') !!}",
+                icon: "error"
+            });
+        }, 1300);
+    </script>
+@endif
+
     @if (session()->has('success'))
         <script>
             swal.fire({

@@ -81,7 +81,7 @@ class SuratPerintahKerjaController extends Controller
         $data['KodeSpk'] = $this->GenerateKode();
         $data['idUser'] = auth()->user()->id;
         SuratTugas::create($data);
-        return redirect()->route('st.index')->with('success', 'Data Berhasil Disimpan');
+        return redirect()->route('spk.index')->with('success', 'Data Berhasil Disimpan');
     }
 
     /**

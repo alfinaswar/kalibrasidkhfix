@@ -57,7 +57,7 @@ class InstrumenController extends Controller
     public function create()
     {
         //ganti kategorinya
-        $data = inventori::where('Kategori', 2)->get();
+        $data = inventori::where('Kategori', 'ALATUKUR')->get();
         // dd($data);
         return view('master.instrumen.create', compact('data'));
     }

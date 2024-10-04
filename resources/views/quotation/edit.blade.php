@@ -155,16 +155,17 @@
                                         <td>
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <select name="TipeDiskon" id="TipeDiskon" class="form-control">
-                                                        <option value="">Pilih Tipe Diskon</option>
-                                                        <option value="flat">Flat</option>
-                                                        <option value="persentase">Persentase</option>
-                                                    </select>
+                                           <select name="TipeDiskon" id="TipeDiskon" class="form-control">
+    <option value="">Pilih Tipe Diskon</option>
+    <option value="flat" @if ($data->TipeDiskon == "flat") selected @endif>Flat</option>
+    <option value="persentase" @if ($data->TipeDiskon == "persentase") selected @endif>Persentase</option>
+</select>
+
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" class="form-control text-end" id="TotalDiskon"
-                                                        name="TotalDiskon" placeholder="Nominal Diskon">
-                                                </div>
+                                                   <input type="text" class="form-control text-end" id="TotalDiskon"
+       name="TotalDiskon" value="{{ number_format($data->Diskon, 0, ',', '.') }}"
+       placeholder="Nominal Diskon" onblur="formatRupiah(this)">
 
                                             </div>
                                         </td>
@@ -177,7 +178,7 @@
                                     <tr>
                                         <td colspan="3" class="text-end fw-bold">Total</td>
                                         <td><input type="text" class="form-control text-end" id="Total"
-                                                name="Total" readonly></td>
+                                                name="Total" value="{{$data->Total}}" readonly></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -319,7 +320,15 @@
             recalculateTotals();
         });
         $(document).ready(function() {
-
+                function formatRupiah(input) {
+    let value = input.value.replace(/[^0-9]/g, '');
+    const formattedValue = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(value);
+    input.value = formattedValue;
+}
             $('#Diskon').on('keyup', function() {
                 let diskon = $(this).val();
                 $('#TotalDiskon').val(diskon);

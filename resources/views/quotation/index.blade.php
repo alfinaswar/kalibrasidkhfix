@@ -72,7 +72,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center"><a href="{{ route('quotation.form-quotation', $st->id) }}"
-                                            class="btn btn-primary">Quotation</a></td>
+                                            class="btn btn-primary">Pilih</a></td>
                                 </tr>
                             @endforeach
                         </tbody>

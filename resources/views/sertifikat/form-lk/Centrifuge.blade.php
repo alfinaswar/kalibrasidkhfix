@@ -55,7 +55,7 @@
                                 <div class="mb-3">
                                     <label for="nama_kalibrator" class="form-label">Nama Kalibrator</label>
                                     <input type="text" class="form-control" id="nama_kalibrator" name="nama_kalibrator"
-                                        placeholder="Masukkan Nama Kalibrator">
+                                        placeholder="Masukkan Nama Kalibrator" value="{{auth()->user()->name}}" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label for="metoda_kerja" class="form-label">Metoda Kerja</label>
@@ -83,8 +83,51 @@
                                 </div>
                             </div>
                         </div>
+                                                <div class="row">
+                                                    <center>
+                            <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
+                                DAFTAR ALAT UKUR</h3>
+                               <span class="text-primary fw-bold text-uppercase">{{ $sertifikat->getNamaAlat->Nama }}</span>
+                               </center>
+                            <table class="table table-striped">
+                                <thead class="thead-dark bg-primary text-white">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nama Alat</th>
+                                        <th scope="col">Merk</th>
+                                        <th scope="col">Model/Type</th>
+                                        <th scope="col">Nomor Seri</th>
+                                        <th scope="col">Tertelusur</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="vertical-align: middle">
+                                   @foreach ($getAlatUkur as $key => $NamaAlatUkur)
+            <tr>
+                <td>
+{{$key+1}}
+                </td>
+                <td>
+                    <input type="text" name="nama_alat_ukur[]" class="form-control" value="{{$NamaAlatUkur->Nama}}" required>
+                </td>
+                <td>
+                    <input type="text" name="merk_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Merk }}" required>
+                </td>
+                <td>
+                    <input type="text" name="model_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Tipe }}" required>
+                </td>
+                <td>
+                    <input type="text" name="nomor_seri_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Sn }}" required>
+                </td>
+                <td>
+                    <input type="text" name="tertelusur_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Tertelusur }}" required>
+                </td>
+            </tr>
+            @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="row">
-                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                            <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN KONDISI LINGKUNGAN</h3>
                             <table class="table table-striped">
                                 <thead class="thead-dark bg-primary text-white">
@@ -225,7 +268,7 @@
                             </table>
                         </div>
                         <div class="row">
-                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                            <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN FISIK DAN FUNGSI</h3>
 
                             <table class="table table-striped">
@@ -353,7 +396,7 @@
                             </table>
                         </div>
                         <div class="row">
-                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                            <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
                                 PENGUKURAN KESELAMATAN LISTRIK</h3>
                             <table class="table table-striped">
                                 <thead class="thead-dark bg-primary text-white">
@@ -527,7 +570,7 @@
                             </table>
                         </div>
                         <div class="row">
-                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                            <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
                                 PENGUJIAN KINERJA</h3>
                             <div class="text-end mb-3">
                                 <a class="btn btn-secondary" onclick="addRow()"><i class="fas fa-plus"></i></a>
@@ -619,7 +662,7 @@
                             </table>
                         </div>
                         <div class="row">
-                            <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
+                            <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
                                 TELAAH TEKNIS</h3>
                             <table id="myTable" class="table table-striped"
                                 style="vertical-align: mid; text-align:center;">
@@ -713,12 +756,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Metoda Kerja</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <table id="example" class="display" width="100%">
+                    <table id="example" class="display table-striped" width="100%">
                         <thead>
                             <tr>
                                 <th width="10%">#</th>

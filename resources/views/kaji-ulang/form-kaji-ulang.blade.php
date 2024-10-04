@@ -104,12 +104,12 @@
                                                     </span>
                                                 @enderror
                                             </td>
-                                            <td><select name="Metode1[]"
+                                            <td width="30%"><select name="Metode1[]"
                                                     class="multi-select form-control-lg @error('Metode1') is-invalid @enderror">
                                                     <option value="">Pilih Metode</option>
                                                     @foreach ($metode as $item)
                                                         <option value="{{ $item->id }}"
-                                                            @if ($item->id == $data->id) Selected @endif>
+                                                            @if ($item->id == $data->id) @endif>
                                                             {{ $item->Nama }}</option>
                                                     @endforeach
                                                 </select>
@@ -120,12 +120,12 @@
                                                 @enderror
 
                                             </td>
-                                            <td><select name="Metode2[]"
+                                            <td width="30%"><select name="Metode2[]"
                                                     class="multi-select form-control-lg @error('Metode2') is-invalid @enderror">
                                                     <option value="">Pilih Metode</option>
                                                     @foreach ($metode as $item)
                                                         <option value="{{ $item->id }}"
-                                                            @if ($item->id == $data->id) Selected @endif>
+                                                            @if ($item->id == $data->id) @endif>
                                                             {{ $item->Nama }}</option>
                                                     @endforeach
                                                 </select>
@@ -135,7 +135,7 @@
                                                     </span>
                                                 @enderror
                                             </td>
-                                            <td><select class="form-control" tabindex="null" name="Status[]" required>
+                                            <td width="30%"><select class="form-control" tabindex="null" name="Status[]" required>
                                                     <option value="">Pilih Status</option>
                                                     <option value="1">Diterima</option>
                                                     <option value="2">Ditolak</option>
@@ -143,7 +143,7 @@
                                                     </option>
 
                                                 </select></td>
-                                            <td><select class="form-control" tabindex="null" name="Kondisi[]" required>
+                                            <td width="30%"><select class="form-control" tabindex="null" name="Kondisi[]" required>
                                                     <option value="">Pilih Kondisi Alat</option>
                                                     <option value="BERFUNGSI">Berfungsi</option>
                                                     <option value="TIDAKBERFUNGSI">Tidak Bergungsi</option>
@@ -151,7 +151,7 @@
 
                                                 </select>
                                             </td>
-                                            <td><input type="text" name="Catatan[]" class="form-control"
+                                            <td width="30%"><input type="text" name="Catatan[]" class="form-control"
                                                     placeholder="Catatan">
                                             </td>
                                         </tr>
