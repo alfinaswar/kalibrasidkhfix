@@ -55,7 +55,7 @@
                                 <div class="mb-3">
                                     <label for="nama_kalibrator" class="form-label">Nama Kalibrator</label>
                                     <input type="text" class="form-control" id="nama_kalibrator" name="nama_kalibrator"
-                                        placeholder="Masukkan Nama Kalibrator" value="{{auth()->user()->name}}" readonly>
+                                        placeholder="Masukkan Nama Kalibrator" value="{{ auth()->user()->name }}" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label for="metoda_kerja" class="form-label">Metoda Kerja</label>
@@ -83,12 +83,13 @@
                                 </div>
                             </div>
                         </div>
-                                                <div class="row">
-                                                    <center>
-                            <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
-                                DAFTAR ALAT UKUR</h3>
-                               <span class="text-primary fw-bold text-uppercase">{{ $sertifikat->getNamaAlat->Nama }}</span>
-                               </center>
+                        <div class="row">
+                            <center>
+                                <h3 class="card-title text-center text-black fw-bold" style="text-decoration: underline;">
+                                    DAFTAR ALAT UKUR</h3>
+                                <span
+                                    class="text-primary fw-bold text-uppercase">{{ $sertifikat->getNamaAlat->Nama }}</span>
+                            </center>
                             <table class="table table-striped">
                                 <thead class="thead-dark bg-primary text-white">
                                     <tr>
@@ -101,28 +102,33 @@
                                     </tr>
                                 </thead>
                                 <tbody style="vertical-align: middle">
-                                   @foreach ($getAlatUkur as $key => $NamaAlatUkur)
-            <tr>
-                <td>
-{{$key+1}}
-                </td>
-                <td>
-                    <input type="text" name="nama_alat_ukur[]" class="form-control" value="{{$NamaAlatUkur->Nama}}" required>
-                </td>
-                <td>
-                    <input type="text" name="merk_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Merk }}" required>
-                </td>
-                <td>
-                    <input type="text" name="model_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Tipe }}" required>
-                </td>
-                <td>
-                    <input type="text" name="nomor_seri_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Sn }}" required>
-                </td>
-                <td>
-                    <input type="text" name="tertelusur_alat_ukur[]" class="form-control" value="{{ $NamaAlatUkur->Tertelusur }}" required>
-                </td>
-            </tr>
-            @endforeach
+                                    @foreach ($getAlatUkur as $key => $NamaAlatUkur)
+                                        <tr>
+                                            <td>
+                                                {{ $key + 1 }}
+                                            </td>
+                                            <td>
+                                                <input type="text" name="nama_alat_ukur[]" class="form-control"
+                                                    value="{{ $NamaAlatUkur->Nama }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="merk_alat_ukur[]" class="form-control"
+                                                    value="{{ $NamaAlatUkur->Merk }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="model_alat_ukur[]" class="form-control"
+                                                    value="{{ $NamaAlatUkur->Tipe }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="nomor_seri_alat_ukur[]" class="form-control"
+                                                    value="{{ $NamaAlatUkur->Sn }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="tertelusur_alat_ukur[]" class="form-control"
+                                                    value="{{ $NamaAlatUkur->Tertelusur }}" required>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -745,7 +751,8 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="idsert" value="{{ $sertifikat->InstrumenId }}">
+        <input type="hidden" name="idinstrumen" value="{{ $sertifikat->InstrumenId }}">
+        <input type="hidden" name="sertifikatid" value="{{ $sertifikat->id }}">
         <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
     </div>

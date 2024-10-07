@@ -7,7 +7,7 @@
         </button>
 
 
-	</div>
+    </div>
 
     <div class="row">
         <div class="col-12">
@@ -16,39 +16,39 @@
                     <h4 class="card-title">Data Purchase Order</h4>
                 </div>
                 <div class="card-body">
-                        <table id="example" class="display" style="min-width: 845px">
-                            <thead>
-                                <tr>
+                    <table id="example" class="display" style="min-width: 845px">
+                        <thead>
+                            <tr>
                                 <th>#</th>
                                 <th>Nomor PO</th>
                                 <th>Customer</th>
                                 <th>Tanggal PO</th>
                                 <th>Status</th>
-                                    <th width="15%">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                <th width="15%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                            </tbody>
+                        </tbody>
 
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
 
     </div>
     </div>
-            <div class="modal fade" id="kajiUlangModal" tabindex="-1" aria-labelledby="kajiUlangModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="kajiUlangModalLabel">Data Quotation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table id="example4" class="display" width="100%">
+    <div class="modal fade" id="kajiUlangModal" tabindex="-1" aria-labelledby="kajiUlangModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="kajiUlangModalLabel">Data Quotation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table id="example4" class="display" width="100%">
                         <thead>
                             <tr class="text-center">
                                 <th>#</th>
@@ -59,44 +59,46 @@
                                 <th width="15%">Aksi</th>
                             </tr>
                         </thead>
-                         <tbody>
-@foreach ($dataQuotation as $key => $qt)
-<tr>
-  <td class="text-center">{{$key+1}}</td>
-  <td>{{$qt->KodeQuotation}}</td>
-  <td>{{$qt->getCustomer->Name}}</td>
-  <td>{{$qt->Tanggal}}</td>
-  <td class="text-center">@if ($qt->Status == "DISETUJUI")
-<span class="badge bg-success text-dark">DISETUJUI</span>
-  @endif</td>
-  <td class="text-center"><a href="{{route('po.form-po', $qt->id)}}" class="btn btn-primary">Buat Po <i class="fas fa-arrow-right"></i></a></td>
-</tr>
-@endforeach
-                            </tbody>
+                        <tbody>
+                            @foreach ($dataQuotation as $key => $qt)
+                                <tr>
+                                    <td class="text-center">{{ $key + 1 }}</td>
+                                    <td>{{ $qt->KodeQuotation }}</td>
+                                    <td>{{ $qt->getCustomer->Name }}</td>
+                                    <td>{{ $qt->Tanggal }}</td>
+                                    <td class="text-center">
+                                        @if ($qt->Status == 'DISETUJUI')
+                                            <span class="badge bg-success text-dark">DISETUJUI</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center"><a href="{{ route('po.form-po', $qt->id) }}"
+                                            class="btn btn-primary">Buat Po <i class="fas fa-arrow-right"></i></a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
 
                     </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-                    </div>
                 </div>
             </div>
         </div>
-     @if (session()->has('success'))
-                <script>
-                    swal.fire({
-                        title: "{{ __('Success!') }}",
-                        text: "{!! \Session::get('success') !!}",
-                        type: "success"
-                    });
-                </script>
-            @endif
- <script>
+    </div>
+    @if (session()->has('success'))
+        <script>
+            swal.fire({
+                title: "{{ __('Success!') }}",
+                text: "{!! \Session::get('success') !!}",
+                type: "success"
+            });
+        </script>
+    @endif
+    <script>
+        $(document).ready(function() {
 
-    $(document).ready(function () {
-
-        $('body').on('click', '.btn-delete', function() {
+            $('body').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
 
                 Swal.fire({
@@ -135,7 +137,7 @@
                     }
                 });
             });
-        var dataTable = function() {
+            var dataTable = function() {
                 var table = $('#example');
                 table.DataTable({
                     responsive: true,
@@ -184,6 +186,6 @@
                 });
             };
             dataTable();
-    });
- </script>
+        });
+    </script>
 @endsection

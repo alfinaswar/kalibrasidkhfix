@@ -77,7 +77,7 @@
                                     @foreach ($data as $x)
                                         <option value="{{ $x->id }}"
                                             {{ collect(old('AlatUkur'))->contains($x->id) ? 'selected' : '' }}>
-                                            {{ $x->Nama }} -  {{ $x->Merk }} - {{ $x->Sn }}
+                                            {{ $x->Nama }} - {{ $x->Merk }} - {{ $x->Sn }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -116,12 +116,14 @@
                                 <label class="form-label">Nama Lembar Kerja Sistem</label>
                                 <input type="text" name="NamaFile" id="NamaFile"
                                     class="form-control @error('NamaFile') is-invalid @enderror" readonly>
+                                <input type="hidden" name="NamaFunction" id="NamaFunction" class="form-control" readonly>
                                 @error('NamaFile')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+
                         </div>
                         <button type="submit" class="btn btn-md btn-primary btn-block">Simpan</button>
                     </form>
@@ -134,7 +136,10 @@
         function NamaInstrumen() {
             var nama = $("#Nama").val().replace(/\s+/g, '-');
             $("#NamaFile").val(nama);
+            var NamaFunction = $("#Nama").val().replace(/\s+/g, '');
+            $("#NamaFunction").val(NamaFunction);
         }
+
 
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
