@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Instrumen;
 use App\Models\inventori;
 use App\Models\MasterMetode;
+use App\Models\PengukuranListrik;
 use App\Models\Sertifikat;
+use App\Models\SertifikatFisikFungsi;
+use App\Models\SertifikatKondisiKelistrikan;
+use App\Models\SertifikatKondisiLingkungan;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -83,7 +87,6 @@ class SertifikatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        // dd($data);
         $cek = instrumen::where('id', $request->idinstrumen)->first()->LK;
         $filePath = storage_path('app/public/file_lk/' . $cek);
         // LOAD EXCEL
@@ -135,7 +138,7 @@ class SertifikatController extends Controller
     }
     private function MappingCentrifuge($data, $sheet, $spreadsheet)
     {
-        // data administrasi
+        // DATA ADMINISTRASI
         $sheet->setCellValue('C8', $data['no_order']);
         $sheet->setCellValue('C9', $data['merk']);
         $sheet->setCellValue('C10', $data['type_model']);
@@ -200,8 +203,8 @@ class SertifikatController extends Controller
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save($newFilePath);
 
+        //ADMINISTRASI
         $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
-            // 'Lokasi' => $data['Lokasi'],
             'Merk' => $data['merk'],
             'Type' => $data['type_model'],
             'SerialNumber' => $data['nomor_seri'],
@@ -210,12 +213,56 @@ class SertifikatController extends Controller
             'Ruangan' => $data['instansi_ruangan'],
             'Hasil' => $data['Hasil'],
             'Resolusi' => $data['resolusi'],
-            // 'MetodeId' => $data['MetodeId'],
             'Status' => 'Laik',
             'filename' => $newFileName,
         ]);
 
-        // return redirect()->back()->with('success', 'Kalibrasi Selesai');
+        $KondisiLingkungan = SertifikatKondisiLingkungan::create([
+            'SertifikatId' => $data['sertifikatid'],
+            'InstrumenId' => $data->idinstrumen,
+            'TempraturAwal' => $data->KondisiAwal[0],
+            'TempraturAkhir' => $data->KondisiAkhir[0],
+            'KelembapanAwal' => $data->KondisiAwal[1],
+            'KelembapanAkhir' => $data->KondisiAkhir[1],
+            'idUser' => auth()->user()->id
+        ]);
+        $kondisiListrik = SertifikatKondisiKelistrikan::create([
+            'SertifikatId' => $data['sertifikatid'],
+            'InstrumenId' => $data->idinstrumen,
+            'Tegangan_LN' => $data->val[0],
+            'Tegangan_LPE' => $data->val[1],
+            'Tegangan_NPE' => $data->val[2],
+            'idUser' => auth()->user()->id
+        ]);
+        $FisikFungsi = SertifikatFisikFungsi::create([
+            'SertifikatId' => $data['sertifikatid'],
+            'InstrumenId' => $data->idinstrumen,
+            'Parameter1' => $data->Parameter1,
+            'Parameter2' => $data->Parameter2,
+            'Parameter3' => $data->Parameter3,
+            'Parameter4' => $data->Parameter4,
+            'Parameter5' => $data->Parameter5,
+            'Parameter6' => $data->Parameter6,
+            'Parameter7' => $data->Parameter7,
+            'Parameter8' => $data->Parameter8,
+            'Parameter9' => $data->Parameter9,
+            'Parameter10' => $data->Parameter10,
+            'Parameter11' => $data->Parameter11,
+            'Parameter12' => $data->Parameter12,
+            'Parameter13' => $data->Parameter13,
+            'idUser' => auth()->user()->id
+        ]);
+        $PengukuranListrik = PengukuranListrik::create([
+            'tipe' => $data['TipeListrik'],
+            'kelas' => $data['Kelas'],
+            'Parameter1' => $data['Hasil'][0],
+            'Parameter2' => $data['Parameter2'][1],
+            'Parameter3' => $data['Parameter3'][2],
+            'Parameter4' => $data['Parameter4'][3],
+            'Parameter5' => $data['Parameter5'][4],
+            'Parameter6' => $data['Parameter6'][5],
+        ]);
+
         return response()->download($newFilePath);
 
     }
