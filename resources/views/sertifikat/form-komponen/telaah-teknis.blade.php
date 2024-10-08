@@ -20,8 +20,8 @@
                         <div class="input-group">
                             <select name="HasilTeknis[]" class="form-control">
                                 <option value=""> --Plih Status-- </option>
-                                <option value="1"> Baik</option>
-                                <option value="0"> Tidak Baik</option>
+                                <option value="BAIK"> Baik</option>
+                                <option value="TIDAKBAIK"> Tidak Baik</option>
                             </select>
                         </div>
                     </div>
@@ -37,8 +37,8 @@
                         <div class="input-group">
                             <select name="HasilTeknis[]" class="form-control">
                                 <option value=""> --Plih Status-- </option>
-                                <option value="Aman"> Aman</option>
-                                <option value="Tidak Aman"> Tidak Aman</option>
+                                <option value="AMAN"> Aman</option>
+                                <option value="TIDAKAMAN"> Tidak Aman</option>
                             </select>
                         </div>
                     </div>
@@ -54,8 +54,8 @@
                         <div class="input-group">
                             <select name="HasilTeknis[]" class="form-control">
                                 <option value=""> --Plih Status-- </option>
-                                <option value="1"> Perlu Perbaikan </option>
-                                <option value="2"> Dalam Batas Toleransi</option>
+                                <option value="PERLUPERBAIKAN"> Perlu Perbaikan </option>
+                                <option value="DALAMBATASTOLERANSI"> Dalam Batas Toleransi</option>
                             </select>
                         </div>
                     </div>

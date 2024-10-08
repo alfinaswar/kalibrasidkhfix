@@ -600,6 +600,7 @@
                                             <div class="input-group">
                                                 <input type="number" class="form-control" name="TestingStandart[]"
                                                     placeholder="Standar Testing RPM">
+
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">
                                                         <i class="fas fa-tachometer-alt"></i>
@@ -642,7 +643,7 @@
                                     <tr>
                                         <td>
                                             <div class="input-group">
-                                                <input type="number" class="form-control" name="StandarWaktu"
+                                                <input type="number" class="form-control" name="TestingStandart[]"
                                                     placeholder="Standar Testing RPM">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">
@@ -652,15 +653,15 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" name="Waktu1" placeholder="Uji 1"
+                                            <input type="text" name="PembacaanAlat1[]" placeholder="Uji 1"
                                                 class="form-control">
                                         </td>
                                         <td>
-                                            <input type="text" name="Waktu2" placeholder="Uji 2"
+                                            <input type="text" name="PembacaanAlat2[]" placeholder="Uji 2"
                                                 class="form-control">
                                         </td>
                                         <td>
-                                            <input type="text" name="Waktu3" placeholder="Uji 3"
+                                            <input type="text" name="PembacaanAlat3[]" placeholder="Uji 3"
                                                 class="form-control">
                                         </td>
                                     </tr>
@@ -690,8 +691,8 @@
                                                 <div class="input-group">
                                                     <select name="HasilTeknis[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="1"> Baik</option>
-                                                        <option value="0"> Tidak Baik</option>
+                                                        <option value="BAIK"> Baik</option>
+                                                        <option value="TIDAKBAIK"> Tidak Baik</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -707,8 +708,8 @@
                                                 <div class="input-group">
                                                     <select name="HasilTeknis[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="Aman"> Aman</option>
-                                                        <option value="Tidak Aman"> Tidak Aman</option>
+                                                        <option value="AMAN"> Aman</option>
+                                                        <option value="TIDAKAMAN"> Tidak Aman</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -724,8 +725,8 @@
                                                 <div class="input-group">
                                                     <select name="HasilTeknis[]" class="form-control">
                                                         <option value=""> --Plih Status-- </option>
-                                                        <option value="1"> Perlu Perbaikan </option>
-                                                        <option value="2"> Dalam Batas Toleransi</option>
+                                                        <option value="PERLUPERBAIKAN"> Perlu Perbaikan </option>
+                                                        <option value="DALAMBATASTOLERABSI"> Dalam Batas Toleransi</option>
                                                     </select>
                                                 </div>
                                             </div>
