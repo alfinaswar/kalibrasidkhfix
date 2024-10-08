@@ -14,7 +14,6 @@ use App\Models\SertifikatKondisiLingkungan;
 use App\Models\SertifikatPatientMonitorPengujuan;
 use App\Models\SertifikatTelaahTeknis;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
@@ -71,7 +70,6 @@ class SertifikatController extends Controller
     {
         $sertifikat = Sertifikat::with('getCustomer', 'getNamaAlat')->where('id', $id)->first();
 
-
         $InstrumenId = $sertifikat->InstrumenId;
         $cek = Instrumen::where('id', $InstrumenId)->first()->NamaFile;
         $FormLK = 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $cek;
@@ -91,18 +89,18 @@ class SertifikatController extends Controller
     {
         $data = $request->all();
         // dd($data);
-        $cek = instrumen::where('id', $request->idinstrumen)->first()->LK;
-        $filePath = storage_path('app/public/file_lk/' . $cek);
-        // LOAD EXCEL
-        $spreadsheet = IOFactory::load($filePath);
-        // AMBIL SHEET
-        $sheet = $spreadsheet->getSheetByName('LK yg diisi');
-        //MAAPING DATA SESUAI ALAT
+        // $cek = instrumen::where('id', $request->idinstrumen)->first()->LK;
+        // $filePath = storage_path('app/public/file_lk/' . $cek);
+
+        // // LOAD EXCEL
+        // $spreadsheet = IOFactory::load($filePath);
+        // // AMBIL SHEET
+        // $sheet = $spreadsheet->getSheetByName('LK yg diisi');
+        // // MAAPING DATA SESUAI ALAT
         $cekNamaFunction = instrumen::where('id', $request->idinstrumen)->first()->NamaFunction;
         $function = 'Store' . $cekNamaFunction;
         return $this->$function($data);
     }
-
 
     /**
      * Display the specified resource.
@@ -116,19 +114,20 @@ class SertifikatController extends Controller
         $spreadsheet = IOFactory::load($filePath);
         // AMBIL SHEET
         $sheet = $spreadsheet->getSheetByName('LK yg diisi');
-        //MAAPING DATA SESUAI ALAT
+        // MAAPING DATA SESUAI ALAT
         $cekNamaFunction = instrumen::where('id', $getIdInstrumen)->first()->NamaFunction;
         $function = 'Mapping' . $cekNamaFunction;
         $idSertifikat = $id;
         return $this->$function($idSertifikat, $sheet, $spreadsheet);
-
     }
+
     public function HasilPdf($id)
     {
         $data = Sertifikat::with('getNamaAlat', 'getCustomer')->where('id', $id)->first();
         $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('sertifikat.sertifikat-pdf', compact('data'));
         return $pdf->stream('Sertifikat_' . $data->id . '.pdf');
     }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -152,9 +151,10 @@ class SertifikatController extends Controller
     {
         //
     }
+
     private function StoreCentrifuge($data)
     {
-        //ADMINISTRASI
+        // ADMINISTRASI
         $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
             'Merk' => $data['merk'],
             'Type' => $data['type_model'],
@@ -217,7 +217,7 @@ class SertifikatController extends Controller
             'idUser' => auth()->user()->id
         ]);
 
-        //pengukuran kinerja
+        // pengukuran kinerja
         for ($i = 0; $i < count($data['TestingStandart']); $i++) {
             $tipePengujian = ($i == count($data['TestingStandart']) - 1) ? 'Time' : 'RPM';
             $pengukurankinerja = SertifikatCentrifugePengujian::create([
@@ -232,7 +232,7 @@ class SertifikatController extends Controller
             ]);
         }
 
-        //telaah teknis
+        // telaah teknis
         $telaahteknis = SertifikatTelaahTeknis::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
@@ -243,8 +243,8 @@ class SertifikatController extends Controller
             'idUser' => auth()->user()->id
         ]);
         return redirect()->back()->with('success', 'Data Berhasil Disimpan');
-
     }
+
     private function MappingCentrifuge($idSertifikat, $sheet, $spreadsheet)
     {
         $data = Sertifikat::with([
@@ -257,9 +257,6 @@ class SertifikatController extends Controller
             'getPengujianKinerjaCentrifuge',
             'getTelaahTeknis'
         ])->find($idSertifikat);
-
-        // dd($data);
-
         $sheet->setCellValue('C8', $data->no_order);
         $sheet->setCellValue('C9', $data->merk);
         $sheet->setCellValue('C10', $data->type_model);
@@ -272,51 +269,85 @@ class SertifikatController extends Controller
         // DATA ALAT UKUR
         $RowAlatUkur = 20;
         foreach ($data->getNamaAlat as $alat) {
-            $sheet->setCellValue('B' . $RowAlatUkur, $alat->nama_alat_ukur);
-            $sheet->setCellValue('C' . $RowAlatUkur, $alat->merk_alat_ukur);
-            $sheet->setCellValue('D' . $RowAlatUkur, $alat->model_alat_ukur);
-            $sheet->setCellValue('E' . $RowAlatUkur, $alat->nomor_seri_alat_ukur);
-            $sheet->setCellValue('F' . $RowAlatUkur, $alat->tertelusur_alat_ukur);
-            $RowAlatUkur++;
+            if (is_object($alat) && isset($alat->AlatUkur)) {
+                foreach ($alat->AlatUkur as $idAlatUkur) {
+                    $alatUkur = Inventori::find($idAlatUkur);
+                    if ($alatUkur) {
+                        $sheet->setCellValue('B' . $RowAlatUkur, $alatUkur->Nama);
+                        $sheet->setCellValue('C' . $RowAlatUkur, $alatUkur->Merk);
+                        $sheet->setCellValue('D' . $RowAlatUkur, $alatUkur->Tipe);
+                        $sheet->setCellValue('E' . $RowAlatUkur, $alatUkur->Sn);
+                        $sheet->setCellValue('F' . $RowAlatUkur, $alatUkur->Tertelusur);
+                        $RowAlatUkur++;
+                    }
+                }
+            }
         }
-        // data PENGUKURAN KONDISI LINGKUNGAN
-        $sheet->setCellValue('D28', $data->getPengukuranKondisiLingkungan->KondisiAwal[0]);
-        $sheet->setCellValue('G28', $data->getPengukuranKondisiLingkungan->KondisiAwal[1]);
-        $sheet->setCellValue('D29', $data->getPengukuranKondisiLingkungan->KondisiAkhir[0]);
-        $sheet->setCellValue('G29', $data->getPengukuranKondisiLingkungan->KondisiAkhir[1]);
+        $sheet->setCellValue('D28', $data->getPengukuranKondisiLingkungan->TempraturAwal);
+        $sheet->setCellValue('G28', $data->getPengukuranKondisiLingkungan->TempraturAkhir);
+        $sheet->setCellValue('D29', $data->getPengukuranKondisiLingkungan->KelembapanAwal);
+        $sheet->setCellValue('G29', $data->getPengukuranKondisiLingkungan->KelembapanAkhir);
 
-        foreach ($data->getTeganganUtama as $key => $value) {
-            $sheet->setCellValue('D' . (30 + $key), $value);
-        }
+        $sheet->setCellValue('D30', $data->getTeganganUtama->Tegangan_LN);
+        $sheet->setCellValue('D31', $data->getTeganganUtama->Tegangan_LPE);
+        $sheet->setCellValue('D32', $data->getTeganganUtama->Tegangan_NPE);
         // PEMERIKSAAN FISIK DAN FUNGSI ALAT
-        foreach ($data->getPmeriksaanFisikFungsi as $key => $value) {
-            $sheet->setCellValue('E' . (38 + $key), $value);
-        }
+        $sheet->setCellValue('E38', $data->getPmeriksaanFisikFungsi->Parameter1);
+        $sheet->setCellValue('E39', $data->getPmeriksaanFisikFungsi->Parameter2);
+        $sheet->setCellValue('E40', $data->getPmeriksaanFisikFungsi->Parameter3);
+        $sheet->setCellValue('E41', $data->getPmeriksaanFisikFungsi->Parameter4);
+        $sheet->setCellValue('E42', $data->getPmeriksaanFisikFungsi->Parameter5);
+        $sheet->setCellValue('E43', $data->getPmeriksaanFisikFungsi->Parameter6);
         // PENGUKURAN KESELAMATAN LISTRIK
-        foreach ($data->getPengukuranListrik as $key => $value) {
-            $sheet->setCellValue('E' . (50 + $key), $value);
+        // dd($data->getPengukuranListrik);
+        if ($data->getPengukuranListrik->tipe == 'B') {
+            $tipe = 'C46';
+        } elseif ($data->getPengukuranListrik->tipe == 'BF') {
+            $tipe = 'E46';
+        } else {
+            $tipe = 'G46';
         }
+        if ($data->getPengukuranListrik->kelas == 'I') {
+            $kelas = 'C47';
+        } elseif ($data->getPengukuranListrik->tipe == 'II') {
+            $kelas = 'E47';
+        } else {
+            $kelas = 'G47';
+        }
+        $sheet->setCellValue($tipe, $data->getPengukuranListrik->tipe);
+        $sheet->setCellValue($kelas, $data->getPengukuranListrik->kelas);
+        $sheet->setCellValue('E50', $data->getPengukuranListrik->Parameter1);
+        $sheet->setCellValue('E51', $data->getPengukuranListrik->Parameter2);
+        $sheet->setCellValue('E52', $data->getPengukuranListrik->Parameter3);
+        $sheet->setCellValue('E53', $data->getPengukuranListrik->Parameter4);
+        $sheet->setCellValue('E54', $data->getPengukuranListrik->Parameter5);
+        $sheet->setCellValue('E55', $data->getPengukuranListrik->Parameter6);
         // PENGUJIAN KINERJA
         $row = 61;
+        $maxRow = count($data->getPengujianKinerjaCentrifuge) - 1;
         foreach ($data->getPengujianKinerjaCentrifuge as $key => $value) {
-            $sheet->setCellValue('C' . $row, $value->TestingStandart);
-            $sheet->setCellValue('D' . $row, $value->PembacaanAlat1);
-            $sheet->setCellValue('E' . $row, $value->PembacaanAlat2);
-            $sheet->setCellValue('F' . $row, $value->PembacaanAlat3);
-            $row++;
+            $sheet->setCellValue('C', $row, $value->TitikUkur);
+            $sheet->setCellValue('D', $row, $value->Pengulangan1);
+            $sheet->setCellValue('E', $row, $value->Pengulangan2);
+            $sheet->setCellValue('F', $row, $value->Pengulangan3);
+            if ($key < $maxRow) {
+                $row++;
+            }
         }
         // PENGUJIAN KINERJA WAKTU
-        $sheet->setCellValue('C68', end($data->getPengujianKinerjaCentrifuge)->TestingStandart);
-        $sheet->setCellValue('D68', end($data->getPengujianKinerjaCentrifuge)->PembacaanAlat1);
-        $sheet->setCellValue('E68', end($data->getPengujianKinerjaCentrifuge)->PembacaanAlat2);
-        $sheet->setCellValue('F68', end($data->getPengujianKinerjaCentrifuge)->PembacaanAlat3);
+        $sheet->setCellValue('C' . $row, end($data->getPengujianKinerjaCentrifuge)->TitikUkur ?? 0);
+        $sheet->setCellValue('D' . $row, end($data->getPengujianKinerjaCentrifuge)->Pengulangan1 ?? 0);
+        $sheet->setCellValue('E' . $row, end($data->getPengujianKinerjaCentrifuge)->Pengulangan2 ?? 0);
+        $sheet->setCellValue('F' . $row, end($data->getPengujianKinerjaCentrifuge)->Pengulangan3 ?? 0);
         // TELAAH TEKNIS
-        $rowteknis = 71;
-        foreach ($data->getTelaahTeknis as $key => $value) {
-            $sheet->setCellValue('C' . $rowteknis, $value);
-            $rowteknis++;
-        }
-        // Generate
+
+        $sheet->setCellValue('C71', $data->getTelaahTeknis->FisikFungsi);
+        $sheet->setCellValue('C72', $data->getTelaahTeknis->KeselamatanListrik);
+        $sheet->setCellValue('C73', $data->getTelaahTeknis->Kinerja);
+        $sheet->mergeCells('C71:E71');
+        $sheet->setCellValue('C71', $data->getTelaahTeknis->Catatan);
+        $sheet->getStyle('C71')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
         $newFileName = $data->nama_pemilik . now()->format('Y-m-d_H-i-s') . '.xlsx';
         $newFilePath = storage_path('app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'Nama' . $newFileName);
 
@@ -325,10 +356,10 @@ class SertifikatController extends Controller
         $writer->save($newFilePath);
         return response()->download($newFilePath);
     }
+
     private function StorePatientMonitor($data)
     {
-
-        //ADMINISTRASI
+        // ADMINISTRASI
         $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
             'Merk' => $data['merk'],
             'Type' => $data['type_model'],
@@ -391,7 +422,7 @@ class SertifikatController extends Controller
             'idUser' => auth()->user()->id
         ]);
 
-        //pengukuran kinerja heartrate
+        // pengukuran kinerja heartrate
         for ($i = 0; $i < count($data['Titik_Ukur_Heartrate']); $i++) {
             $pengukurankinerja = SertifikatPatientMonitorPengujuan::create([
                 'SertifikatId' => $data['sertifikatid'],
@@ -404,7 +435,7 @@ class SertifikatController extends Controller
                 'idUser' => auth()->user()->id
             ]);
         }
-        //pengukuran kinerja heartrate
+        // pengukuran kinerja heartrate
         for ($i = 0; $i < count($data['Titik_Ukur_Respirasi']); $i++) {
             $pengukurankinerja = SertifikatPatientMonitorPengujuan::create([
                 'SertifikatId' => $data['sertifikatid'],
@@ -417,7 +448,7 @@ class SertifikatController extends Controller
                 'idUser' => auth()->user()->id
             ]);
         }
-        //pengukuran kinerja oksigen
+        // pengukuran kinerja oksigen
         for ($i = 0; $i < count($data['Titik_Ukur_saturasi_oksigen']); $i++) {
             $pengukurankinerja = SertifikatPatientMonitorPengujuan::create([
                 'SertifikatId' => $data['sertifikatid'],
@@ -430,7 +461,7 @@ class SertifikatController extends Controller
                 'idUser' => auth()->user()->id
             ]);
         }
-        //pengukuran kinerja oksigen
+        // pengukuran kinerja oksigen
         for ($i = 0; $i < count($data['Titik_Ukur_Nama']); $i++) {
             $pengukurankinerja = SertifikatPatientMonitorPengujuan::create([
                 'SertifikatId' => $data['sertifikatid'],
@@ -444,7 +475,7 @@ class SertifikatController extends Controller
                 'idUser' => auth()->user()->id
             ]);
         }
-        //telaah teknis
+        // telaah teknis
         $telaahteknis = SertifikatTelaahTeknis::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
@@ -547,5 +578,4 @@ class SertifikatController extends Controller
         $writer->save($newFilePath);
         return response()->download($newFilePath);
     }
-
 }
