@@ -88,6 +88,20 @@ class SertifikatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        // ADMINISTRASI
+        $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
+            'Merk' => $data['merk'],
+            'Type' => $data['type_model'],
+            'SerialNumber' => $data['nomor_seri'],
+            'TanggalPelaksanaan' => $data['tanggal_kalibrasi'],
+            'TanggalTerbit' => null,
+            'Ruangan' => $data['instansi_ruangan'],
+            'Hasil' => $data['Hasil'],
+            'Resolusi' => $data['resolusi'],
+            'Status' => 'Laik',
+            'filename' => $newFileName ?? null,
+        ]);
         // dd($data);
         // $cek = instrumen::where('id', $request->idinstrumen)->first()->LK;
         // $filePath = storage_path('app/public/file_lk/' . $cek);
@@ -155,18 +169,18 @@ class SertifikatController extends Controller
     private function StoreCentrifuge($data)
     {
         // ADMINISTRASI
-        $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
-            'Merk' => $data['merk'],
-            'Type' => $data['type_model'],
-            'SerialNumber' => $data['nomor_seri'],
-            'TanggalPelaksanaan' => $data['tanggal_kalibrasi'],
-            'TanggalTerbit' => null,
-            'Ruangan' => $data['instansi_ruangan'],
-            'Hasil' => $data['Hasil'],
-            'Resolusi' => $data['resolusi'],
-            'Status' => 'Laik',
-            'filename' => $newFileName ?? null,
-        ]);
+        // $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
+        //     'Merk' => $data['merk'],
+        //     'Type' => $data['type_model'],
+        //     'SerialNumber' => $data['nomor_seri'],
+        //     'TanggalPelaksanaan' => $data['tanggal_kalibrasi'],
+        //     'TanggalTerbit' => null,
+        //     'Ruangan' => $data['instansi_ruangan'],
+        //     'Hasil' => $data['Hasil'],
+        //     'Resolusi' => $data['resolusi'],
+        //     'Status' => 'Laik',
+        //     'filename' => $newFileName ?? null,
+        // ]);
 
         $KondisiLingkungan = SertifikatKondisiLingkungan::create([
             'SertifikatId' => $data['sertifikatid'],
@@ -257,15 +271,16 @@ class SertifikatController extends Controller
             'getPengujianKinerjaCentrifuge',
             'getTelaahTeknis'
         ])->find($idSertifikat);
-        $sheet->setCellValue('C8', $data->no_order);
-        $sheet->setCellValue('C9', $data->merk);
-        $sheet->setCellValue('C10', $data->type_model);
-        $sheet->setCellValue('C11', $data->nomor_seri);
-        $sheet->setCellValue('C12', $data->tanggal_kalibrasi);
-        $sheet->setCellValue('C13', $data->instansi_ruangan);
-        $sheet->setCellValue('C14', $data->resolusi);
-        $sheet->setCellValue('F9', $data->nama_pemilik);
-        $sheet->setCellValue('F10', $data->alamat_pemilik);
+        // dd($data);
+        $sheet->setCellValue('C8', $data->SertifikatOrder);
+        $sheet->setCellValue('C9', $data->Merk);
+        $sheet->setCellValue('C10', $data->Type);
+        $sheet->setCellValue('C11', $data->SerialNumber);
+        $sheet->setCellValue('C12', $data->TanggalPelaksanaan);
+        $sheet->setCellValue('C13', $data->Ruangan);
+        $sheet->setCellValue('C14', $data->Resolusi);
+        $sheet->setCellValue('F9', $data->getCustomer->Name);
+        $sheet->setCellValue('F10', $data->getCustomer->Alamat);
         // DATA ALAT UKUR
         $RowAlatUkur = 20;
         foreach ($data->getNamaAlat as $alat) {
@@ -283,6 +298,7 @@ class SertifikatController extends Controller
                 }
             }
         }
+        // dd($data);
         $sheet->setCellValue('D28', $data->getPengukuranKondisiLingkungan->TempraturAwal);
         $sheet->setCellValue('G28', $data->getPengukuranKondisiLingkungan->TempraturAkhir);
         $sheet->setCellValue('D29', $data->getPengukuranKondisiLingkungan->KelembapanAwal);
@@ -324,21 +340,22 @@ class SertifikatController extends Controller
         $sheet->setCellValue('E55', $data->getPengukuranListrik->Parameter6);
         // PENGUJIAN KINERJA
         $row = 61;
-        $maxRow = count($data->getPengujianKinerjaCentrifuge) - 1;
-        foreach ($data->getPengujianKinerjaCentrifuge as $key => $value) {
-            $sheet->setCellValue('C', $row, $value->TitikUkur);
-            $sheet->setCellValue('D', $row, $value->Pengulangan1);
-            $sheet->setCellValue('E', $row, $value->Pengulangan2);
-            $sheet->setCellValue('F', $row, $value->Pengulangan3);
-            if ($key < $maxRow) {
-                $row++;
-            }
+        $pengujianKinerjaCentrifuge = $data->getPengujianKinerjaCentrifuge;
+        $maxRow = count($pengujianKinerjaCentrifuge) - 1;
+        for ($i = 0; $i < $maxRow; $i++) {
+            $value = $pengujianKinerjaCentrifuge[$i];
+            $sheet->setCellValue('C' . $row, $value->TitikUkur);
+            $sheet->setCellValue('D' . $row, $value->Pengulangan1);
+            $sheet->setCellValue('E' . $row, $value->Pengulangan2);
+            $sheet->setCellValue('F' . $row, $value->Pengulangan3);
+            $row++;
         }
+        // dd($data->getPengujianKinerjaCentrifuge->last()->TipePenujian);
         // PENGUJIAN KINERJA WAKTU
-        $sheet->setCellValue('C' . $row, end($data->getPengujianKinerjaCentrifuge)->TitikUkur ?? 0);
-        $sheet->setCellValue('D' . $row, end($data->getPengujianKinerjaCentrifuge)->Pengulangan1 ?? 0);
-        $sheet->setCellValue('E' . $row, end($data->getPengujianKinerjaCentrifuge)->Pengulangan2 ?? 0);
-        $sheet->setCellValue('F' . $row, end($data->getPengujianKinerjaCentrifuge)->Pengulangan3 ?? 0);
+        $sheet->setCellValue('C68', $data->getPengujianKinerjaCentrifuge->last()->TitikUkur);
+        $sheet->setCellValue('D68', $data->getPengujianKinerjaCentrifuge->last()->Pengulangan1);
+        $sheet->setCellValue('E68', $data->getPengujianKinerjaCentrifuge->last()->Pengulangan2);
+        $sheet->setCellValue('F68', $data->getPengujianKinerjaCentrifuge->last()->Pengulangan3);
         // TELAAH TEKNIS
 
         $sheet->setCellValue('C71', $data->getTelaahTeknis->FisikFungsi);
@@ -359,20 +376,6 @@ class SertifikatController extends Controller
 
     private function StorePatientMonitor($data)
     {
-        // ADMINISTRASI
-        $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
-            'Merk' => $data['merk'],
-            'Type' => $data['type_model'],
-            'SerialNumber' => $data['nomor_seri'],
-            'TanggalPelaksanaan' => $data['tanggal_kalibrasi'],
-            'TanggalTerbit' => null,
-            'Ruangan' => $data['instansi_ruangan'],
-            'Hasil' => $data['Hasil'],
-            'Resolusi' => $data['resolusi'],
-            'Status' => 'Laik',
-            'filename' => $newFileName ?? null,
-        ]);
-
         $KondisiLingkungan = SertifikatKondisiLingkungan::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
@@ -488,89 +491,137 @@ class SertifikatController extends Controller
         return redirect()->back()->with('success', 'Data Berhasil Disimpan');
     }
 
-    private function MappingPatientMonitor($sheet, $spreadsheet)
+    private function MappingPatientMonitor($idsertifikat, $sheet, $spreadsheet)
     {
-        // DATA ADMINISTRASI
-        $sheet->setCellValue('C8', $data['no_order']);
-        $sheet->setCellValue('C9', $data['merk']);
-        $sheet->setCellValue('C10', $data['type_model']);
-        $sheet->setCellValue('C11', $data['nomor_seri']);
-        $sheet->setCellValue('C12', $data['tanggal_kalibrasi']);
-        $sheet->setCellValue('C13', $data['instansi_ruangan']);
-        $sheet->setCellValue('C14', $data['resolusi']);
-        $sheet->setCellValue('F9', $data['nama_pemilik']);
-        $sheet->setCellValue('F10', $data['alamat_pemilik']);
+        $data = Sertifikat::with([
+            'getCustomer',
+            'getNamaAlat',
+            'getPengukuranKondisiLingkungan',
+            'getTeganganUtama',
+            'getPmeriksaanFisikFungsi',
+            'getPengukuranListrik',
+            'getPengujianPatientMonitor',
+            'getTelaahTeknis'
+        ])->find($idsertifikat);
+        // dd($data);
+        $sheet->setCellValue('C8', $data->SertifikatOrder);
+        $sheet->setCellValue('C9', $data->Merk);
+        $sheet->setCellValue('C10', $data->Type);
+        $sheet->setCellValue('C11', $data->SerialNumber);
+        $sheet->setCellValue('C12', $data->TanggalPelaksanaan);
+        $sheet->setCellValue('C13', $data->Ruangan);
+        $sheet->setCellValue('C14', $data->Resolusi);
+        $sheet->setCellValue('F9', $data->getCustomer->Name);
+        $sheet->setCellValue('F10', $data->getCustomer->Alamat);
         // DATA ALAT UKUR
         $RowAlatUkur = 20;
-        for ($i = 0; $i < count($data['nama_alat_ukur']); $i++) {
-            $sheet->setCellValue('B' . $RowAlatUkur . '', $data['nama_alat_ukur'][$i]);
-            $sheet->setCellValue('C' . $RowAlatUkur . '', $data['merk_alat_ukur'][$i]);
-            $sheet->setCellValue('D' . $RowAlatUkur . '', $data['model_alat_ukur'][$i]);
-            $sheet->setCellValue('E' . $RowAlatUkur . '', $data['nomor_seri_alat_ukur'][$i]);
-            $sheet->setCellValue('F' . $RowAlatUkur . '', $data['tertelusur_alat_ukur'][$i]);
-            $RowAlatUkur++;
+        foreach ($data->getNamaAlat as $alat) {
+            if (is_object($alat) && isset($alat->AlatUkur)) {
+                foreach ($alat->AlatUkur as $idAlatUkur) {
+                    $alatUkur = Inventori::find($idAlatUkur);
+                    if ($alatUkur) {
+                        $sheet->setCellValue('B' . $RowAlatUkur, $alatUkur->Nama);
+                        $sheet->setCellValue('C' . $RowAlatUkur, $alatUkur->Merk);
+                        $sheet->setCellValue('D' . $RowAlatUkur, $alatUkur->Tipe);
+                        $sheet->setCellValue('E' . $RowAlatUkur, $alatUkur->Sn);
+                        $sheet->setCellValue('F' . $RowAlatUkur, $alatUkur->Tertelusur);
+                        $RowAlatUkur++;
+                    }
+                }
+            }
         }
-        // data PENGUKURAN KONDISI LINGKUNGAN
-        $sheet->setCellValue('D28', $data['KondisiAwal'][0]);
-        $sheet->setCellValue('G28', $data['KondisiAwal'][1]);
-        $sheet->setCellValue('D28', $data['KondisiAkhir'][0]);
-        $sheet->setCellValue('G28', $data['KondisiAkhir'][1]);
+        // dd($data);
+        $sheet->setCellValue('D28', $data->getPengukuranKondisiLingkungan->TempraturAwal);
+        $sheet->setCellValue('G28', $data->getPengukuranKondisiLingkungan->TempraturAkhir);
+        $sheet->setCellValue('D29', $data->getPengukuranKondisiLingkungan->KelembapanAwal);
+        $sheet->setCellValue('G29', $data->getPengukuranKondisiLingkungan->KelembapanAkhir);
 
-        for ($i = 0; $i < 3; $i++) {
-            $sheet->setCellValue('D' . (30 + $i), $data['val'][$i]);
-        }
+        $sheet->setCellValue('D30', $data->getTeganganUtama->Tegangan_LN);
+        $sheet->setCellValue('D31', $data->getTeganganUtama->Tegangan_LPE);
+        $sheet->setCellValue('D32', $data->getTeganganUtama->Tegangan_NPE);
         // PEMERIKSAAN FISIK DAN FUNGSI ALAT
-        for ($i = 0; $i < 6; $i++) {
-            $sheet->setCellValue('E' . (38 + $i), $data['Hasil'][$i]);
-        }
+        $sheet->setCellValue('E38', $data->getPmeriksaanFisikFungsi->Parameter1);
+        $sheet->setCellValue('E39', $data->getPmeriksaanFisikFungsi->Parameter2);
+        $sheet->setCellValue('E40', $data->getPmeriksaanFisikFungsi->Parameter3);
+        $sheet->setCellValue('E41', $data->getPmeriksaanFisikFungsi->Parameter4);
+        $sheet->setCellValue('E42', $data->getPmeriksaanFisikFungsi->Parameter5);
+        $sheet->setCellValue('E43', $data->getPmeriksaanFisikFungsi->Parameter6);
         // PENGUKURAN KESELAMATAN LISTRIK
-        for ($i = 0; $i < 6; $i++) {
-            $sheet->setCellValue('E' . (50 + $i), $data['TerukurListrik2'][$i]);
+        // dd($data->getPengukuranListrik);
+        if ($data->getPengukuranListrik->tipe == 'B') {
+            $tipe = 'C46';
+        } elseif ($data->getPengukuranListrik->tipe == 'BF') {
+            $tipe = 'E46';
+        } else {
+            $tipe = 'G46';
         }
+        if ($data->getPengukuranListrik->kelas == 'I') {
+            $kelas = 'C47';
+        } elseif ($data->getPengukuranListrik->tipe == 'II') {
+            $kelas = 'E47';
+        } else {
+            $kelas = 'G47';
+        }
+        $sheet->setCellValue($tipe, $data->getPengukuranListrik->tipe);
+        $sheet->setCellValue($kelas, $data->getPengukuranListrik->kelas);
+        $sheet->setCellValue('E50', $data->getPengukuranListrik->Parameter1);
+        $sheet->setCellValue('E51', $data->getPengukuranListrik->Parameter2);
+        $sheet->setCellValue('E52', $data->getPengukuranListrik->Parameter3);
+        $sheet->setCellValue('E53', $data->getPengukuranListrik->Parameter4);
+        $sheet->setCellValue('E54', $data->getPengukuranListrik->Parameter5);
+        $sheet->setCellValue('E55', $data->getPengukuranListrik->Parameter6);
+
         // PENGUJIAN KINERJA HEARTRATE
-        $row = 61;
-        for ($i = 0; $i < count($data['Titik_Ukur_Heartrate']) - 1; $i++) {
-            $sheet->setCellValue('C' . $row . '', $data['Titik_Ukur_Heartrate'][$i]);
-            $sheet->setCellValue('D' . $row . '', $data['Pengulangan1_Heartrate'][$i]);
-            $sheet->setCellValue('E' . $row . '', $data['Pengulangan2_Heartrate'][$i]);
-            $sheet->setCellValue('F' . $row . '', $data['Pengulangan3_Heartrate'][$i]);
-            $row++;
+        $heartrate = $data->getPengujianPatientMonitor->where('TipePengujian', 'HEARTRATE');
+        $rowheartrate = 61;
+        foreach ($heartrate as $key => $a) {
+            $sheet->setCellValue('C' . $rowheartrate, $a->TitikUkur);
+            $sheet->setCellValue('D' . $rowheartrate, $a->Pengulangan1);
+            $sheet->setCellValue('E' . $rowheartrate, $a->Pengulangan2);
+            $sheet->setCellValue('F' . $rowheartrate, $a->Pengulangan3);
+            $rowheartrate++;
         }
         // PENGUJIAN KINERJA RESPIRASI
-        $rowRespirasi = 69;
-        for ($i = 0; $i < count($data['Titik_Ukur_Respirasi']) - 1; $i++) {
-            $sheet->setCellValue('C' . $rowRespirasi . '', $data['Titik_Ukur_Respirasi'][$i]);
-            $sheet->setCellValue('D' . $rowRespirasi . '', $data['Pengulangan1_Respirasi'][$i]);
-            $sheet->setCellValue('E' . $rowRespirasi . '', $data['Pengulangan2_Respirasi'][$i]);
-            $sheet->setCellValue('F' . $rowRespirasi . '', $data['Pengulangan3_Respirasi'][$i]);
-            $rowRespirasi++;
+        $respirasi = $data->getPengujianPatientMonitor->where('TipePengujian', 'RESPIRASI');
+        $rowrespirasi = 69;
+        foreach ($respirasi as $key => $b) {
+            $sheet->setCellValue('C' . $rowrespirasi, $b->TitikUkur);
+            $sheet->setCellValue('D' . $rowrespirasi, $b->Pengulangan1);
+            $sheet->setCellValue('E' . $rowrespirasi, $b->Pengulangan2);
+            $sheet->setCellValue('F' . $rowrespirasi, $b->Pengulangan3);
+            $rowrespirasi++;
         }
-        // PENGUJIAN KINERJA SATURASI OKSIGEN
-        $rowOksigen = 76;
-        for ($i = 0; $i < count($data['Titik_Ukur_saturasi_oksigen']) - 1; $i++) {
-            $sheet->setCellValue('C' . $rowOksigen . '', $data['Titik_Ukur_saturasi_oksigen'][$i]);
-            $sheet->setCellValue('D' . $rowOksigen . '', $data['Pengulangan1_saturasi_oksigen'][$i]);
-            $sheet->setCellValue('E' . $rowOksigen . '', $data['Pengulangan2_saturasi_oksigen'][$i]);
-            $sheet->setCellValue('F' . $rowOksigen . '', $data['Pengulangan3_saturasi_oksigen'][$i]);
-            $rowOksigen++;
+        // PENGUJIAN KINERJA SATURASI
+        $saturasi = $data->getPengujianPatientMonitor->where('TipePengujian', 'SATURASI');
+        $rowsaturasi = 76;
+        foreach ($saturasi as $key => $c) {
+            $sheet->setCellValue('C' . $rowsaturasi, $c->TitikUkur);
+            $sheet->setCellValue('D' . $rowsaturasi, $c->Pengulangan1);
+            $sheet->setCellValue('E' . $rowsaturasi, $c->Pengulangan2);
+            $sheet->setCellValue('F' . $rowsaturasi, $c->Pengulangan3);
+            $rowsaturasi++;
         }
-        // PENGUJIAN TEKANAN DARAH
-        $rowOksigen = 83;
-        for ($i = 0; $i < count($data['Titik_Ukur_Nama']) - 1; $i++) {
-            $sheet->setCellValue('D' . $rowOksigen . '', $data['Titik_Ukur_Nama'][$i]);
-            $sheet->setCellValue('E' . $rowOksigen . '', $data['Titik_Ukur_Hasil'][$i]);
-            $sheet->setCellValue('F' . $rowOksigen . '', $data['Pengulangan1_Tekanan_Darah'][$i]);
-            $sheet->setCellValue('G' . $rowOksigen . '', $data['Pengulangan2_Tekanan_Darah'][$i]);
-            $sheet->setCellValue('H' . $rowOksigen . '', $data['Pengulangan3_Tekanan_Darah'][$i]);
-            $rowOksigen++;
+        // PENGUJIAN KINERJA TEKANAN DARAH
+        $tekanandarah = $data->getPengujianPatientMonitor->where('TipePengujian', 'TEKANANDARAH');
+        $rowtekanandarah = 83;
+        foreach ($tekanandarah as $key => $d) {
+            $sheet->setCellValue('D' . $rowtekanandarah, $d->TipeTitikUkur);
+            $sheet->setCellValue('E' . $rowtekanandarah, $d->TitikUkur);
+            $sheet->setCellValue('F' . $rowtekanandarah, $d->Pengulangan1);
+            $sheet->setCellValue('G' . $rowtekanandarah, $d->Pengulangan2);
+            $sheet->setCellValue('H' . $rowtekanandarah, $d->Pengulangan3);
+            $rowtekanandarah++;
         }
-        $rowteknis = 97;
-        foreach ($data['HasilTeknis'] as $key => $value) {
-            $sheet->setCellValue('C' . $rowteknis . '', $data['HasilTeknis'][$key]);
-            $rowteknis++;
-        }
-        // Generate
-        $newFileName = $data['nama_pemilik'] . now()->format('Y-m-d_H-i-s') . '.xlsx';
+        // TELAAH TEKNIS
+
+        $sheet->setCellValue('C97', $data->getTelaahTeknis->FisikFungsi);
+        $sheet->setCellValue('C98', $data->getTelaahTeknis->KeselamatanListrik);
+        $sheet->setCellValue('C99', $data->getTelaahTeknis->Kinerja);
+        $sheet->mergeCells('C100:E100');
+        $sheet->setCellValue('C100', $data->getTelaahTeknis->Catatan);
+        $sheet->getStyle('C100')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $newFileName = $data->nama_pemilik . now()->format('Y-m-d_H-i-s') . '.xlsx';
         $newFilePath = storage_path('app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'Nama' . $newFileName);
 
         // Simpan Yang Telah Di modifiasi

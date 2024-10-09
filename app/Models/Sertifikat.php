@@ -26,31 +26,36 @@ class Sertifikat extends Model
 
     public function getPengukuranKondisiLingkungan()
     {
-        return $this->hasOne(SertifikatKondisiLingkungan::class, 'id', 'InstrumenId');
+        return $this->hasOne(SertifikatKondisiLingkungan::class, 'SertifikatId', 'id');
     }
 
     public function getTeganganUtama()
     {
-        return $this->hasOne(SertifikatKondisiKelistrikan::class, 'id', 'InstrumenId');
+        return $this->hasOne(SertifikatKondisiKelistrikan::class, 'SertifikatId', 'id');
     }
 
     public function getPmeriksaanFisikFungsi()
     {
-        return $this->hasOne(SertifikatFisikFungsi::class, 'id', 'InstrumenId');
+        return $this->hasOne(SertifikatFisikFungsi::class, 'SertifikatId', 'id');
     }
 
     public function getPengukuranListrik()
     {
-        return $this->hasOne(PengukuranListrik::class, 'id', 'InstrumenId');
+        return $this->hasOne(PengukuranListrik::class, 'SertifikatId', 'id');
     }
 
     public function getPengujianKinerjaCentrifuge()
     {
-        return $this->hasMany(SertifikatCentrifugePengujian::class, 'InstrumenId', 'id');
+        return $this->hasMany(SertifikatCentrifugePengujian::class, 'SertifikatId', 'id');
     }
 
     public function getTelaahTeknis()
     {
-        return $this->hasOne(SertifikatTelaahTeknis::class, 'id', 'InstrumenId');
+        return $this->hasOne(SertifikatTelaahTeknis::class, 'SertifikatId', 'id');
+    }
+
+    public function getPengujianPatientMonitor()
+    {
+        return $this->hasMany(SertifikatPatientMonitorPengujuan::class, 'SertifikatId', 'id');
     }
 }
