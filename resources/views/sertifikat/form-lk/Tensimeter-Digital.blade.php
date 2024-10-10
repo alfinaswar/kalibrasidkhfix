@@ -19,7 +19,7 @@
                         @include('sertifikat.form-komponen.alat-ukur');
 
                         {{-- Komponen Pengukuran Kondisi Lingkungan --}}
-                        @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan');
+                        @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan-tanpa-tegangan-utama');
 
                         {{-- Komponen Pemeriksaan Fisik dan Fungsi Alat --}}
                         @include('sertifikat.form-komponen.pemeriksaan-fisik-dan-fungsi-alat');

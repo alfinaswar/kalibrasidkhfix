@@ -79,60 +79,7 @@
                       </div>
                   </td>
               </tr>
-              <tr>
-                  <th scope="row">3</th>
-                  <td>
-                      <input type="text" class="form-control" value="Tegangan Utama (vAC)" name="TeganganUtama"
-                          readonly>
-                  </td>
-                  <td>
-                      <div class="form-control-wrap">
-                          <div class="input-group">
-                              <input type="number" class="form-control" placeholder="L-N" name="val[]">
-                              <div class="input-group-append">
-                                  <span class="input-group-text" id="basic-addon2">
-                                      <i class="fas fa-bolt"></i>
-                                  </span>
-                              </div>
-                          </div>
-                      </div>
-                  </td>
-                  <td>
 
-                  </td>
-              </tr>
-              <tr>
-                  <th scope="row"></th>
-                  <td></td>
-                  <td>
-                      <div class="input-group">
-                          <input type="number" class="form-control" placeholder="L-PE" name="val[]">
-                          <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2">
-                                  <i class="fas fa-bolt"></i>
-                              </span>
-                          </div>
-                      </div>
-
-                  </td>
-                  <td></td>
-              </tr>
-              <tr>
-                  <td></td>
-                  <td></td>
-                  <td>
-                      <div class="input-group">
-                          <input type="number" class="form-control" placeholder="N-PE" name="val[]">
-                          <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2">
-                                  <i class="fas fa-bolt"></i>
-                              </span>
-                          </div>
-                      </div>
-
-                  </td>
-                  <td></td>
-              </tr>
           </tbody>
       </table>
   </div>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instrumen;
+use App\Models\MasterCustomer;
 use App\Models\po;
 use App\Models\SuratPerintahKerja;
 use App\Models\SuratTugas;

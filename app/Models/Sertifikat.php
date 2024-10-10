@@ -23,4 +23,39 @@ class Sertifikat extends Model
     {
         return $this->hasOne(Instrumen::class, 'id', 'InstrumenId');
     }
+
+    public function getPengukuranKondisiLingkungan()
+    {
+        return $this->hasOne(SertifikatKondisiLingkungan::class, 'SertifikatId', 'id');
+    }
+
+    public function getTeganganUtama()
+    {
+        return $this->hasOne(SertifikatKondisiKelistrikan::class, 'SertifikatId', 'id');
+    }
+
+    public function getPmeriksaanFisikFungsi()
+    {
+        return $this->hasOne(SertifikatFisikFungsi::class, 'SertifikatId', 'id');
+    }
+
+    public function getPengukuranListrik()
+    {
+        return $this->hasOne(PengukuranListrik::class, 'SertifikatId', 'id');
+    }
+
+    public function getPengujianKinerjaCentrifuge()
+    {
+        return $this->hasMany(SertifikatCentrifugePengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getTelaahTeknis()
+    {
+        return $this->hasOne(SertifikatTelaahTeknis::class, 'SertifikatId', 'id');
+    }
+
+    public function getPengujianPatientMonitor()
+    {
+        return $this->hasMany(SertifikatPatientMonitorPengujuan::class, 'SertifikatId', 'id');
+    }
 }
