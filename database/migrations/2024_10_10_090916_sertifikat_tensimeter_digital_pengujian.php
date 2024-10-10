@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('sertifikat_tensimeter_digital_pengujians', function (Blueprint $table) {
+            $table->id();
+            $table->string('SertifikatId')->nullable();
+            $table->bigInteger('InstrumenId')->nullable();
+            $table->string('TipePengujian')->nullable();
+            $table->enum('TipeTitikUkur', ['SYSTOL', 'MAP', 'DIASTOLE'])->nullable();
+            $table->string('TitikUkur')->nullable();
+            $table->string('Pengulangan1')->nullable();
+            $table->string('Pengulangan2')->nullable();
+            $table->string('Pengulangan3')->nullable();
+            $table->string('idUser')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('sertifikat_tensimeter_digital_pengujians');
+    }
+};
