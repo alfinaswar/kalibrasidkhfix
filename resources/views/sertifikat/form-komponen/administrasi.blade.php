@@ -64,5 +64,15 @@
             <input type="date" class="form-control" id="mdate" name="tanggal_terima"
                 placeholder="Masukkan Tanggal Terima">
         </div>
+        <marquee scrollamount="2" >
+
+            <div class="mb-3">
+                <label for="tanggal_terima" class="form-label fs-4">Status</label>
+                <select class="form-control" name="HasilAdm" id="HasilAdm">
+                    <option value="LAIK">Laik</option>
+                    <option value="TIDAKLAIK">Tidak Laik</option>
+                </select>
+            </div>
+        </marquee>
     </div>
 </div>

@@ -49,7 +49,7 @@ class SertifikatController extends Controller
                     return $btnUji . ' ' . $excel . ' ' . $pdf;
                 })
                 ->addColumn('statsertifikat', function ($row) {
-                    if ($row->Status == 'DRAFT') {
+                    if ($row->Diserahkan == 'N') {
                         $stat = '<span class="badge bg-warning">DRAFT</span>';
                     } else {
                         $stat = '<span class="badge bg-success">TERBIT</span>';
@@ -95,9 +95,9 @@ class SertifikatController extends Controller
             'TanggalPelaksanaan' => $data['tanggal_kalibrasi'],
             'TanggalTerbit' => null,
             'Ruangan' => $data['instansi_ruangan'],
-            'Hasil' => $data['Hasil'],
+            'Hasil' => $data['HasilAdm'],
             'Resolusi' => $data['resolusi'],
-            'Status' => 'Laik',
+            'Status' => 'AKTIF',
             'filename' => $newFileName ?? null,
         ]);
         $cekNamaFunction = instrumen::where('id', $request->idinstrumen)->first()->NamaFunction;
