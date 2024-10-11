@@ -7,14 +7,14 @@ use App\Models\SertifikatTelaahTeknis;
 use App\Models\SertifikatSpyghmomanometerakurasi;
 use App\Models\SertifikatSpyghmomanometerPengujian;
 
-class sSphygmomanometerAnalogController extends Controller
+class SphygmomanometerAnalogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        dd("test");
     }
 
     /**

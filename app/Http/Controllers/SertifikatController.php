@@ -114,7 +114,7 @@ class SertifikatController extends Controller
         $cekNamaFunction = instrumen::where('id', $request->idinstrumen)->first()->NamaFunction;
         // $function = 'Store' . $cekNamaFunction;
         $namaController = $cekNamaFunction.'Controller';
-        $cont = "App\Http\Controllers\s".$namaController;
+        $cont = "App".DIRECTORY_SEPARATOR."Http".DIRECTORY_SEPARATOR."Controllers".DIRECTORY_SEPARATOR.$namaController;
         $cont = new $cont;
         return $cont->store($data);
     }
