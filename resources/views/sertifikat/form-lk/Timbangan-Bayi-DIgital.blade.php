@@ -24,8 +24,11 @@
                         {{-- Komponen Pemeriksaan Fisik dan Fungsi Alat --}}
                         @include('sertifikat.form-komponen.pemeriksaan-fisik-dan-fungsi-alat-tensimeter-digital')
 
-                        {{-- Komponen Pengujian Kinerja Tekanan Darah --}}
+                        {{-- Komponen Pengujian Kinerja hALF mAX --}}
                         @include('sertifikat.form-komponen.pengukuran-kinerja-half-max')
+
+                        {{-- Komponen Pengujian Kinerja Skala Nominal --}}
+                        @include('sertifikat.form-komponen.pengujian-skala-nominal')
 
                         {{-- Komponen Teknis --}}
                         @include('sertifikat.form-komponen.telaah-teknis')
