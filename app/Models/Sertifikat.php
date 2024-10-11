@@ -58,4 +58,8 @@ class Sertifikat extends Model
     {
         return $this->hasMany(SertifikatPatientMonitorPengujuan::class, 'SertifikatId', 'id');
     }
+    public function getPengujianTensimeterDigital()
+    {
+        return $this->hasMany(SertifikatTensimeterDigitalPengujian::class, 'SertifikatId', 'id');
+    }
 }
