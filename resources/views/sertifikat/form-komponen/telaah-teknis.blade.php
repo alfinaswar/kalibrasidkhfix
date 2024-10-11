@@ -1,6 +1,7 @@
 <div class="row">
     <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
         TELAAH TEKNIS</h3>
+        <span class="text-center">Kosongkan jika tidak ada</span>
     <table id="myTable" class="table table-striped" style="vertical-align: mid; text-align:center;">
         <thead class="thead-dark bg-primary text-white">
             <tr>
@@ -47,7 +48,7 @@
             <tr>
                 <th scope="row">3</th>
                 <td>
-                    <span name="ParameterTeknis[]">Fisik dan Fungsi</span>
+                    <span name="ParameterTeknis[]">Kinerja</span>
                 </td>
                 <td>
                     <div class="form-control-wrap">

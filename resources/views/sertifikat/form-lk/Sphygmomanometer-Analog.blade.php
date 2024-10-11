@@ -19,32 +19,20 @@
                         @include('sertifikat.form-komponen.alat-ukur')
 
                         {{-- Komponen Pengukuran Kondisi Lingkungan --}}
-                        @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan')
+                        @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan-tanpa-tegangan-utama')
 
                         {{-- Komponen Pemeriksaan Fisik dan Fungsi Alat --}}
-                        @include('sertifikat.form-komponen.pemeriksaan-fisik-dan-fungsi-alat')
-
-                        {{-- Komponen Pengukuran Keselamatan Listrik --}}
-                        @include('sertifikat.form-komponen.pengukuran-keselamatan-listrik')
-
-                        {{-- Komponen Pengujian Kinerja Heart Rate --}}
-                        @include('sertifikat.form-komponen.pengukuran-kinerja-heart-rate')
+                        @include('sertifikat.form-komponen.sphygmomanometer.pemeriksaan-fisik-dan-fungsi-alat-sphygmomanometer')
 
                         {{-- Komponen Pengujian Kinerja Respirasi --}}
-                        @include('sertifikat.form-komponen.pengukuran-kinerja-respirasi')
-
-                        {{-- Komponen Pengujian Kinerja Saturasi Oksigen --}}
-                        @include('sertifikat.form-komponen.pengukuran-kinerja-saturasi-oksigen')
-
-                        {{-- Komponen Pengujian Kinerja Tekanan Darah --}}
-                        @include('sertifikat.form-komponen.pengukuran-kinerja-tekanan-darah')
+                        @include('sertifikat.form-komponen.sphygmomanometer.pengujian-kinerja')
 
                         {{-- Komponen Teknis --}}
                         @include('sertifikat.form-komponen.telaah-teknis')
                 </div>
             </div>
         </div>
-        <input type="hidden" name="idsert" value="{{ $sertifikat->InstrumenId }}">
+        <input type="hidden" name="idinstrumen" value="{{ $sertifikat->InstrumenId }}">
         <input type="hidden" name="sertifikatid" value="{{ $sertifikat->id }}">
         <button type="submit" class="btn btn-primary">Simpan</button>
         </form>

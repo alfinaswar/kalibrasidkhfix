@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Instrumen;
 use App\Models\inventori;
-use App\Models\MasterMetode;
-use App\Models\PengukuranListrik;
 use App\Models\Sertifikat;
-use App\Models\SertifikatCentrifugePengujian;
-use App\Models\SertifikatFisikFungsi;
-use App\Models\SertifikatKondisiKelistrikan;
-use App\Models\SertifikatKondisiLingkungan;
-use App\Models\SertifikatPatientMonitorPengujuan;
-use App\Models\SertifikatTelaahTeknis;
+use App\Models\MasterMetode;
 use Illuminate\Http\Request;
+use App\Models\PengukuranListrik;
+use App\Models\SertifikatFisikFungsi;
+use App\Models\SertifikatTelaahTeknis;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
-use PDF;
+use App\Models\SertifikatKondisiLingkungan;
+use App\Models\SertifikatKondisiKelistrikan;
+use App\Models\SertifikatCentrifugePengujian;
+use App\Models\SertifikatPatientMonitorPengujuan;
 
 class SertifikatController extends Controller
 {
@@ -88,7 +88,7 @@ class SertifikatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
+// dd($data);
         // ADMINISTRASI
         $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
             'Merk' => $data['merk'],
@@ -112,8 +112,11 @@ class SertifikatController extends Controller
         // $sheet = $spreadsheet->getSheetByName('LK yg diisi');
         // // MAAPING DATA SESUAI ALAT
         $cekNamaFunction = instrumen::where('id', $request->idinstrumen)->first()->NamaFunction;
-        $function = 'Store' . $cekNamaFunction;
-        return $this->$function($data);
+        // $function = 'Store' . $cekNamaFunction;
+        $namaController = $cekNamaFunction.'Controller';
+        $cont = "App\Http\Controllers\s".$namaController;
+        $cont = new $cont;
+        return $cont->store($data);
     }
 
     /**
