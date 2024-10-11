@@ -13,22 +13,22 @@
                     <form method="POST" action="{{ route('job.store') }}">
                         @csrf
                         {{-- Komponen Administrasi --}}
-                        @include('sertifikat.form-komponen.administrasi');
+                        @include('sertifikat.form-komponen.administrasi')
 
                         {{-- Komponen Alat Ukur --}}
-                        @include('sertifikat.form-komponen.alat-ukur');
+                        @include('sertifikat.form-komponen.alat-ukur')
 
                         {{-- Komponen Pengukuran Kondisi Lingkungan --}}
-                        @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan-tanpa-tegangan-utama');
+                        @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan-tanpa-tegangan-utama')
 
                         {{-- Komponen Pemeriksaan Fisik dan Fungsi Alat --}}
-                        @include('sertifikat.form-komponen.pemeriksaan-fisik-dan-fungsi-alat-tensimeter-digital');
+                        @include('sertifikat.form-komponen.pemeriksaan-fisik-dan-fungsi-alat-tensimeter-digital')
 
                         {{-- Komponen Pengujian Kinerja Tekanan Darah --}}
-                        @include('sertifikat.form-komponen.pengukuran-kinerja-tekanan-darah');
+                        @include('sertifikat.form-komponen.pengukuran-kinerja-half-max')
 
                         {{-- Komponen Teknis --}}
-                        @include('sertifikat.form-komponen.telaah-teknis');
+                        @include('sertifikat.form-komponen.telaah-teknis')
                 </div>
             </div>
         </div>
@@ -78,60 +78,6 @@
         </script>
     @endif
     <script>
-        function addRow() {
-            var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
-            var newRow = table.insertRow(table.rows.length);
-            var cells = [];
-            for (var i = 0; i < 5; i++) {
-                cells[i] = newRow.insertCell(i);
-                if (i === 0) {
-                    cells[i].innerHTML = ` <div
-                                                                                    class="input-group">
-                                                                                    <input type="number" class="form-control" name="TestingStandart[]" placeholder="Standart Testing RPM"
-                                                                                        value="">
-                                                                                    <div class="input-group-prepend">
-                                                                                        <span class="input-group-text">
-                                                                                            <i class="fas fa-tachometer-alt"></i>
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    </div>`;
-                } else if (i < 4) {
-                    cells[i].innerHTML = ` <input type="text" name="PembacaanAlat${i}[]" placeholder="Uji ${i}"
-                                                                                        class="form-control" onclick="checkValue(this)">
-                                                                                        `;
-                } else {
-                    cells[i].innerHTML = `
-                                                                                        <input type="text" name="RataRata${i}[]" placeholder="Rata-rata" class="form-control">
-                                                                                        `;
-                }
-            }
-            updateTestingStandart();
-        }
-
-        function deleteRow() {
-            var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
-            if (table.rows.length > 1) {
-                table.deleteRow(table.rows.length - 1);
-                updateTestingStandart();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Tidak dapat menghapus baris, tabel harus memiliki setidaknya satu baris.'
-                });
-            }
-        }
-
-        function updateTestingStandart() {
-            var rows = document.querySelectorAll('#myTable tbody tr');
-            var lastRowIndex = rows.length - 1;
-            var lastRowTestingStandartInput = rows[lastRowIndex].querySelector('input[name="TestingStandart[]"]');
-            if (lastRowIndex > 0) {
-                var prevRowTestingStandartInput = rows[lastRowIndex - 1].querySelector('input[name="TestingStandart[]"]');
-                lastRowTestingStandartInput.value = prevRowTestingStandartInput.value;
-            }
-        }
-
         function saveMetodaKerja() {
             var modalValue = document.getElementById('modal_metoda_kerja').value;
             document.getElementById('metoda_kerja').value = modalValue;
@@ -175,21 +121,5 @@
             };
             dataTable();
         });
-
-        function checkValue(input) {
-            var row = input.parentNode.parentNode;
-            var testingStandartInput = row.querySelector('input[name="TestingStandart[]"]');
-            var testingStandartValue = parseFloat(testingStandartInput.value);
-            var pembacaanAlatValue = parseFloat(input.value);
-            var allowedRange = testingStandartValue * 0.1;
-            if (pembacaanAlatValue < (testingStandartValue - allowedRange) || pembacaanAlatValue > (testingStandartValue +
-                    allowedRange)) {
-                input.classList.add('is-invalid');
-            } else {
-                input.classList.remove('is-invalid');
-            }
-
-
-        }
     </script>
 @endsection
