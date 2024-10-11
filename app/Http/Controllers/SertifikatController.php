@@ -88,6 +88,7 @@ class SertifikatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        dd($data);
         $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
             'Merk' => $data['merk'],
             'Type' => $data['type_model'],

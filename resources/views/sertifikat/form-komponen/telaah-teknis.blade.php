@@ -1,7 +1,17 @@
 <div class="row">
     <h3 class="card-title text-center text-primary fw-bold" style="text-decoration: underline;">
         TELAAH TEKNIS</h3>
-        <span class="text-center">Kosongkan jika tidak ada</span>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round" class="me-2">
+            <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <strong>Warning!</strong> Kosongkan Jika Tidak Ada.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+        </button>
+    </div>
     <table id="myTable" class="table table-striped" style="vertical-align: mid; text-align:center;">
         <thead class="thead-dark bg-primary text-white">
             <tr>
