@@ -2,9 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Instrumen;
+use App\Models\MasterCustomer;
+use App\Models\PengukuranListrik;
+use App\Models\SertifikatFisikFungsi;
+use App\Models\SertifikatTelaahTeknis;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SertifikatKondisiLingkungan;
+use App\Models\SertifikatKondisiKelistrikan;
+use App\Models\SertifikatCentrifugePengujian;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\SertifikatPatientMonitorPengujuan;
+use App\Models\SertifikatSpyghmomanometerakurasi;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\SertifikatSpyghmomanometerPengujian;
+use App\Models\SertifikatTensimeterDigitalPengujian;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sertifikat extends Model
 {
@@ -61,5 +74,15 @@ class Sertifikat extends Model
     public function getPengujianTensimeterDigital()
     {
         return $this->hasMany(SertifikatTensimeterDigitalPengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getSpyghmomanometerakurasi()
+    {
+        return $this->hasOne(SertifikatSpyghmomanometerakurasi::class, 'SertifikatId', 'id');
+    }
+
+    public function getSpyghmomanometerPengujian()
+    {
+        return $this->hasMany(SertifikatSpyghmomanometerPengujian::class, 'SertifikatId', 'id');
     }
 }
