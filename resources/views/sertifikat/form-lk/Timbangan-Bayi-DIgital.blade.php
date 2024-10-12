@@ -22,16 +22,16 @@
                         @include('sertifikat.form-komponen.pengukuran-kondisi-lingkungan-tanpa-tegangan-utama')
 
                         {{-- Komponen Pemeriksaan Fisik dan Fungsi Alat --}}
-                        @include('sertifikat.form-komponen.pemeriksaan-fisik-dan-fungsi-alat-tensimeter-digital')
+                        @include('sertifikat.form-komponen.TimbanganBayiDigital.pemeriksaan-fisik-dan-fungsi-alat-tensimeter-digital')
 
                         {{-- Komponen Pengujian Kinerja hALF mAX --}}
-                        @include('sertifikat.form-komponen.pengukuran-kinerja-half-max')
+                        @include('sertifikat.form-komponen.TimbanganBayiDigital.pengukuran-kinerja-half-max')
 
                         {{-- Komponen Pengujian Kinerja Skala Nominal --}}
-                        @include('sertifikat.form-komponen.pengujian-skala-nominal')
+                        @include('sertifikat.form-komponen.TimbanganBayiDigital.pengujian-skala-nominal')
 
                         {{-- Komponen Teknis --}}
-                        @include('sertifikat.form-komponen.telaah-teknis')
+                        @include('sertifikat.form-komponen.TimbanganBayiDigital.telaah-teknis')
                 </div>
             </div>
         </div>

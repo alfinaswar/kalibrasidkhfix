@@ -88,7 +88,7 @@ class SertifikatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        dd($data);
+        // dd($data);
         $sertifikat = Sertifikat::where('id', $data['sertifikatid'])->update([
             'Merk' => $data['merk'],
             'Type' => $data['type_model'],
@@ -103,8 +103,8 @@ class SertifikatController extends Controller
         ]);
         $cekNamaFunction = instrumen::where('id', $request->idinstrumen)->first()->NamaFunction;
         // $function = 'Store' . $cekNamaFunction;
-        $namaController = $cekNamaFunction.'Controller';
-        $cont = "App".DIRECTORY_SEPARATOR."Http".DIRECTORY_SEPARATOR."Controllers".DIRECTORY_SEPARATOR.$namaController;
+        $namaController = $cekNamaFunction . 'Controller';
+        $cont = "App" . DIRECTORY_SEPARATOR . "Http" . DIRECTORY_SEPARATOR . "Controllers" . DIRECTORY_SEPARATOR . $namaController;
         $cont = new $cont;
         return $cont->store($data);
     }

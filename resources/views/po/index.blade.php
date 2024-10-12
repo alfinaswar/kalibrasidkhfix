@@ -5,7 +5,9 @@
         <button type="button" class="btn btn-primary me-3 btn-sm" data-bs-toggle="modal" data-bs-target="#kajiUlangModal">
             <i class="fas fa-plus me-2"></i>Buat PO
         </button>
-
+        <a href="{{ route('po.po-tanpa-qo') }}" class="btn btn-secondary me-3 btn-sm">
+            <i class="fas fa-plus me-2"></i>Tanpa Quotation
+        </a>
 
     </div>
 

@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('po')->group(function () {
         Route::GET('/', [PoController::class, 'index'])->name('po.index');
         Route::GET('/buat/{id}', [PoController::class, 'create'])->name('po.form-po');
+        Route::GET('/buat-tanpa-qo', [PoController::class, 'createTanpaQo'])->name('po.po-tanpa-qo');
         Route::POST('/simpan', [PoController::class, 'store'])->name('po.store');
         Route::GET('/edit/{id}', [PoController::class, 'edit'])->name('po.edit');
         Route::POST('/update/{id}', [PoController::class, 'update'])->name('po.update');

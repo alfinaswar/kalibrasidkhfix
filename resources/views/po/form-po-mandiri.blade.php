@@ -2,12 +2,13 @@
 @section('content')
     <div class="col-xl-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Buat Quotation</h4>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">Buat Purchase Order</h4>
+                <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
             </div>
             <div class="card-body">
                 <div class="basic-form">
-                    <form action="{{ route('quotation.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('po.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -16,8 +17,8 @@
                                     class="form-control-lg @error('CustomerId') is-invalid @enderror">
                                     <option>Pilih Customer</option>
                                     @foreach ($customer as $cust)
-                                        <option value="{{ $cust->id }}"
-                                            @if ($cust->id == $data->CustomerId) Selected @endif>{{ $cust->Name }}</option>
+                                        <option value="{{ $cust->id }}">
+                                            {{ $cust->Name }}</option>
                                     @endforeach
                                 </select>
                                 @error('CustomerId')
@@ -27,12 +28,21 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label class="form-label">Tanggal PO</label>
+                                <input type="date" name="TanggalPo" value="{{ now()->format('Y-m-d') }}"
+                                    class="form-control  @error('TanggalPo') is-invalid @enderror"
+                                    placeholder="{{ now() }}" id="mdate">
+                                @error('TanggalPo')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
                                 <select name="Status" class="form-control @error('Status') is-invalid @enderror">
-                                    <option value="">Pilih Status</option>
-                                    <option value="DRAFT">Draft</option>
-                                    <option value="DISETUJUI">Disetujui</option>
-                                    <option value="DITOLAK">Tidak Disetujui</option>
+                                    <option value="AKTIF">AKTIF</option>
+                                    <option value="TIDAK">TIDAK AKTIF</option>
                                 </select>
                                 @error('Status')
                                     <span class="invalid-feedback" role="alert">
@@ -40,71 +50,8 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Perihal</label>
-                                <textarea name="Perihal" id="texteditor1" class="form-control" placeholder="Isi Perihal"></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Lampiran</label>
-                                <textarea name="Lampiran" id="texteditor2" class="form-control" placeholder="Lampiran"></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Header</label>
-                                <textarea name="Header" id="texteditor3" class="form-control" placeholder="Header Quotation">
-            <p>Dengan Hormat,</p>
-                                    <p>Semoga Bpk/ Ibu selalu dalam keadaan sehat dan sukses menjalankan aktivitas sehari-hari.</p>
-            <p>PT Digital Kalibrasi Hebat adalah institusi pengujian dan kalibrasi alat kesehatan yang telah memiliki ijin operasional dengan nomor 09092200348530001. Sehubungan dengan rencana pengujian dan kalibrasi alat kesehatan di RS Awal Bros A.Yani, bersama ini kami sampaikan penawaran harga mengenai pengujian dan kalibrasi alat kesehatan sebagai berikut:</p></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea name="Deskripsi" id="texteditor4" class="form-control" placeholder="Deskripsi">  <div class="section">
-            <p>Kondisi Penawaran Harga:</p>
-            <p>Kedua belah pihak mengikuti aturan perpajakan yang berlaku.</p>
-            <p>Pembayaran DP 30%, Pelunasan setelah penyerahan sertifikat dan terbit sertifikat ASPAK.</p>
-            <p>Waktu pelaksanaan sesuai permintaan pemberi kerja.</p>
-        </div>
-
-        <div class="section">
-            <p>Cara Pembayaran:</p>
-            <p>Pembayaran melalui transfer ke rekening Bank Mandiri a/n PT Digital Kalibrasi Hebat No. 1080024737729.</p>
-            <p>Jika menggunakan SPK / PO dengan Term Of Payment (TOP):</p>
-            <ul>
-                <li>Minimal Biaya Kalibrasi Rp. 4.000.000,00- (Empat Juta Rupiah).</li>
-                <li>TOP (Term Of Payment) 30 hari setelah tagihan.</li>
-                <li>Sertifikat Kalibrasi diberikan jika sudah dilakukan pelunasan.</li>
-            </ul>
-        </div>
-
-        <div class="section contact">
-            <p>Untuk memudahkan koordinasi terkait penawaran ini, kami siap dihubungi dengan PIC:</p>
-            <p>Samuel Clinton +62 811-760-5052</p>
-        </div>
-
-        <p>Demikian penawaran ini kami sampaikan, besar harapan kerjasama ini dapat terwujud. Untuk perhatian dan kerjasama yang baik diucapkan terima kasih.</p></textarea>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Tanggal</label>
-                                <input type="date" class="form-control @error('Tanggal') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="Tanggal" id="mdate">
-                                @error('Tanggal')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Tanggal Dilaksanakan</label>
-                                <input type="date" class="form-control @error('DueDate') is-invalid @enderror"
-                                    placeholder="Tanggal DueDate" name="DueDate" id="mdate">
-                                @error('DueDate')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
                         </div>
-                        <div class="text-center mt-4">
+                        <div class="text-center mt-4 fw-bold">
                             <u>
                                 <h3>DETAIL INSTRUMEN</h3>
                             </u>
@@ -125,47 +72,44 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Existing Rows -->
-                                    @foreach ($GetKajiUlang as $item)
-                                        <tr>
-                                            <td>
-                                                <select class="form-control multi-select" name="InstrumenId[]"
-                                                    onchange="getHarga(this)">
-                                                    @foreach ($instrumen as $inst)
-                                                        <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td><input type="text" name="Qty[]" class="form-control qty"
-                                                    placeholder="Jumlah Alat" value="{{ $item->Qty }}"></td>
-                                            <td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Rp.</span>
-                                                    </div>
-                                                    <input type="text" name="Harga[]"
-                                                        class="form-control text-end harga" placeholder="Harga"
-                                                        value="{{ $item->getInstrumen->Tarif }}">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">.00</span>
-                                                    </div>
+                                    <tr>
+                                        <td>
+                                            <select class="multi-select" name="InstrumenId[]" onchange="getHarga(this)">
+                                                <option>Pilih Instrumen</option>
+                                                @foreach ($instrumen as $inst)
+                                                    <option value="{{ $inst->id }}">
+                                                        {{ $inst->Nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td><input type="text" name="Qty[]" class="form-control qty"
+                                                placeholder="Jumlah Alat" value="1"></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Rp.</span>
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Rp.</span>
-                                                    </div>
-                                                    <input type="text" name="SubTotal[]"
-                                                        class="form-control text-end subtotal" placeholder="Sub Total"
-                                                        readonly>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">.00</span>
-                                                    </div>
+                                                <input type="text" name="Harga[]" class="form-control text-end harga"
+                                                    placeholder="Harga">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">.00</span>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Rp.</span>
+                                                </div>
+                                                <input type="text" name="SubTotal[]"
+                                                    class="form-control text-end subtotal" placeholder="Sub Total" readonly>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">.00</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
                                     <!-- New Rows will be added here -->
                                 </tbody>
                                 <tfoot>
@@ -207,7 +151,6 @@
                             </table>
                         </div>
                 </div>
-                <input type="hidden" name="SerahTerimaId" value="{{ $data->id }}">
                 <button type="submit" class="btn btn-md btn-primary btn-block">Simpan</button>
                 </form>
             </div>
@@ -226,6 +169,7 @@
 
         function getHarga(selectElement) {
             const instrumenId = selectElement.value;
+            // alert(instrumenId)
             $.ajax({
                 url: `{{ route('instrument.getHarga', ':instrumenId') }}`.replace(':instrumenId', instrumenId),
                 type: 'GET',
@@ -239,7 +183,7 @@
                     const subTotal = qty * data.harga;
                     subtotalInput.value = subTotal.toLocaleString('id-ID');
 
-                    recalculateTotals();
+                    hitung();
                 },
                 error: function(error) {
                     console.error('Error fetching harga:', error);
@@ -268,7 +212,7 @@
             });
         });
         document.addEventListener('DOMContentLoaded', function() {
-            function recalculateTotals() {
+            function hitung() {
                 let totalSubTotal = 0;
                 let totalQty = 0;
 
@@ -278,36 +222,42 @@
                         /,/g, '') || 0);
                     const subTotal = qty * harga;
 
-                    row.querySelector('.subtotal').value = subTotal.toLocaleString('id-ID', {});
+                    row.querySelector('.subtotal').value = subTotal.toLocaleString('id-ID', {
+                        // minimumFractionDigits: 3
+                    });
 
                     totalSubTotal += subTotal;
                     totalQty += qty;
                 });
 
-                document.getElementById('subtotal').value = totalSubTotal.toLocaleString('id-ID', {});
+                document.getElementById('subtotal').value = totalSubTotal.toLocaleString('id-ID', {
+                    // minimumFractionDigits: 3
+                });
                 document.getElementById('totalQty').value = totalQty.toLocaleString('id-ID');
                 document.getElementById('Total').value = totalSubTotal.toLocaleString('id-ID');
             }
             document.querySelectorAll('.qty, .harga').forEach(function(element) {
-                element.addEventListener('input', recalculateTotals);
+                element.addEventListener('input', hitung);
             });
             document.getElementById('add-row').addEventListener('click', function() {
                 const newRow = `
                 <tr>
                     <td>
-                        <select class="form-control multi-select" name="InstrumenId[]" onchange="getHarga(this)">
-                @foreach ($instrumen as $inst)
-                <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
-                @endforeach
-            </select>
+                      <select class="form-control multi-select" name="InstrumenId[]" onchange="getHarga(this)">
+                                                     <option>Pilih Instrumen</option>
+                                                    @foreach ($instrumen as $inst)
+                                                        <option value="{{ $inst->id }}">
+                                                            {{ $inst->Nama }}</option>
+                                                    @endforeach
+                                                </select>
                     </td>
-                    <td><input type="text" name="Qty[]" class="form-control qty" placeholder="Jumlah Alat" value=""></td>
+                    <td><input type="text" name="Qty[]" class="form-control qty" placeholder="Jumlah Alat" value="1"></td>
                     <td>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp.</span>
                             </div>
-                            <input type="text" name="Harga[]" class="form-control text-end harga" placeholder="Harga" value="">
+                            <input type="text" name="Harga[]" class="form-control text-end harga" placeholder="Harga">
                             <div class="input-group-append">
                                 <span class="input-group-text">.00</span>
                             </div>
@@ -332,20 +282,40 @@
                 tbody.insertAdjacentHTML('beforeend', newRow);
 
                 tbody.lastElementChild.querySelectorAll('.qty, .harga').forEach(function(element) {
-                    element.addEventListener('input', recalculateTotals);
+                    element.addEventListener('input', hitung);
                 });
 
-                recalculateTotals();
+                hitung();
             });
 
-            recalculateTotals();
+            // hitung();
         });
         $(document).ready(function() {
 
-            $('#Diskon').on('keyup', function() {
-                let diskon = $(this).val();
-                $('#TotalDiskon').val(diskon);
-            });
+            function getHarga(selectElement) {
+                const instrumenId = selectElement.value;
+                $.ajax({
+                    url: `{{ route('instrument.getHarga', ':instrumenId') }}`.replace(':instrumenId',
+                        instrumenId),
+                    type: 'GET',
+                    success: function(data) {
+                        const row = selectElement.closest('tr');
+                        const hargaInput = row.querySelector('.harga');
+                        const qtyInput = row.querySelector('.qty');
+                        const subtotalInput = row.querySelector('.subtotal');
+                        hargaInput.value = parseInt(data.harga).toLocaleString('id-ID');
+                        const qty = parseFloat(qtyInput.value.replace(/\D/g, '') || 0);
+                        const subTotal = qty * data.harga;
+                        subtotalInput.value = subTotal.toLocaleString('id-ID');
+
+                        recalculateTotals();
+                    },
+                    error: function(error) {
+                        console.error('Error fetching harga:', error);
+                    }
+                });
+            }
+
             $('#TotalDiskon').on('input', function() {
                 var DiskonTipe = document.getElementById("TipeDiskon").value;
                 var SubTotal = parseFloat(document.getElementById("subtotal").value.replace(/\D/g, '') ||

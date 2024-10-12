@@ -30,7 +30,7 @@ class InventoriController extends Controller
                     $gambar = '<img src="' . url('storage/foto_inventori/' . $row->Foto) . '" width="100" height="100">';
                     return $gambar;
                 })
-                ->rawColumns(['action','gambar'])
+                ->rawColumns(['action', 'gambar'])
                 ->make(true);
         }
         return view('master.inventori.index');
@@ -43,9 +43,9 @@ class InventoriController extends Controller
     {
         $data = kategoriInventori::get();
         // dd($data);
-        return view('master.inventori.create',compact('data'));
+        return view('master.inventori.create', compact('data'));
     }
-       public function KategoriInventori(Request $request)
+    public function KategoriInventori(Request $request)
     {
         if ($request->ajax()) {
             $data = kategoriInventori::orderBy('id', 'Desc')->get();
@@ -83,8 +83,8 @@ class InventoriController extends Controller
      */
     public function store(Request $request)
     {
-        //  $data = $request->all();
-        // dd($data);
+        $data = $request->all();
+        dd($data);
         $validator = Validator::make($request->all(), [
             'Nama' => 'required',
             'Kategori' => 'required',
@@ -109,8 +109,8 @@ class InventoriController extends Controller
             $foto = $request->file('Foto');
             $foto->storeAs('public/foto_inventori', $foto->hashName());
             $foto = $foto->hashName();
-        }else{
-           $foto = null;
+        } else {
+            $foto = null;
         }
         $data['Kode'] = $this->GenerateKode();
         $data['Foto'] = $foto;
@@ -134,7 +134,7 @@ class InventoriController extends Controller
     {
         $alat = inventori::find($id);
         $data = kategoriInventori::all();
-        return view('master.inventori.edit', compact('alat','data'));
+        return view('master.inventori.edit', compact('alat', 'data'));
     }
     public function editKategori($id)
     {
@@ -212,8 +212,8 @@ class InventoriController extends Controller
     public function destroyKategori($id)
     {
         // dd($id);
-        $cek = inventori::where('Kategori',$id)->get();
-        if(count($cek)<=0){
+        $cek = inventori::where('Kategori', $id)->get();
+        if (count($cek) <= 0) {
 
             $data = kategoriInventori::find($id);
             if ($data) {
@@ -222,7 +222,7 @@ class InventoriController extends Controller
             } else {
                 return response()->json(['message' => 'data tidak ditemukan'], 404);
             }
-        }else{
+        } else {
             return response()->json(['message' => 'Data Sedang Digunakan'], 404);
         }
 
