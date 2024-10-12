@@ -111,6 +111,7 @@ class InstrumenController extends Controller
         if (!$instrumen) {
             return response()->json(['error' => 'Instrumen Tidak Ditemukan'], 404);
         }
+        // dd($instrumen);
         return response()->json(['harga' => $instrumen->Tarif]);
     }
 

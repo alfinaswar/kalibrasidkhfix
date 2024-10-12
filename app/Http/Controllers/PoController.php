@@ -73,6 +73,12 @@ class PoController extends Controller
         // dd($instrumen);
         return view('po.form-po', compact('customer', 'getQuotation', 'instrumen'));
     }
+    public function createTanpaQo(Request $request)
+    {
+        $customer = MasterCustomer::all();
+        $instrumen = Instrumen::get();
+        return view('po.form-po-mandiri', compact('customer', 'instrumen'));
+    }
 
     /**
      * Store a newly created resource in storage.

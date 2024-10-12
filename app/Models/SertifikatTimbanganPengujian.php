@@ -12,4 +12,11 @@ class SertifikatTimbanganPengujian extends Model
     protected $table = 'sertifikat_timbangan_pengujians';
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'MassaHalf' => 'json',
+        'MassaMax' => 'json',
+        'PengujianZ' => 'json',
+        'PengujianM' => 'json'
+    ];
+
 }
