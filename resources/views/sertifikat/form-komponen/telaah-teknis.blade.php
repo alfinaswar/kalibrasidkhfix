@@ -9,7 +9,7 @@
             <line x1="9" y1="9" x2="15" y2="15"></line>
         </svg>
         <strong>Warning!</strong> Kosongkan Jika Tidak Ada.
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+        {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"> --}}
         </button>
     </div>
     <table id="myTable" class="table table-striped" style="vertical-align: mid; text-align:center;">
@@ -66,7 +66,7 @@
                             <select name="HasilTeknis[]" class="form-control">
                                 <option value=""> --Plih Status-- </option>
                                 <option value="PERLUPERBAIKAN"> Perlu Perbaikan </option>
-                                <option value="DALAMBATASTOLERANSI"> Dalam Batas Toleransi</option>
+                                <option value="DALAMBATASTOLENRANSI"> Dalam Batas Toleransi</option>
                             </select>
                         </div>
                     </div>

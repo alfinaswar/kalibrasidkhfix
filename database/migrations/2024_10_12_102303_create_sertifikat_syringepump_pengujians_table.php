@@ -11,14 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sertifikat_spyghmomanometer_pengujian', function (Blueprint $table) {
+        Schema::create('sertifikat_syringepump_pengujian', function (Blueprint $table) {
             $table->id();
             $table->string('SertifikatId')->nullable();
             $table->bigInteger('InstrumenId')->nullable();
-            $table->enum('TypePengujian', ['KEBOCORAN', 'LAJUBUANG'])->nullable();
-            $table->string('Penunjukan_standart')->nullable();
-            $table->string('TekananAkhir')->nullable();
-            $table->string('WaktuTerukur')->nullable();
+            $table->enum('TipePengujian', ['FLOWRATE', 'HISAPMAKSIMUM'])->nullable();
+            $table->json('Penunjukan')->nullable();
+            $table->json('Pengulangan1')->nullable();
+            $table->json('Pengulangan2')->nullable();
+            $table->json('Pengulangan3')->nullable();
+            $table->json('Pengulangan4')->nullable();
+            $table->json('Pengulangan5')->nullable();
+            $table->json('Pengulangan6')->nullable();
             $table->string('idUser')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sertifikat_spyghmomanometer_pengujian');
+        Schema::dropIfExists('sertifikat_syringepump_pengujian');
     }
 };

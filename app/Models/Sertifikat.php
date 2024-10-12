@@ -11,8 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\SertifikatKondisiLingkungan;
 use App\Models\SertifikatKondisiKelistrikan;
 use App\Models\SertifikatNebulizerPengujian;
+use App\Models\SertifikatSuctionpumpTekanan;
 use App\Models\SertifikatCentrifugePengujian;
+use App\Models\SertifikatInfusepumpPengujian;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\SertifikatSuctionpumpPengujian;
+use App\Models\SertifikatSyringepumpPengujian;
 use App\Models\SertifikatPatientMonitorPengujuan;
 use App\Models\SertifikatSpyghmomanometerakurasi;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -90,5 +94,25 @@ class Sertifikat extends Model
     public function getNebulizerPengujian()
     {
         return $this->hasOne(SertifikatNebulizerPengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getInfusePumpPengujian()
+    {
+        return $this->hasMany(SertifikatInfusepumpPengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getSyringepumpPengujian()
+    {
+        return $this->hasMany(SertifikatSyringepumpPengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getSuctionpumpTekanan()
+    {
+        return $this->hasOne(SertifikatSuctionpumpTekanan::class, 'SertifikatId', 'id');
+    }
+
+    public function getSuctionpumpPengujian()
+    {
+        return $this->hasOne(SertifikatSuctionpumpPengujian::class, 'SertifikatId', 'id');
     }
 }

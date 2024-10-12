@@ -68,14 +68,14 @@ class SphygmomanometerAnalogController extends Controller
         $kebocoran = SertifikatSpyghmomanometerPengujian::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
-            'TypePengujian' => 'kebocoran',
+            'TypePengujian' => 'KEBOCORAN',
             'Penunjukan_standart' => $data['penunjukan_standar'],
             'idUser' => auth()->user()->id
         ]);
         $lajubuang = SertifikatSpyghmomanometerPengujian::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
-            'TypePengujian' => 'lajubuang',
+            'TypePengujian' => 'LAJUBUANG',
             'TekananAkhir' => $data['tekananAkhir'],
             'WaktuTerukur' => $data['waktuTerukur'],
             'idUser' => auth()->user()->id

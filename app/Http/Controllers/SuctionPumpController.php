@@ -11,9 +11,10 @@ use App\Models\SertifikatTelaahTeknis;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\SertifikatKondisiLingkungan;
 use App\Models\SertifikatKondisiKelistrikan;
-use App\Models\SertifikatNebulizerPengujian;
+use App\Models\SertifikatSuctionpumpTekanan;
+use App\Models\SertifikatSuctionpumpPengujian;
 
-class NebulizerController extends Controller
+class SuctionPumpController extends Controller
 {
     public function store($data)
     {
@@ -24,7 +25,7 @@ class NebulizerController extends Controller
             'TempraturAkhir' => $data['KondisiAkhir'][0],
             'KelembapanAwal' => $data['KondisiAwal'][1],
             'KelembapanAkhir' => $data['KondisiAkhir'][1],
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
         $kondisiListrik = SertifikatKondisiKelistrikan::create([
             'SertifikatId' => $data['sertifikatid'],
@@ -32,7 +33,7 @@ class NebulizerController extends Controller
             'Tegangan_LN' => $data['val'][0],
             'Tegangan_LPE' => $data['val'][1],
             'Tegangan_NPE' => $data['val'][2],
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
         $FisikFungsi = SertifikatFisikFungsi::create([
             'SertifikatId' => $data['sertifikatid'],
@@ -50,7 +51,7 @@ class NebulizerController extends Controller
             'Parameter11' => $data['Hasil'][10] ?? null,
             'Parameter12' => $data['Hasil'][11] ?? null,
             'Parameter13' => $data['Hasil'][12] ?? null,
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
         $PengukuranListrik = PengukuranListrik::create([
             'SertifikatId' => $data['sertifikatid'],
@@ -63,17 +64,27 @@ class NebulizerController extends Controller
             'Parameter4' => $data['TerukurListrik2'][3],
             'Parameter5' => $data['TerukurListrik2'][4],
             'Parameter6' => $data['TerukurListrik2'][5],
+            'idUser' => auth()->user()->id,
+        ]);
+
+        $akurasi = SertifikatSuctionpumpPengujian::create([
+            'SertifikatId' => $data['sertifikatid'],
+            'InstrumenId' => $data['idinstrumen'],
+            'Penunjukan' => $data['Penunjukan'],
+            'StandartNaik1' => $data['StandartNaik1'],
+            'StandartTurun1' => $data['StandartTurun1'],
+            'StandartNaik2' => $data['StandartNaik2'],
+            'StandartTurun2' => $data['StandartTurun2'],
+            'StandartNaik3' => $data['StandartNaik3'],
+            'StandartTurun3' => $data['StandartTurun3'],
             'idUser' => auth()->user()->id
         ]);
 
-        $pengujian = SertifikatNebulizerPengujian::create([
+        $tekanan = SertifikatSuctionpumpTekanan::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
-            'Pengulangan1' => $data['Pengulangan1'],
-            'Pengulangan2' => $data['Pengulangan2'],
-            'Pengulangan3' => $data['Pengulangan3'],
-            'Pengulangan4' => $data['Pengulangan4'],
-            'Pengulangan5' => $data['Pengulangan5'],
+            'Penunjukan' => $data['PenunjukanAlat'],
+            'TitikUkur' => $data['TitikUkur'],
             'idUser' => auth()->user()->id
         ]);
 
@@ -84,7 +95,7 @@ class NebulizerController extends Controller
             'KeselamatanListrik' => $data['HasilTeknis'][1],
             'Kinerja' => $data['HasilTeknis'][2],
             'Catatan' => $data['Catatan'],
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
 
         return redirect()->back()->with('success', 'Data Berhasil Disimpan');
@@ -92,16 +103,7 @@ class NebulizerController extends Controller
 
     public function cetakExcel($id, $sheet, $spreadsheet)
     {
-        $data = Sertifikat::with([
-            'getCustomer',
-            'getNamaAlat',
-            'getPengukuranKondisiLingkungan',
-            'getTeganganUtama',
-            'getPmeriksaanFisikFungsi',
-            'getPengukuranListrik',
-            'getNebulizerPengujian',
-            'getTelaahTeknis'
-        ])->find($id);
+        $data = Sertifikat::with(['getCustomer', 'getNamaAlat', 'getPengukuranKondisiLingkungan', 'getTeganganUtama', 'getPmeriksaanFisikFungsi', 'getPengukuranListrik', 'getSuctionpumpTekanan', 'getSuctionpumpPengujian', 'getTelaahTeknis'])->find($id);
         // dd($data);
         $sheet->setCellValue('C8', $data->SertifikatOrder);
         $sheet->setCellValue('C9', $data->Merk);
@@ -141,10 +143,10 @@ class NebulizerController extends Controller
 
         // pemeriksaan fisik dan fungsi alat
         $colum = 37;
-        for ($i=1; $i <= 6; $i++) {
-            $par = 'Parameter'.$i;
-            $sheet->setCellValue('E'.$colum, $data->getPmeriksaanFisikFungsi->$par);
-            $colum +=1;
+        for ($i = 1; $i <= 6; $i++) {
+            $par = 'Parameter' . $i;
+            $sheet->setCellValue('E' . $colum, $data->getPmeriksaanFisikFungsi->$par);
+            $colum += 1;
         }
 
         // pengukuran keselamatan listrik
@@ -173,20 +175,31 @@ class NebulizerController extends Controller
         $sheet->setCellValue('E54', $data->getPengukuranListrik->Parameter6);
 
         // pengujian
-        $sheet->setCellValue('C60', $data->getNebulizerPengujian->Pengulangan1);
-        $sheet->setCellValue('D60', $data->getNebulizerPengujian->Pengulangan2);
-        $sheet->setCellValue('E60', $data->getNebulizerPengujian->Pengulangan3);
-        $sheet->setCellValue('F60', $data->getNebulizerPengujian->Pengulangan4);
-        $sheet->setCellValue('G60', $data->getNebulizerPengujian->Pengulangan5);
+        $colum = 60;
+        for ($i = 0; $i < count($data->getSuctionpumpPengujian->Penunjukan); $i++) {
+            $sheet->setCellValue('C' . $colum, $data->getSuctionpumpPengujian->StandartNaik1[$i]);
+            $sheet->setCellValue('D' . $colum, $data->getSuctionpumpPengujian->StandartTurun1[$i]);
+            $sheet->setCellValue('E' . $colum, $data->getSuctionpumpPengujian->StandartNaik2[$i]);
+            $sheet->setCellValue('F' . $colum, $data->getSuctionpumpPengujian->StandartTurun2[$i]);
+            $sheet->setCellValue('G' . $colum, $data->getSuctionpumpPengujian->StandartNaik3[$i]);
+            $sheet->setCellValue('H' . $colum, $data->getSuctionpumpPengujian->StandartTurun3[$i]);
+            $colum++;
+        }
 
-        // $sheet->setCellValue('C64', $data->getTelaahTeknis->FisikFungsi);
-        // $sheet->setCellValue('C65', $data->getTelaahTeknis->KeselamatanListrik);
-        // $sheet->setCellValue('C66', $data->getTelaahTeknis->Kinerja);
-        $sheet->mergeCells('C67:E67');
-        $sheet->setCellValue('C67', $data->getTelaahTeknis->Catatan);
-        $sheet->getStyle('C67')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->mergeCells('C67:C68');
+        $sheet->setCellValue('C67', $data->getSuctionpumpTekanan->TitikUkur);
 
-        $newFileName = $data->getCustomer->Name .'_'. $data->SertifikatOrder.'_'. $data->getNamaAlat->Nama. '.xlsx';
+        // $sheet->setCellValue('C72', $data->getTelaahTeknis->FisikFungsi);
+        // $sheet->setCellValue('C73', $data->getTelaahTeknis->KeselamatanListrik);
+        // $sheet->setCellValue('C74', $data->getTelaahTeknis->Kinerja);
+        $sheet->mergeCells('C75:E75');
+        $sheet->setCellValue('C75', $data->getTelaahTeknis->Catatan);
+        $sheet
+            ->getStyle('C75')
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $newFileName = $data->getCustomer->Name . '_' . $data->SertifikatOrder . '_' . $data->getNamaAlat->Nama . '.xlsx';
         $newFilePath = storage_path('app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'Nama' . $newFileName);
 
         // Simpan Yang Telah Di modifiasi

@@ -11,9 +11,9 @@ use App\Models\SertifikatTelaahTeknis;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\SertifikatKondisiLingkungan;
 use App\Models\SertifikatKondisiKelistrikan;
-use App\Models\SertifikatNebulizerPengujian;
+use App\Models\SertifikatSyringepumpPengujian;
 
-class NebulizerController extends Controller
+class SyringePumpController extends Controller
 {
     public function store($data)
     {
@@ -24,7 +24,7 @@ class NebulizerController extends Controller
             'TempraturAkhir' => $data['KondisiAkhir'][0],
             'KelembapanAwal' => $data['KondisiAwal'][1],
             'KelembapanAkhir' => $data['KondisiAkhir'][1],
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
         $kondisiListrik = SertifikatKondisiKelistrikan::create([
             'SertifikatId' => $data['sertifikatid'],
@@ -32,7 +32,7 @@ class NebulizerController extends Controller
             'Tegangan_LN' => $data['val'][0],
             'Tegangan_LPE' => $data['val'][1],
             'Tegangan_NPE' => $data['val'][2],
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
         $FisikFungsi = SertifikatFisikFungsi::create([
             'SertifikatId' => $data['sertifikatid'],
@@ -50,7 +50,7 @@ class NebulizerController extends Controller
             'Parameter11' => $data['Hasil'][10] ?? null,
             'Parameter12' => $data['Hasil'][11] ?? null,
             'Parameter13' => $data['Hasil'][12] ?? null,
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
         $PengukuranListrik = PengukuranListrik::create([
             'SertifikatId' => $data['sertifikatid'],
@@ -63,18 +63,33 @@ class NebulizerController extends Controller
             'Parameter4' => $data['TerukurListrik2'][3],
             'Parameter5' => $data['TerukurListrik2'][4],
             'Parameter6' => $data['TerukurListrik2'][5],
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
 
-        $pengujian = SertifikatNebulizerPengujian::create([
+        $flow = SertifikatSyringepumpPengujian::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
+            'TipePengujian' => 'FLOWRATE',
+            'Penunjukan' => $data['SettingAlat'],
             'Pengulangan1' => $data['Pengulangan1'],
             'Pengulangan2' => $data['Pengulangan2'],
             'Pengulangan3' => $data['Pengulangan3'],
             'Pengulangan4' => $data['Pengulangan4'],
             'Pengulangan5' => $data['Pengulangan5'],
-            'idUser' => auth()->user()->id
+            'Pengulangan6' => $data['Pengulangan6'],
+        ]);
+
+        $occ = SertifikatSyringepumpPengujian::create([
+            'SertifikatId' => $data['sertifikatid'],
+            'InstrumenId' => $data['idinstrumen'],
+            'TipePengujian' => 'HISAPMAKSIMUM',
+            'Penunjukan' => $data['SettingAlatOcc'],
+            'Pengulangan1' => $data['PengulanganOcc1'],
+            'Pengulangan2' => $data['PengulanganOcc2'],
+            'Pengulangan3' => $data['PengulanganOcc3'],
+            'Pengulangan4' => $data['PengulanganOcc4'],
+            'Pengulangan5' => $data['PengulanganOcc5'],
+            'Pengulangan6' => $data['PengulanganOcc6'],
         ]);
 
         $telaahteknis = SertifikatTelaahTeknis::create([
@@ -84,7 +99,7 @@ class NebulizerController extends Controller
             'KeselamatanListrik' => $data['HasilTeknis'][1],
             'Kinerja' => $data['HasilTeknis'][2],
             'Catatan' => $data['Catatan'],
-            'idUser' => auth()->user()->id
+            'idUser' => auth()->user()->id,
         ]);
 
         return redirect()->back()->with('success', 'Data Berhasil Disimpan');
@@ -92,16 +107,7 @@ class NebulizerController extends Controller
 
     public function cetakExcel($id, $sheet, $spreadsheet)
     {
-        $data = Sertifikat::with([
-            'getCustomer',
-            'getNamaAlat',
-            'getPengukuranKondisiLingkungan',
-            'getTeganganUtama',
-            'getPmeriksaanFisikFungsi',
-            'getPengukuranListrik',
-            'getNebulizerPengujian',
-            'getTelaahTeknis'
-        ])->find($id);
+        $data = Sertifikat::with(['getCustomer', 'getNamaAlat', 'getPengukuranKondisiLingkungan', 'getTeganganUtama', 'getPmeriksaanFisikFungsi', 'getPengukuranListrik', 'getSyringepumpPengujian', 'getTelaahTeknis'])->find($id);
         // dd($data);
         $sheet->setCellValue('C8', $data->SertifikatOrder);
         $sheet->setCellValue('C9', $data->Merk);
@@ -141,10 +147,10 @@ class NebulizerController extends Controller
 
         // pemeriksaan fisik dan fungsi alat
         $colum = 37;
-        for ($i=1; $i <= 6; $i++) {
-            $par = 'Parameter'.$i;
-            $sheet->setCellValue('E'.$colum, $data->getPmeriksaanFisikFungsi->$par);
-            $colum +=1;
+        for ($i = 1; $i <= 6; $i++) {
+            $par = 'Parameter' . $i;
+            $sheet->setCellValue('E' . $colum, $data->getPmeriksaanFisikFungsi->$par);
+            $colum += 1;
         }
 
         // pengukuran keselamatan listrik
@@ -173,20 +179,48 @@ class NebulizerController extends Controller
         $sheet->setCellValue('E54', $data->getPengukuranListrik->Parameter6);
 
         // pengujian
-        $sheet->setCellValue('C60', $data->getNebulizerPengujian->Pengulangan1);
-        $sheet->setCellValue('D60', $data->getNebulizerPengujian->Pengulangan2);
-        $sheet->setCellValue('E60', $data->getNebulizerPengujian->Pengulangan3);
-        $sheet->setCellValue('F60', $data->getNebulizerPengujian->Pengulangan4);
-        $sheet->setCellValue('G60', $data->getNebulizerPengujian->Pengulangan5);
+        $pengulangan1 = $data->getSyringepumpPengujian[0]->Pengulangan1;
+        $pengulangan2 = $data->getSyringepumpPengujian[0]->Pengulangan2;
+        $pengulangan3 = $data->getSyringepumpPengujian[0]->Pengulangan3;
+        $pengulangan4 = $data->getSyringepumpPengujian[0]->Pengulangan4;
+        $pengulangan5 = $data->getSyringepumpPengujian[0]->Pengulangan5;
+        $pengulangan6 = $data->getSyringepumpPengujian[0]->Pengulangan6;
+        // dd($test[0]);
+        $colum = 60;
+        for ($i = 0; $i < count($data->getSyringepumpPengujian[0]->Penunjukan); $i++) {
+            $sheet->setCellValue('C' . $colum, $pengulangan1[$i]);
+            $sheet->setCellValue('D' . $colum, $pengulangan2[$i]);
+            $sheet->setCellValue('E' . $colum, $pengulangan3[$i]);
+            $sheet->setCellValue('F' . $colum, $pengulangan4[$i]);
+            $sheet->setCellValue('G' . $colum, $pengulangan5[$i]);
+            $sheet->setCellValue('H' . $colum, $pengulangan6[$i]);
+            $colum++;
+        }
 
-        // $sheet->setCellValue('C64', $data->getTelaahTeknis->FisikFungsi);
-        // $sheet->setCellValue('C65', $data->getTelaahTeknis->KeselamatanListrik);
-        // $sheet->setCellValue('C66', $data->getTelaahTeknis->Kinerja);
-        $sheet->mergeCells('C67:E67');
-        $sheet->setCellValue('C67', $data->getTelaahTeknis->Catatan);
-        $sheet->getStyle('C67')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $occ1 = $data->getSyringepumpPengujian[1]->Pengulangan1;
+        $occ2 = $data->getSyringepumpPengujian[1]->Pengulangan2;
+        $occ3 = $data->getSyringepumpPengujian[1]->Pengulangan3;
+        $occ4 = $data->getSyringepumpPengujian[1]->Pengulangan4;
+        $occ5 = $data->getSyringepumpPengujian[1]->Pengulangan5;
+        $occ6 = $data->getSyringepumpPengujian[1]->Pengulangan6;
+        $sheet->setCellValue('C67', $occ1[0]);
+        $sheet->setCellValue('D67', $occ2[0]);
+        $sheet->setCellValue('E67', $occ3[0]);
+        $sheet->setCellValue('F67', $occ4[0]);
+        $sheet->setCellValue('G67', $occ5[0]);
+        $sheet->setCellValue('H67', $occ6[0]);
 
-        $newFileName = $data->getCustomer->Name .'_'. $data->SertifikatOrder.'_'. $data->getNamaAlat->Nama. '.xlsx';
+        // $sheet->setCellValue('C71', $data->getTelaahTeknis->FisikFungsi);
+        // $sheet->setCellValue('C72', $data->getTelaahTeknis->KeselamatanListrik);
+        // $sheet->setCellValue('C73', $data->getTelaahTeknis->Kinerja);
+        $sheet->mergeCells('C74:E74');
+        $sheet->setCellValue('C74', $data->getTelaahTeknis->Catatan);
+        $sheet
+            ->getStyle('C74')
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $newFileName = $data->getCustomer->Name . '_' . $data->SertifikatOrder . '_' . $data->getNamaAlat->Nama . '.xlsx';
         $newFilePath = storage_path('app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'Nama' . $newFileName);
 
         // Simpan Yang Telah Di modifiasi
