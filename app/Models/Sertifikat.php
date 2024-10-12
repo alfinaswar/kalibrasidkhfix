@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Instrumen;
 use App\Models\MasterCustomer;
+use App\Models\KondisiKebisingan;
 use App\Models\PengukuranListrik;
 use App\Models\SertifikatFisikFungsi;
 use App\Models\SertifikatTelaahTeknis;
@@ -17,6 +18,7 @@ use App\Models\SertifikatInfusepumpPengujian;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SertifikatSuctionpumpPengujian;
 use App\Models\SertifikatSyringepumpPengujian;
+use App\Models\SertifikatBabyIncubatorPengujian;
 use App\Models\SertifikatPatientMonitorPengujuan;
 use App\Models\SertifikatSpyghmomanometerakurasi;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -114,5 +116,15 @@ class Sertifikat extends Model
     public function getSuctionpumpPengujian()
     {
         return $this->hasOne(SertifikatSuctionpumpPengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getBabyIncubatorPengujian()
+    {
+        return $this->hasMany(SertifikatBabyIncubatorPengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getKebisingan()
+    {
+        return $this->hasOne(KondisiKebisingan::class, 'SertifikatId', 'id');
     }
 }

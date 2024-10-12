@@ -84,7 +84,7 @@ class InventoriController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        dd($data);
+        // dd($data);
         $validator = Validator::make($request->all(), [
             'Nama' => 'required',
             'Kategori' => 'required',
