@@ -10,6 +10,7 @@ use App\Models\SertifikatTelaahTeknis;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SertifikatKondisiLingkungan;
 use App\Models\SertifikatKondisiKelistrikan;
+use App\Models\SertifikatNebulizerPengujian;
 use App\Models\SertifikatCentrifugePengujian;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SertifikatPatientMonitorPengujuan;
@@ -84,5 +85,10 @@ class Sertifikat extends Model
     public function getSpyghmomanometerPengujian()
     {
         return $this->hasMany(SertifikatSpyghmomanometerPengujian::class, 'SertifikatId', 'id');
+    }
+
+    public function getNebulizerPengujian()
+    {
+        return $this->hasOne(SertifikatNebulizerPengujian::class, 'SertifikatId', 'id');
     }
 }
