@@ -122,7 +122,10 @@ class Sertifikat extends Model
     {
         return $this->hasMany(SertifikatBabyIncubatorPengujian::class, 'SertifikatId', 'id');
     }
-
+    public function getPengujianTimbangan()
+    {
+        return $this->hasMany(SertifikatTimbanganPengujian::class, 'SertifikatId', 'id');
+    }
     public function getKebisingan()
     {
         return $this->hasOne(KondisiKebisingan::class, 'SertifikatId', 'id');

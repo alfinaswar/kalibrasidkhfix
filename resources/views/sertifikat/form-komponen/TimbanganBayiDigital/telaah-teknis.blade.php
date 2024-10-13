@@ -49,7 +49,7 @@
                             <select name="HasilTeknis[]" class="form-control">
                                 <option value=""> --Plih Status-- </option>
                                 <option value="PERLUPERBAIKAN"> Perlu Perbaikan </option>
-                                <option value="DALAMBATASTOLERANSI"> Dalam Batas Toleransi</option>
+                                <option value="DALAMBATASTOLENRANSI"> Dalam Batas Toleransi</option>
                             </select>
                         </div>
                     </div>

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\inventori;
+use App\Models\Sertifikat;
 use App\Models\SertifikatFisikFungsi;
 use App\Models\SertifikatKondisiLingkungan;
 use App\Models\SertifikatTelaahTeknis;
 use App\Models\SertifikatTimbanganPengujian;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class TimbanganBayiDigitalController extends Controller
 {
@@ -40,13 +43,22 @@ class TimbanganBayiDigitalController extends Controller
             'PengujianM' => array_slice($data['PengujianM'], 0, 9) ?? null,
             'idUser' => auth()->user()->id
         ]);
+
+        $pengukurankinerja = SertifikatTimbanganPengujian::create([
+            'SertifikatId' => $data['sertifikatid'],
+            'InstrumenId' => $data['idinstrumen'],
+            'TipePengujian' => 'SKALA',
+            'MassaHalf' => array_slice($data['MassaHalf'], 10, 19) ?? null,
+            'PengujianZ' => array_slice($data['PengujianZ'], 10, 19) ?? null,
+            'PengujianM' => array_slice($data['PengujianM'], 10, 19) ?? null,
+            'idUser' => auth()->user()->id
+        ]);
         // telaah teknis
         $telaahteknis = SertifikatTelaahTeknis::create([
             'SertifikatId' => $data['sertifikatid'],
             'InstrumenId' => $data['idinstrumen'],
-            'FisikFngsi' => $data['HasilTeknis'][0] ?? null,
-            'KeselamatanListrik' => $data['HasilTeknis'][1] ?? null,
-            'Kinerja' => $data['HasilTeknis'][2] ?? null,
+            'FisikFungsi' => $data['HasilTeknis'][0] ?? null,
+            'Kinerja' => $data['HasilTeknis'][1] ?? null,
             'Catatan' => $data['Catatan'] ?? null,
             'idUser' => auth()->user()->id
         ]);
@@ -59,7 +71,7 @@ class TimbanganBayiDigitalController extends Controller
             'getNamaAlat',
             'getPengukuranKondisiLingkungan',
             'getPmeriksaanFisikFungsi',
-            'getPengujianTensimeterDigital',
+            'getPengujianTimbangan',
             'getTelaahTeknis'
         ])->find($idsertifikat);
         // dd($data);
@@ -90,37 +102,43 @@ class TimbanganBayiDigitalController extends Controller
             }
         }
         // dd($data);
-        $sheet->setCellValue('D26', $data->getPengukuranKondisiLingkungan->TempraturAwal);
-        $sheet->setCellValue('G26', $data->getPengukuranKondisiLingkungan->TempraturAkhir);
-        $sheet->setCellValue('D27', $data->getPengukuranKondisiLingkungan->KelembapanAwal);
-        $sheet->setCellValue('G27', $data->getPengukuranKondisiLingkungan->KelembapanAkhir);
+        $sheet->setCellValue('D31', $data->getPengukuranKondisiLingkungan->TempraturAwal);
+        $sheet->setCellValue('G31', $data->getPengukuranKondisiLingkungan->TempraturAkhir);
+        $sheet->setCellValue('D32', $data->getPengukuranKondisiLingkungan->KelembapanAwal);
+        $sheet->setCellValue('G32', $data->getPengukuranKondisiLingkungan->KelembapanAkhir);
 
         // PEMERIKSAAN FISIK DAN FUNGSI ALAT
-        $sheet->setCellValue('E33', $data->getPmeriksaanFisikFungsi->Parameter1);
-        $sheet->setCellValue('E34', $data->getPmeriksaanFisikFungsi->Parameter2);
-        $sheet->setCellValue('E35', $data->getPmeriksaanFisikFungsi->Parameter3);
-        $sheet->setCellValue('E36', $data->getPmeriksaanFisikFungsi->Parameter4);
-        $sheet->setCellValue('E37', $data->getPmeriksaanFisikFungsi->Parameter5);
-        $sheet->setCellValue('E38', $data->getPmeriksaanFisikFungsi->Parameter6);
-        // PENGUJIAN KINERJA HEARTRATE
-        // dd($data->getPengujianTensimeterDigital);
+        $sheet->setCellValue('E38', $data->getPmeriksaanFisikFungsi->Parameter1);
+        $sheet->setCellValue('E39', $data->getPmeriksaanFisikFungsi->Parameter2);
+        $sheet->setCellValue('E40', $data->getPmeriksaanFisikFungsi->Parameter3);
         // PENGUJIAN KINERJA TEKANAN DARAH
-        $tekanandarah = $data->getPengujianTensimeterDigital->where('TipePengujian', 'TEKANANDARAH');
-        $rowtekanandarah = 44;
-        foreach ($tekanandarah as $key => $d) {
-            $sheet->setCellValue('D' . $rowtekanandarah, $d->TipeTitikUkur);
-            $sheet->setCellValue('E' . $rowtekanandarah, $d->TitikUkur);
-            $sheet->setCellValue('F' . $rowtekanandarah, $d->Pengulangan1);
-            $sheet->setCellValue('G' . $rowtekanandarah, $d->Pengulangan2);
-            $sheet->setCellValue('H' . $rowtekanandarah, $d->Pengulangan3);
-            $rowtekanandarah++;
+
+        $kinerja = $data->getPengujianTimbangan->where('TipePengujian', 'KINERJA')->first();
+        $rowSkala = 44;
+        $pengujianMCount = count($kinerja->PengujianM);
+        for ($key = 0; $key < $pengujianMCount; $key++) {
+            // $d = $kinerja->PengujianM[$key];
+            $sheet->setCellValue('D' . $rowSkala, $kinerja->PengujianZ[$key]);
+            $sheet->setCellValue('E' . $rowSkala, $kinerja->PengujianM[$key]);
+            $rowSkala++;
+        }
+        // PENGUJIAN KINERJA TEKANAN DARAH
+
+        $kinerja = $data->getPengujianTimbangan->where('TipePengujian', 'SKALA')->first();
+        $rowSkala = 57;
+        $pengujianMCount = count($kinerja->PengujianM);
+        for ($key = 0; $key < $pengujianMCount; $key++) {
+            // $d = $kinerja->PengujianM[$key];
+            $sheet->setCellValue('B' . $rowSkala, $kinerja->PengujianZ[$key]);
+            $sheet->setCellValue('C' . $rowSkala, $kinerja->PengujianM[$key]);
+            $rowSkala++;
         }
         // TELAAH TEKNIS
-        $sheet->setCellValue('C58', $data->getTelaahTeknis->FisikFungsi) ?? 0;
-        $sheet->setCellValue('C59', $data->getTelaahTeknis->Kinerja) ?? 0;
-        $sheet->mergeCells('C60:E60');
-        $sheet->setCellValue('C60', $data->getTelaahTeknis->Catatan);
-        $sheet->getStyle('C60')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('C71', $data->getTelaahTeknis->FisikFungsi) ?? 0;
+        $sheet->setCellValue('C72', $data->getTelaahTeknis->Kinerja) ?? 0;
+        $sheet->mergeCells('C73:E73');
+        $sheet->setCellValue('C73', $data->getTelaahTeknis->Catatan);
+        $sheet->getStyle('C73')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         $newFileName = $data->nama_pemilik . now()->format('Y-m-d_H-i-s') . '.xlsx';
         $newFilePath = storage_path('app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'Nama' . $newFileName);
