@@ -25,10 +25,7 @@
                         @include('sertifikat.form-komponen.TimbanganBayi.pemeriksaan-fisik-dan-fungsi-alat-tensimeter-digital')
 
                         {{-- Komponen Pengujian Kinerja hALF mAX --}}
-                        @include('sertifikat.form-komponen.TimbanganBayi.pengukuran-kinerja-half-max')
-
-                        {{-- Komponen Pengujian Kinerja Skala Nominal --}}
-                        @include('sertifikat.form-komponen.TimbanganBayi.pengujian-skala-nominal')
+                        @include('sertifikat.form-komponen.TimbanganDewasa.pengukuran-kinerja')
 
                         {{-- Komponen Teknis --}}
                         @include('sertifikat.form-komponen.TimbanganBayi.telaah-teknis')
