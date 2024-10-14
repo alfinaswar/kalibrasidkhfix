@@ -144,13 +144,13 @@ class TimbanganBayiMekanikController extends Controller
         // PENGUJIAN KINERJA TEKANAN DARAH
 
         $kinerja = $data->getPengujianTimbangan->where('TipePengujian', 'SKALA')->first();
-        $rowSkala = 57;
+        $rowSkalaNom = 57;
         $pengujianMCount = count($kinerja->PengujianM);
         for ($key = 0; $key < $pengujianMCount; $key++) {
             // $d = $kinerja->PengujianM[$key];
-            $sheet->setCellValue('B' . $rowSkala, $kinerja->PengujianZ[$key]);
-            $sheet->setCellValue('C' . $rowSkala, $kinerja->PengujianM[$key]);
-            $rowSkala++;
+            $sheet->setCellValue('B' . $rowSkalaNom, $kinerja->PengujianZ[$key]);
+            $sheet->setCellValue('C' . $rowSkalaNom, $kinerja->PengujianM[$key]);
+            $rowSkalaNom++;
         }
         // TELAAH TEKNIS
         $sheet->setCellValue('C71', $data->getTelaahTeknis->FisikFungsi) ?? 0;

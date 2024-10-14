@@ -96,10 +96,10 @@ class InstrumenController extends Controller
         $data['idUser'] = auth()->user()->id;
         Instrumen::create($data);
 
-        $viewContent = "@extends('layouts.app')\n@section('content')\n<h1>{{ \$post->title }}</h1>\n<p>{{ \$post->content }}</p>\n@endsection";
-        $viewPath = resource_path('views' . DIRECTORY_SEPARATOR . 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $request->NamaFile . '.blade.php');
+        // $viewContent = "@extends('layouts.app')@endsection";
+        // $viewPath = resource_path('views' . DIRECTORY_SEPARATOR . 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $request->NamaFile . '.blade.php');
 
-        file_put_contents($viewPath, $viewContent);
+        // file_put_contents($viewPath, $viewContent);
 
         return redirect()->route('instrumen.index')->with('success', 'Data Berhasil Disimpan');
     }
@@ -128,7 +128,7 @@ class InstrumenController extends Controller
     public function edit($id)
     {
         $instrumen = Instrumen::find($id);
-        $data = inventori::where('Kategori', 2)->get();
+        $data = inventori::where('Kategori', 'ALATUKUR')->get();
         return view('master.instrumen.edit', compact('instrumen', 'data'));
     }
 

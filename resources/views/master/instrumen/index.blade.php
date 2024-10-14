@@ -15,12 +15,12 @@
                 </div>
                 <div class="card-body">
 
-                    <table id="example" class="display" style="min-width: 845px" width="100%">
+                    <table id="example" class="display" width="100%">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Nomor</th>
-                                <th>Kategori</th>
+                                <th width="20%">Nomor</th>
+                                <th width="15%">Kategori</th>
                                 <th>Nama</th>
                                 <th>Tarif</th>
                                 {{-- <th>Akreditasi</th> --}}
@@ -49,6 +49,7 @@
             swal.fire({
                 title: "{{ __('Success!') }}",
                 text: "{!! \Session::get('success') !!}",
+                 icon: "success",
                 type: "success"
             });
         </script>

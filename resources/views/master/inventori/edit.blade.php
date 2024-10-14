@@ -26,8 +26,8 @@
                                 <select class="form-control" id="single-select" name="Kategori">
                                     <option>Pilih Kategori</option>
                                     @foreach ($data as $cat)
-                                        <option value="{{ $cat->id }}"
-                                            {{ $alat->Kategori == $cat->id ? 'selected' : '' }}>{{ $cat->Kategori }}
+                                        <option value="{{ $cat->idKategori }}"
+                                            {{ $alat->Kategori == $cat->idKategori ? 'selected' : '' }}>{{ $cat->Kategori }}
                                         </option>
                                     @endforeach
                                 </select>

@@ -80,7 +80,7 @@
                                     @foreach ($data as $key => $value)
                                         <option value="{{ $value->id }}"
                                             {{ is_array($instrumen->AlatUkur) && in_array($value->id, $instrumen->AlatUkur) ? 'selected' : '' }}>
-                                            {{ $value->Nama }}
+                                            {{ $value->Nama }} - {{ $value->Merk }} - {{ $value->Sn }}
                                         </option>
                                     @endforeach
                                 </select>

@@ -11,27 +11,8 @@ use App\Models\SertifikatTimbanganPengujian;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class TimbanganDewasaDigitalController extends Controller
+class TimbanganDewasaMekanikController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store($data)
     {
         $KondisiLingkungan = SertifikatKondisiLingkungan::create([
@@ -141,22 +122,22 @@ class TimbanganDewasaDigitalController extends Controller
 
         $kinerja = $data->getPengujianTimbangan->where('TipePengujian', 'KINERJA');
         // dd($kinerja);
-        $rowSkala = 44;
+        $rowkinerjahalf = 44;
         $pengujianhalfCount = count($kinerja[0]->PengujianM);
         for ($key = 0; $key < $pengujianhalfCount; $key++) {
             // $d = $kinerja->PengujianM[$key];
-            $sheet->setCellValue('D' . $rowSkala, $kinerja[0]->PengujianZ[$key]);
-            $sheet->setCellValue('E' . $rowSkala, $kinerja[0]->PengujianM[$key]);
-            $rowSkala++;
+            $sheet->setCellValue('D' . $rowkinerjahalf, $kinerja[0]->PengujianZ[$key]);
+            $sheet->setCellValue('E' . $rowkinerjahalf, $kinerja[0]->PengujianM[$key]);
+            $rowkinerjahalf++;
         }
 
         $pengujianMAXCount = count($kinerja[1]->PengujianM);
-        $rowSkalaMax = 44;
+        $rowkinerjamax = 44;
         for ($key = 0; $key < $pengujianMAXCount; $key++) {
             // $d = $kinerja->PengujianM[$key];
-            $sheet->setCellValue('J' . $rowSkalaMax, $kinerja[1]->PengujianZ[$key]);
-            $sheet->setCellValue('K' . $rowSkalaMax, $kinerja[1]->PengujianM[$key]);
-            $rowSkalaMax++;
+            $sheet->setCellValue('J' . $rowkinerjamax, $kinerja[1]->PengujianZ[$key]);
+            $sheet->setCellValue('K' . $rowkinerjamax, $kinerja[1]->PengujianM[$key]);
+            $rowkinerjamax++;
         }
         $nominal = $data->getPengujianTimbangan->where('TipePengujian', 'SKALA')->first();
         $pengujianNOMCount = count($kinerja[1]->PengujianM);
@@ -182,37 +163,5 @@ class TimbanganDewasaDigitalController extends Controller
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save($newFilePath);
         return response()->download($newFilePath);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
