@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instrumen;
+use App\Models\inventori;
 use App\Models\KajiUlang;
 use App\Models\MasterCustomer;
+use App\Models\MasterMetode;
 use App\Models\po;
 use App\Models\poDetail;
 use App\Models\Quotation;
@@ -168,9 +170,17 @@ class PoController extends Controller
     }
     public function infoKalibrasi($NoSertifikat)
     {
-        $data = sertifikat::where('NoSertifikat', $NoSertifikat)->first();
-        if ($data->Diserahkan == "N") {
-            return view('sertifikat.create');
+        $data =Sertifikat::with('getCustomer', 'getNamaAlat')->where('NoSertifikat', $NoSertifikat)->first();
+        $InstrumenId = $data->InstrumenId;
+        $cek = Instrumen::where('id', $InstrumenId)->first()->NamaFile;
+        $FormLK = 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $cek;
+
+        $metode = MasterMetode::get();
+
+        $alatUkurId = $data->getNamaAlat->AlatUkur;
+        $getAlatUkur = inventori::whereIn('id', $alatUkurId)->get();
+        if ($data->TanggalPelaksanaan == null) {
+            return view($FormLK, compact('sertifikat', 'metode', 'getAlatUkur'));
         } else {
             route('job.hasilPdf', $data->id);
         }
