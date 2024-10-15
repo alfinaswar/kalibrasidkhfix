@@ -1,56 +1,57 @@
 @extends('layouts.app')
 
-
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Create New Role</h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" style="background-color:#6b6ef5;" href="{{ route('roles.index') }}"> Back</a>
+<div class="row justify-content-center">
+    <div class="col-lg-8 margin-tb">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="my-0">Buat Peran Baru</h2>
+                <a class="btn btn-primary" href="{{ route('roles.index') }}">Kembali</a>
+            </div>
+            <div class="card-body">
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> Ada beberapa masalah dengan input Anda.<br><br>
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                {!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
+                        <div class="form-group">
+                            <strong>Nama Role / Hak Akses:</strong>
+                            {!! Form::text('name', null, array('placeholder' => 'Nama','class' => 'form-control')) !!}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
+                        <div class="form-group">
+                            <strong>Hak Akses:</strong>
+                            <br/>
+                            <div class="form-check">
+                            @foreach($permission as $value)
+                                <label class="form-check-label">
+                                    {!! Form::checkbox('permission[]', $value->id, false, array('class' => 'form-check-input')) !!}
+                                     &nbsp;{{ $value->name }}
+                                </label>
+                                <br/>
+                            @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary" >Buat</button>
+                    </div>
+                </div>
+                {!! Form::close() !!}
+            </div>
         </div>
     </div>
 </div>
 
-
-@if (count($errors) > 0)
-    <div class="alert alert-danger">
-        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-        <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-        </ul>
-    </div>
-@endif
-
-
-{!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Name:</strong>
-            {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Permission:</strong>
-            <br/>
-            @foreach($permission as $value)
-                <label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}
-                {{ $value->name }}</label>
-            <br/>
-            @endforeach
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="submit" class="btn btn-primary" style="background-color:#6b6ef5;">Submit</button>
-    </div>
-</div>
-{!! Form::close() !!}
-
-
-<p class="text-center text-primary"><small>..</small></p>
+<p class="text-center text-primary mt-3"><small>..</small></p>
 @endsection
