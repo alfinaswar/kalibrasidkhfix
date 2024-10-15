@@ -182,7 +182,7 @@ class PoController extends Controller
         if ($data->TanggalPelaksanaan == null) {
             return view($FormLK, compact('sertifikat', 'metode', 'getAlatUkur'));
         } else {
-            route('job.hasilPdf', $data->id);
+            return redirect()->route('job.hasilpdf',$data->id);
         }
     }
     /**
