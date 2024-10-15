@@ -29,9 +29,9 @@ class KajiUlangController extends Controller
                     $ikl = '<a href="' . route('ku.cetak', $row->id) . '" target="_blank" class="btn btn-secondary btn-sm btn-edit" title="Instruksi Kerja PDF"><i class="fas fa-file-pdf"></i></a>';
                     $ku = '<a href="' . route('ku.cetak-kup', $row->id) . '" target="_blank" class="btn btn-primary btn-sm btn-edit" title="Kaji Ulang Permintaan Tender"><i class="fas fa-file-pdf"></i></a>';
                     $edit = '<a href="' . route('ku.edit', $row->id) . '" class="btn btn-warning btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
-                    $delete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
+                    // $delete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
 
-                    return $edit . ' ' . $delete . ' ' . $ikl . ' ' . $ku;
+                    return $edit . ' ' . $ikl . ' ' . $ku;
                 })
 
                 ->addColumn('StatusKaji', function ($row) {
@@ -150,16 +150,39 @@ class KajiUlangController extends Controller
      */
     public function edit($id)
     {
-        $data = KajiUlang::where('SerahTerimaId',$id)->get();
-        return view('kaji-ulang.edit',compact('data'));
+        $data = SerahTerima::with('dataKaji')->find($id);
+        $customer = MasterCustomer::where('Status', 'AKTIF')->get();
+        $instrumen = Instrumen::where('Status', 'AKTIF')->get();
+        $metode = MasterMetode::get();
+        return view('kaji-ulang.edit', compact('metode', 'data', 'instrumen', 'customer'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, KajiUlang $kajiUlang)
+    public function update(Request $request, $id)
     {
-        //
+        $KajiUlang = KajiUlang::where('SerahTerimaId',$id)->get();
+        if ($KajiUlang) {
+            foreach ($request->InstrumenId as $key => $value) {
+                $existingRecords = KajiUlang::where('InstrumenId', $value)
+                    ->where('SerahTerimaId', $id)
+                    ->get();
+                foreach ($existingRecords as $record) {
+                    $record->update([
+                        'SerahTerimaId' => $request->SerahTerimaId,
+                        'InstrumenId' => $request->InstrumenId[$key],
+                        'Metode1' => $request->Metode1[$key],
+                        'Metode2' => $request->Metode2[$key],
+                        'Status' => $request->Status[$key],
+                        'Kondisi' => $request->Kondisi[$key],
+                        'Catatan' => $request->Catatan[$key],
+                        'idUser' => auth()->user()->id,
+                    ]);
+                }
+            }
+        }
+        return redirect()->route('ku.index')->with('success','Kaji Ulang Berhasil Di Update');
     }
 
     /**

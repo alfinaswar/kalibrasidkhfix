@@ -92,7 +92,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::GET('/edit/{id}', [KajiUlangController::class, 'edit'])->name('ku.edit');
         Route::GET('/detail/{id}', [KajiUlangController::class, 'show'])->name('ku.cetak');
         Route::GET('/cetak-kup/{id}', [KajiUlangController::class, 'cetakKup'])->name('ku.cetak-kup');
-        Route::PUT('/update/{id}', [KajiUlangController::class, 'update'])->name('ku.update');
+        Route::POST('/update-data/{id}', [KajiUlangController::class, 'update'])->name('ku.update');
         Route::delete('hapus/{id}', [KajiUlangController::class, 'destroy'])->name('ku.destroy');
     });
     Route::prefix('master-metode')->group(function () {

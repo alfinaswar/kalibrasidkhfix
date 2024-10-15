@@ -53,7 +53,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal Diserahkan</label>
                                 <input type="text" class="form-control @error('TanggalDiajukan') is-invalid @enderror"
                                     placeholder="Tanggal Diserahkan" value="{{ $data->TanggalDiajukan }}" disabled>
@@ -62,7 +62,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="text-center mt-4">
                             <u>
@@ -71,8 +71,7 @@
 
                         </div>
                         <div class="text-end mt-4">
-                            <button type="button" class="btn btn-md btn-secondary mb-3" id="add-row">Tambah
-                                Baris</button>
+
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped verticle-middle">
@@ -137,9 +136,9 @@
                                             </td>
                                             <td width="30%"><select class="form-control" tabindex="null" name="Status[]" required>
                                                     <option value="">Pilih Status</option>
-                                                    <option value="1">Diterima</option>
-                                                    <option value="2">Ditolak</option>
-                                                    <option value="3">Diterima Sbeagian</option>
+                                                    <option value="DITERIMA">Diterima</option>
+                                                    <option value="DITOLAK">Ditolak</option>
+                                                    <option value="DITERIMASEBAGIAN">Diterima Sebagian</option>
                                                     </option>
 
                                                 </select></td>

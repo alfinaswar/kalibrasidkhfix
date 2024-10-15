@@ -15,13 +15,8 @@
                     <div class="row">
                     <div class="col-3 my-1">
                                                 <label class="me-sm-2">Kategori</label>
-                                                <select id="filter-kategori" class="multi-select" name="filter-kategori">
-                                                <option selected>Pilih...</option>
-                                                   @foreach ($customer as $kat)
-                                                   <option value="{{ $kat->Kategori }}">{{ $kat->Kategori }}</option>
-                                                   @endforeach
-
-                                                </select>
+<input type="date" class="form-control TanggalDiserahkan"
+                                    placeholder="'.now().'" name="Tanggal" id="mdate">
                                             </div>
                                               <div class="col-3 my-1">
                                                 <label class="me-sm-2">Customer</label>
@@ -72,6 +67,11 @@
     <script>
         $(document).ready(function() {
 
+  $('body').on('change', '.TanggalDiserahkan', function () {
+    var rowId = $(this).data('row-id');
+    alert(rowId)
+
+     });
             $('body').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
 
@@ -148,8 +148,8 @@
                             name: 'TanggalDiterima'
                         },
                         {
-                            data: 'TanggalDiajukan',
-                            name: 'TanggalDiajukan'
+                            data: 'Diserahkan',
+                            name: 'Diserahkan',
                         },
                         {
                             data: 'Stat',

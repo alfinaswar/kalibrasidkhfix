@@ -93,7 +93,7 @@
                                     <tbody>
                                         @foreach ($st->Stdetail as $item)
                                             <tr>
-                                                <td><select class="form-control" tabindex="null" name="InstrumenId[]">
+                                                <td><select class="multi-select" tabindex="null" name="InstrumenId[]">
                                                         @foreach ($instrumen as $inst)
                                                             <option value="{{ $inst->id }}"
                                                                 @selected($item->InstrumenId == $inst->id)>{{ $inst->Nama }}</option>
@@ -129,12 +129,13 @@
     </div>
 
     <script>
+
         document.getElementById('add-row').addEventListener('click', function() {
             var table = document.getElementById('instrument-table').getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
 
             var cells = [
-                '<select name="InstrumenId[]" class="default-select form-control" tabindex="true">@foreach ($instrumen as $inst)<option value="{{ $inst->id }}">{{ $inst->Nama }}</option>@endforeach',
+                '<select name="InstrumenId[]" class="multi-select">@foreach ($instrumen as $inst)<option value="{{ $inst->id }}">{{ $inst->Nama }}</option>@endforeach',
                 '<input type="text" name="Merk[]" class="form-control" placeholder="Merk">',
                 '<input type="text" name="Type[]" class="form-control" placeholder="Type">',
                 '<input type="text" name="SerialNumber[]" class="form-control" placeholder="Serial Number">',
@@ -147,7 +148,7 @@
                 var cell = newRow.insertCell();
                 cell.innerHTML = cellContent;
             });
-
+        $(".multi-select").select2();
             addDeleteRowEventListener(newRow.querySelector('.delete-row'));
         });
 

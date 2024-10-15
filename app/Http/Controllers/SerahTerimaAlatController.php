@@ -26,7 +26,7 @@ class SerahTerimaAlatController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btnPdf = '<a href="' . route('st.pdf', $row->id) . '" class="btn btn-primary btn-sm" title="Pdf"><i class="fas fa-print"></i></a>';
+                    $btnPdf = '<a href="' . route('st.pdf', $row->id) . '" class="btn btn-primary btn-sm" target="_blank" title="Pdf"><i class="fas fa-print"></i></a>';
                     $btnEdit = '<a href="' . route('st.edit', $row->id) . '" class="btn btn-primary btn-sm btn-edit" title="Edit"><i class="fas fa-edit"></i></a>';
                     $btnDelete = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm btn-delete" title="Hapus"><i class="fas fa-trash-alt"></i></a>';
                     $LinkDetail = '<a href="' . route('st.detail', $row->id) . '" target="_blank" title="Detail" class="btn btn-secondary btn-sm"><i class="fas fa-tags"></i></a>';
@@ -38,10 +38,14 @@ class SerahTerimaAlatController extends Controller
                     } else {
                         $Stat = '<span class="badge bg-warning">TIDAK AKTIF</span>';
                     }
-
                     return $Stat;
                 })
-                ->rawColumns(['action', 'Stat'])
+                ->addColumn('Diserahkan', function ($row) {
+                    $Diserahkan = '<input type="date" class="form-control TanggalDiserahkan"
+                                    placeholder="'.now().'" name="Tanggal" data-row-id="' . $row->id . '"  id="test">';
+                    return $Diserahkan;
+                })
+                ->rawColumns(['action', 'Stat','Diserahkan'])
                 ->make(true);
         }
         $customer = MasterCustomer::latest()->get();

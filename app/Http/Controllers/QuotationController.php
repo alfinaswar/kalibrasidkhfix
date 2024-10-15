@@ -9,6 +9,7 @@ use App\Models\Quotation;
 use App\Models\QuotationDetail;
 use App\Models\SerahTerima;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -71,6 +72,11 @@ class QuotationController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        // dd($data);
+        $date = new DateTime($request->Tanggal);
+        $date->modify('+1 month');
+        $data['DueDate'] = $date->format('Y-m-d');
+
         $data['KodeQuotation'] = $this->GenerateKode();
         $data['Diskon'] = str_replace('.', '', $request->TotalDiskon);
         $data['SubTotal'] = str_replace('.', '', $request->subtotal);
@@ -159,7 +165,6 @@ class QuotationController extends Controller
             'Header' => 'required',
             'Deskripsi' => 'required',
             'Tanggal' => 'required',
-            'DueDate' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()

@@ -88,7 +88,8 @@
             swal.fire({
                 title: "{{ __('Success!') }}",
                 text: "{!! \Session::get('success') !!}",
-                type: "success"
+                type: "success",
+                icon: "success"
             });
         </script>
     @endif

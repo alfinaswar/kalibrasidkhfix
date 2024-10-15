@@ -30,7 +30,7 @@
                                 <label class="form-label">Status</label>
                                 <select name="Status" class="form-control @error('Status') is-invalid @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="DRAFT">Draft</option>
+                                    <option value="DRAFT" selected>Draft</option>
                                     <option value="DISETUJUI">Disetujui</option>
                                     <option value="DITOLAK">Tidak Disetujui</option>
                                 </select>
@@ -85,7 +85,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Tanggal</label>
                                 <input type="date" class="form-control @error('Tanggal') is-invalid @enderror"
-                                    placeholder="Tanggal Diterima" name="Tanggal" id="mdate">
+                                    placeholder="Tanggal Diterima" name="Tanggal" value="{{ now()->format('Y-m-d') }}" id="mdate">
                                 @error('Tanggal')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -93,16 +93,16 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Tanggal Dilaksanakan</label>
+                            {{-- <div class="mb-3 col-md-6">
+                                <label class="form-label">Tanggal Jatuh Tempo</label>
                                 <input type="date" class="form-control @error('DueDate') is-invalid @enderror"
-                                    placeholder="Tanggal DueDate" name="DueDate" id="mdate">
+                                    placeholder="Tanggal DueDate" name="DueDate" value="{{ now()->format('Y-m-d') }}" id="mdate">
                                 @error('DueDate')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="text-center mt-4">
                             <u>
@@ -324,6 +324,11 @@
                             </div>
                         </div>
                     </td>
+                    <td>
+                        <div class="input-group">
+                        <button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </td>
                 </tr>
             `;
 
@@ -340,6 +345,7 @@
 
             recalculateTotals();
         });
+
         $(document).ready(function() {
 
             $('#Diskon').on('keyup', function() {

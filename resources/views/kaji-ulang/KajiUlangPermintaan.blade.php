@@ -15,10 +15,10 @@ asd
         body {
             font-family: 'Arial ', sans-serif;
             /* font-size: 12px; */
-            margin-top: 3.7cm;
-            margin-bottom: 4.0cm;
-            margin-left: 2.54cm;
-            margin-right: 2.54cm;
+            margin-top: 4cm;
+            margin-bottom: 2.0cm;
+            margin-left: 1.5cm;
+            margin-right: 1cm;
             font-size: 14px;
             text-align: justify;
             line-height: 0.8cm;
@@ -52,7 +52,7 @@ asd
 
         }
 
-        #tableheader {
+        /* #tableheader {
             width: 100%;
             line-height: 0.5cm;
         }
@@ -65,11 +65,12 @@ asd
             text-align: left;
             vertical-align: middle;
 
-        }
+        } */
 
         #tableisi {
-            width: 100%;
+            /* width: 100%; */
             line-height: 0.5cm;
+            font-size: 10px;
             border-collapse: collapse;
         }
 
@@ -86,7 +87,6 @@ asd
             border-collapse: collapse;
 
         }
-
 
         #logo {
             float: left;
@@ -115,7 +115,7 @@ asd
         <span style="font-size: 14pt; font-weight: bold;">Kaji Ulang Permintaan,Tender dan Kontrak</span><br>
     </div>
     <div style="margin-top:1cm;">
-        <table width="100%" id="tableheader">
+        <table id="tableheader">
             <tbody>
                 <tr>
                     <td style="width: 3cm;">Tanggal </td>
@@ -140,8 +140,6 @@ asd
                 <tr>
                     <th>No</th>
                     <th>Nama Alat</th>
-                    <th>Type</th>
-                    <th>No Seri</th>
                     <th>Qty</th>
                     <th>Metode 1</th>
                     <th>Metode 2</th>
@@ -155,8 +153,7 @@ asd
                     <tr>
                         <td style="text-align: center;">1</td>
                         <td>{{ $kajiulang->getInstrumen->Nama }}</td>
-                        <td></td>
-                        <td></td>
+
                         <td>{{ $kajiulang->Qty }}</td>
                         <td>{{ $kajiulang->getMetode1->Nama }}</td>
                         <td>{{ $kajiulang->getMetode2->Nama }}</td>
@@ -213,7 +210,7 @@ asd
 
 
         <footer>
-            <p style="font-size: 8px; margin-left: -65; margin-top:50px;">*Pada permintaan pengujian kalibrasi in-situ,
+            <p style="font-size: 8px; margin-left: -30; margin-top:50px;">*Pada permintaan pengujian kalibrasi in-situ,
                 informasi data
                 alat berfungsi di
                 dapat dari pelanggan.

@@ -94,7 +94,7 @@
                                     <tbody>
                                         <tr>
 
-                                            <td><select class="form-control @error('InstrumenId') is-invalid @enderror"
+                                            <td><select class="form-control multi-select @error('InstrumenId') is-invalid @enderror"
                                                     tabindex="null" name="InstrumenId[]" required>
                                                     <option value="">Pilih Alat</option>
                                                     @foreach ($instrumen as $inst)
@@ -146,19 +146,20 @@
             var newRow = table.insertRow();
 
             var cells = [
-                '<select name="InstrumenId[]" class="default-select form-control" tabindex="true">@foreach ($instrumen as $inst)<option value="{{ $inst->id }}">{{ $inst->Nama }}</option>@endforeach',
+                '<select name="InstrumenId[]" class="multi-select form-control" tabindex="true">@foreach ($instrumen as $inst)<option value="{{ $inst->id }}">{{ $inst->Nama }}</option>@endforeach',
                 '<input type="text" name="Merk[]" class="form-control" placeholder="Merk">',
                 '<input type="text" name="Type[]" class="form-control" placeholder="Type">',
                 '<input type="text" name="SerialNumber[]" class="form-control" placeholder="Serial Number">',
                 '<input type="text" name="Qty[]" value="1" class="form-control" placeholder="Qty">',
                 '<input type="text" name="Deskripsi[]" class="form-control" placeholder="Deskripsi">',
-                '<button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>'
+                '<button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i></button>'
             ];
 
             cells.forEach(function(cellContent) {
                 var cell = newRow.insertCell();
                 cell.innerHTML = cellContent;
             });
+               $(".multi-select").select2();
 
             addDeleteRowEventListener(newRow.querySelector('.delete-row'));
         });

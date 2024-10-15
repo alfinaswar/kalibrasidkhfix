@@ -1176,8 +1176,7 @@
 <script src="{{ asset('') }}assets/vendor/jquery-asGradient/jquery-asGradient.min.js"></script>
 <script src="{{ asset('') }}assets/vendor/jquery-asColorPicker/js/jquery-asColorPicker.min.js"></script>
 <!-- Material color picker -->
-<script
-    src="{{ asset('') }}assets/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js">
+<script src="{{ asset('') }}assets/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js">
 </script>
 <script src="{{ asset('') }}assets/vendor/bootstrap-datepicker-master/js/bootstrap-datepicker.min.js"></script>
 <!-- pickdate -->
