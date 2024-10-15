@@ -12,15 +12,19 @@
                     <h4 class="card-title">Data Serah Terima Alat</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    {{-- <div class="row">
                     <div class="col-3 my-1">
-                                                <label class="me-sm-2">Kategori</label>
-<input type="date" class="form-control TanggalDiserahkan"
-                                    placeholder="'.now().'" name="Tanggal" id="mdate">
+    <label class="me-sm-2">Status</label>
+                                                <select id="filter-status" class="form-control" name="filter-status">
+                                                <option>Pilih...</option>
+                                                   <option value="AKTIF">AKTIF</option>
+                                                   <option value="TIDAKAKTIF">TIDAK</option>
+
+                                                </select>
                                             </div>
                                               <div class="col-3 my-1">
                                                 <label class="me-sm-2">Customer</label>
-                                                <select id="filter-customer" class="multi-select" name="filter-Customer">
+                                                <select id="filter-customer" class="multi-select" name="filter-customer">
                                                 <option selected>Pilih...</option>
                                                    @foreach ($customer as $kat)
                                                    <option value="{{ $kat->Name }}">{{ $kat->Name }}</option>
@@ -28,7 +32,7 @@
 
                                                 </select>
                                             </div>
-                                            </div>
+                                            </div> --}}
                     <table id="example" class="display" style="min-width: 845px" width="100%">
                         <thead>
                             <tr>
@@ -60,18 +64,48 @@
             swal.fire({
                 title: "{{ __('Success!') }}",
                 text: "{!! \Session::get('success') !!}",
-                type: "success"
+                icon: "success"
             });
         </script>
     @endif
     <script>
         $(document).ready(function() {
 
-  $('body').on('change', '.TanggalDiserahkan', function () {
+$('body').on('change', '.TanggalDiserahkan', function () {
     var rowId = $(this).data('row-id');
-    alert(rowId)
+    var tanggalDiserahkan = $(this).val();
+    var url = "{{ route('st.UpdateDiserahkan', ':id') }}".replace(':id', rowId);
 
-     });
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        data: {
+            tanggalDiserahkan: tanggalDiserahkan,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            swal({
+                title: "Success!",
+                text: response.message,
+                type: "success",
+                timer: 2000,
+                showConfirmButton: false
+            });
+            location.reload();
+        },
+        error: function (xhr) {
+            swal({
+                title: "Error!",
+                text: xhr.responseJSON.message || "Gagal.",
+                type: "error",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    });
+});
+
+
             $('body').on('click', '.btn-delete', function() {
                 var id = $(this).data('id');
 
@@ -165,7 +199,8 @@
                 });
             };
             dataTable();
-            //filter data
+             $(".multi-select").select2();
+
         });
     </script>
 @endsection

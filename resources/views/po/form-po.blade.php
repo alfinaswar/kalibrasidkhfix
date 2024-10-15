@@ -262,7 +262,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp.</span>
                             </div>
-                            <input type="text" name="Harga[]" class="form-control text-end harga" placeholder="Harga" value="">
+                            <input type="text" name="Harga[]" class="form-control text-end harga" placeholder="Harga">
                             <div class="input-group-append">
                                 <span class="input-group-text">.00</span>
                             </div>
@@ -279,6 +279,9 @@
                             </div>
                         </div>
                     </td>
+                     <td>
+                <button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i></button>
+            </td>
                 </tr>
             `;
 
@@ -289,6 +292,11 @@
                 tbody.lastElementChild.querySelectorAll('.qty, .harga').forEach(function(element) {
                     element.addEventListener('input', hitung);
                 });
+                 const deleteButton = tbody.lastElementChild.querySelector('.delete-row');
+    deleteButton.addEventListener('click', function() {
+        tbody.removeChild(tbody.lastElementChild);
+        hitung(); // Recalculate totals after deleting a row
+    });
 
                 hitung();
             });

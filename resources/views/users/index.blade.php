@@ -11,18 +11,12 @@
             });
         </script>
     @endif
-
-
     <div class="nk-block nk-block-lg">
-        <div class="nk-block-head">
-            <div class="nk-block-head-content">
+               <div class="nk-block-head">
+            <div class="nk-block-head-content mb-3">
 
-                <div class="nk-block-des">
-
-                </div>
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm">Tambah
-                        Pengguna</button>
+                <div class="text-end">
+                    <a href="{{route('users.create')}}" class="btn btn-primary btn-sm">Tambah Pengguna</a>
                 </div>
             </div>
         </div>
@@ -35,7 +29,7 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>Email</th>
-                            <th>Roles</th>
+                            <th>Hak Akses</th>
                             <th width="280px">Action</th>
                         </tr>
                     </thead>
@@ -66,7 +60,7 @@
         </div><!-- .card-preview -->
     </div> <!-- nk-block -->
 
-    {!! $data->render() !!}
+
 
 
     <div class="modal fade" id="modalForm">

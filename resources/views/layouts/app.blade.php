@@ -6,16 +6,12 @@
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="author" content="DexignLab">
-    <meta name="robots" content="">
-    <meta name="keywords"
-        content="admin dashboard, admin template, analytics, bootstrap, bootstrap 5, bootstrap 5 admin template, job board admin, job portal admin, modern, responsive admin dashboard, sales dashboard, sass, ui kit, web app, frontend">
-    <meta name="description"
-        content="We proudly present Jobick, a Job Admin dashboard HTML Template, If you are hiring a job expert you would like to build a superb website for your Jobick, it's a best choice.">
-    <meta property="og:title" content="Jobick : Job Admin Dashboard Bootstrap 5 Template + FrontEnd">
+    <meta name="author" content="Digital Indonesia Hebat">
+    <meta name="keywords" content="Sistem Kalibrasi Alat Medis By PT. Digital Indonesia Hebat">
+    <meta name="description" content="Sistem Kalibrasi Alat Medis Terbaik Di indonesia yang berkantor di kota pekanbaru">
+    <meta property="og:title" content="Sistem Kalibrasi Alat Medis By Digital Indonesia Hebat">
     <meta property="og:description"
-        content="We proudly present Jobick, a Job Admin dashboard HTML Template, If you are hiring a job expert you would like to build a superb website for your Jobick, it's a best choice.">
-    <meta name="format-detection" content="telephone=no">
+        content="Sistem Kalibrasi Alat Medis Terbaik Di indonesia yang berkantor di kota pekanbaru">
 
     <!-- Mobile Specific -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,7 +60,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
@@ -994,48 +990,19 @@
                             <img src="{{ asset('') }}assets/images/profile/pic1.jpg" alt="">
                             <div class="d-flex align-items-center sidebar-info">
                                 <div>
-                                    <span class="font-w400 d-block">Franklin Jr</span>
-                                    <small class="text-end font-w400">Superadmin</small>
+                                    <span class="font-w400 d-block">{{ auth()->user()->name }}</span>
+                                    <small class="text-end font-w400">{{ auth()->user()->role }}</small>
                                 </div>
-                                <i class="fas fa-chevron-down"></i>
+
                             </div>
 
                         </div>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a href="app-profile.html" class="dropdown-item ai-icon ">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18"
-                                height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            <span class="ms-2">Profile </span>
-                        </a>
-                        <a href="email-inbox.html" class="dropdown-item ai-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="text-success" width="18"
-                                height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                </path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                            <span class="ms-2">Inbox </span>
-                        </a>
-                        <a href="page-register.html" class="dropdown-item ai-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18"
-                                height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                <polyline points="16 17 21 12 16 7"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                            </svg>
-                            <span class="ms-2">Logout </span>
-                        </a>
-                    </div>
+
                 </div>
                 <ul class="metismenu" id="menu">
-                    <li><a class="has-arrow " href="{{ route('home') }}" aria-expanded="false">
+                    <li class="{{ Request::segment(1) == 'home' ? 'active' : '' }}">
+                        <a class="" href="{{ route('home') }}" aria-expanded="true">
                             <i class="flaticon-025-dashboard"></i>
                             <span class="nav-text">Dashboard</span>
                         </a>
@@ -1045,8 +1012,16 @@
                             <span class="nav-text">Form</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('st.index') }}">Serah Terima</a></li>
-                            <li><a href="{{ route('ku.index') }}">Kaji Ulang</a></li>
+                            @can('serah-terima-alat')
+                                <li
+                                    class="{{ Request::segment(1) == 'serah-terima*' || Request::is('serah-terima*') ? 'active' : '' }}">
+                                    <a href="{{ route('st.index') }}">Serah Terima</a></li>
+                            @endcan
+                            @can('kaji-ulang')
+<li
+                                class="{{ Request::segment(1) == 'kaji-ulang' || Request::is('kaji-ulang/*') ? 'active' : '' }}">
+                                <a href="{{ route('ku.index') }}">Kaji Ulang</a></li>
+                            @endcan
 
                         </ul>
                     </li>
@@ -1055,13 +1030,27 @@
                             <span class="nav-text">Transaksi</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('quotation.index') }}">Quotation</a></li>
-                            <li><a href="{{ route('po.index') }}"> Purchase Order</a></li>
-                            <li><a href="{{ route('spk.index') }}">Surat Perintah Kerja</a></li>
-                            <li><a href="post-details.html">Invoice</a></li>
+                            @can('quotation')
+                            <li class="{{ Request::segment(1) == 'quotation' ? 'active' : '' }}"><a
+                                    href="{{ route('quotation.index') }}">Quotation</a></li>
+                                     @endcan
+                                     @can('purchase-order')
+
+
+                            <li class="{{ Request::segment(1) == 'po' ? 'active' : '' }}"><a
+                                    href="{{ route('po.index') }}"> Purchase Order</a></li>
+                                    @endcan
+                                    @can('surat-perintah-kerja')
+ <li class="{{ Request::segment(1) == 'surat-tugas' ? 'active' : '' }}"><a
+                                    href="{{ route('spk.index') }}">Surat Tugas / Kerja</a></li>
+                                    @endcan
+                            <li class="{{ Request::segment(1) == 'kaji-ulang' ? 'active' : '' }}"><a
+                                    href="post-details.html">Invoice</a></li>
                         </ul>
                     </li>
-                    <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+                    @can('job-order')
+                         <li class="{{ Request::segment(1) == 'job-order' ? 'active' : '' }}"><a class="has-arrow "
+                            href="javascript:void()" aria-expanded="false">
                             <i class="flaticon-050-info"></i>
                             <span class="nav-text">Sertifikat</span>
                         </a>
@@ -1070,18 +1059,29 @@
                             <li><a href="{{ route('job.index') }}">Sertifikat</a></li>
                         </ul>
                     </li>
+                    @endcan
+@can('data-master')
                     <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
                             <i class="flaticon-043-menu"></i>
                             <span class="nav-text">Data Master</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('inv.index') }}">Inventory</a></li>
-                            <li><a href="{{ route('customer.index') }}">Customer</a></li>
-                            <li><a href="{{ route('instrumen.index') }}">Instrumen</a></li>
-                            <li><a href="{{ route('metode.index') }}">Metode</a></li>
-                            <li><a href="{{ route('inv.create-kategori') }}">Kategori Inventori</a></li>
+                            <li class="{{ Request::segment(1) == 'master-inventori' ? 'active' : '' }}"><a
+                                    href="{{ route('inv.index') }}">Inventory</a></li>
+                            <li class="{{ Request::segment(1) == 'master-customer' ? 'active' : '' }}"><a
+                                    href="{{ route('customer.index') }}">Customer</a></li>
+                            <li class="{{ Request::segment(1) == 'master-instrumen' ? 'active' : '' }}"><a
+                                    href="{{ route('instrumen.index') }}">Instrumen</a></li>
+                            <li class="{{ Request::segment(1) == 'master-metode' ? 'active' : '' }}"><a
+                                    href="{{ route('metode.index') }}">Metode</a></li>
+                            <li class="{{ Request::segment(2) == 'create-kategori' ? 'active' : '' }}"><a
+                                    href="{{ route('inv.create-kategori') }}">Kategori Inventori</a></li>
                         </ul>
                     </li>
+                    @endcan
+                    @can('user-management')
+
+
                     <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
                             <i class="flaticon-036-floppy-disk"></i>
                             <span class="nav-text">System</span>
@@ -1092,6 +1092,7 @@
                             <li><a href="{{ route('users.index') }}">Master Permission</a></li>
                         </ul>
                     </li>
+                     @endcan
                 </ul>
 
             </div>
@@ -1176,7 +1177,8 @@
 <script src="{{ asset('') }}assets/vendor/jquery-asGradient/jquery-asGradient.min.js"></script>
 <script src="{{ asset('') }}assets/vendor/jquery-asColorPicker/js/jquery-asColorPicker.min.js"></script>
 <!-- Material color picker -->
-<script src="{{ asset('') }}assets/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js">
+<script
+    src="{{ asset('') }}assets/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js">
 </script>
 <script src="{{ asset('') }}assets/vendor/bootstrap-datepicker-master/js/bootstrap-datepicker.min.js"></script>
 <!-- pickdate -->

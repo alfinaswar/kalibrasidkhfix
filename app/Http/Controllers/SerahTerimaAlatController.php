@@ -41,8 +41,12 @@ class SerahTerimaAlatController extends Controller
                     return $Stat;
                 })
                 ->addColumn('Diserahkan', function ($row) {
-                    $Diserahkan = '<input type="date" class="form-control TanggalDiserahkan"
-                                    placeholder="'.now().'" name="Tanggal" data-row-id="' . $row->id . '"  id="test">';
+                    if ($row->TanggalDiajukan == null) {
+                        $Diserahkan = '<input type="date" class="form-control TanggalDiserahkan"
+                                    placeholder="' . now() . '" name="Tanggal" data-row-id="' . $row->id . '"  id="updateDiserahkan">';
+                    } else {
+                        $Diserahkan = $row->TanggalDiajukan;
+                    }
                     return $Diserahkan;
                 })
                 ->rawColumns(['action', 'Stat','Diserahkan'])
@@ -51,7 +55,13 @@ class SerahTerimaAlatController extends Controller
         $customer = MasterCustomer::latest()->get();
         return view('serah-terima.index',compact('customer'));
     }
+public function updateTanggalDiserahkan(Request $request, $id){
+        $data = SerahTerima::findOrFail($id);
+        $data->TanggalDiajukan = $request->tanggalDiserahkan;
+        $data->save();
 
+        return response()->json(['message' => 'Telah Diserahkan']);
+}
     /**
      * Show the form for creating a new resource.
      */
@@ -199,34 +209,55 @@ class SerahTerimaAlatController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Debugging data dari request
         // dd($request->all());
+
+        // Validasi data
         $validatedData = $request->validate([
             'CustomerId' => 'required',
             'Status' => 'required',
             'TanggalDiterima' => 'required',
         ]);
 
+        // Update data SerahTerima
         $serahTerimaAlat = SerahTerima::find($id);
         $serahTerimaAlat->update($validatedData);
         $serahTerimaAlat->Stdetail()->delete();
 
+        // Loop melalui instrumen
         foreach ($request->InstrumenId as $key => $value) {
             $qty = $request->Qty[$key];
             for ($i = 0; $i < $qty; $i++) {
-                SerahTerimaDetail::create([
-                    'SerahTerimaId' => $serahTerimaAlat->id,
-                    'InstrumenId' => $value,
-                    'Merk' => $request->Merk[$key],
-                    'Type' => $request->Type[$key],
-                    'SerialNumber' => $request->SerialNumber[$key],
-                    'Qty' => 1,
-                    'Deskripsi' => $request->Deskripsi[$key],
-                ]);
+                // Cek apakah Tambahan adalah "YA"
+                if ($request->Tambahan[$key] == 'YA') {
+                    // Buat data KajiUlang
+                    KajiUlang::create([
+                        'KodeKajiUlang' => $this->GenerateKodeKaji(),
+                        'SerahTerimaId' => $serahTerimaAlat->id,
+                        'InstrumenId' => $value,
+                        'Tambahan' => "YA",
+                        'idUser' => auth()->user()->id,
+                    ]);
+                }
+                    SerahTerimaDetail::create([
+                        'SerahTerimaId' => $serahTerimaAlat->id,
+                        'InstrumenId' => $value,
+                        'Merk' => $request->Merk[$key],
+                        'Type' => $request->Type[$key],
+                        'SerialNumber' => $request->SerialNumber[$key],
+                        'Qty' => 1,
+                        'Deskripsi' => $request->Deskripsi[$key],
+                        'Tambahan' => $request->Tambahan[$key] ?? null,
+                    ]);
+
             }
         }
 
+        // Redirect dengan pesan sukses
         return redirect()->route('st.index')->with('success', 'Data Berhasil Diupdate');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -255,6 +286,22 @@ class SerahTerimaAlatController extends Controller
             $Kode = str_pad($lastKodeAlat + 1, 4, '0', STR_PAD_LEFT) . '/ST-DKH/' . $month . '/' . $year;
         } else {
             $Kode = '0001/ST-DKH/' . $month . '/' . $year;
+        }
+        return $Kode;
+    }
+    private function GenerateKodeKaji()
+    {
+        $month = date('m');
+        $month2 = date('m');
+        $romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $month = $romanMonths[$month - 1];
+        $year = date('Y');
+        $lastKode = KajiUlang::whereYear('created_at', $year)->whereMonth('created_at', $month2)->orderby('id', 'desc')->first();
+        if ($lastKode) {
+            $lastKode = (int) substr($lastKode->KodeKajiUlang, 0, 4);
+            $Kode = str_pad($lastKode + 1, 4, '0', STR_PAD_LEFT) . '/KU-DKH/' . $month . '/' . $year;
+        } else {
+            $Kode = '0001/KU-DKH/' . $month . '/' . $year;
         }
         return $Kode;
     }

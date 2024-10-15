@@ -7,23 +7,37 @@
                 <div class="card-header">
                     <h4 class="card-title">Data Sertifikat</h4>
                     <!-- Filter Inputs -->
-                    <div class="row">
+
+                </div>
+                <div class="card-body">
+                     <div class="row mb-4">
                         <div class="col-md-4">
-                            <input type="text" id="filter-nama-alat" class="form-control" placeholder="Filter Nama Alat">
+<label>
+    Cari Berdasarkan Nama Instrumen
+</label>
+ <select class="multi-select" name="nama_alat" id="filter-nama-alat">
+
+                                                <option value="">Semua Data Instrumen</option>
+                                                @foreach ($instrumen as $inst)
+                                                    <option value="{{ $inst->Nama }}">
+                                                        {{ $inst->Nama }}</option>
+                                                @endforeach
+                                            </select>
                         </div>
                         <div class="col-md-4">
-                            <select id="filter-status-sertifikat" class="form-control">
+                            <label>
+    Cari Berdasarkan Status Sertifikat
+</label>
+                            <select id="filter-status-sertifikat" class="form-control" name="status_sertifikat">
                                 <option value="">Filter Status Sertifikat</option>
-                                <option value="DRAFT">DRAFT</option>
-                                <option value="TERBIT">TERBIT</option>
+                                <option value="N">Draft</option>
+                                <option value="Y">Telah Terbit</option>
                             </select>
                         </div>
                         <div class="col-md-4">
                             <button id="filter-apply" class="btn btn-primary">Apply Filter</button>
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
                     <table id="example" class="display" style="min-width: 845px" width="100%">
                         <thead>
                             <tr>

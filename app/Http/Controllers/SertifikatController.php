@@ -59,8 +59,8 @@ class SertifikatController extends Controller
                 ->rawColumns(['action', 'statsertifikat'])
                 ->make(true);
         }
-
-        return view('sertifikat.index');
+$instrumen = Instrumen::get();
+        return view('sertifikat.index',compact('instrumen'));
     }
 
     /**

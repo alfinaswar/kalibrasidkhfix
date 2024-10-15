@@ -115,13 +115,13 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped verticle-middle" id="instrument-table">
+                            <table class="table table-bordered table-striped verticle-middle" id="instrument-table" width="100%">
                                 <thead>
                                     <tr class="text-center">
-                                        <th scope="col">Nama Alat</th>
-                                        <th scope="col">Jumlah</th>
-                                        <th scope="col">Harga</th>
-                                        <th scope="col">Sub Total</th>
+                                        <th scope="col" width="35%">Nama Alat</th>
+                                        <th scope="col" width="5%">Jumlah</th>
+                                        <th scope="col" width="25%">Harga</th>
+                                        <th scope="col" width="25%">Sub Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -129,10 +129,11 @@
                                     @foreach ($GetKajiUlang as $item)
                                         <tr>
                                             <td>
-                                                <select class="form-control multi-select" name="InstrumenId[]"
-                                                    onchange="getHarga(this)">
+                                            <select class="form-control-lg multi-select" name="InstrumenId[]">
                                                     @foreach ($instrumen as $inst)
-                                                        <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
+                                                        <option value="{{ $inst->id }}"
+                                                            @if ($inst->id == $item->InstrumenId) selected @endif>
+                                                            {{ $inst->Nama }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -216,6 +217,7 @@
     </div>
     <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
     <script>
+
         for (let i = 1; i <= 4; i++) {
             ClassicEditor
                 .create(document.querySelector(`#texteditor${i}`))
@@ -295,11 +297,14 @@
                 const newRow = `
                 <tr>
                     <td>
-                        <select class="form-control multi-select" name="InstrumenId[]" onchange="getHarga(this)">
-                @foreach ($instrumen as $inst)
-                <option value="{{ $inst->id }}">{{ $inst->Nama }}</option>
-                @endforeach
-            </select>
+                        <select class="multi-select" name="InstrumenId[]">
+                                                     <option>Pilih Instrumen</option>
+                                                    @foreach ($instrumen as $inst)
+                                                        <option value="{{ $inst->id }}"
+                                                            @if ($inst->id == $item->InstrumenId) selected @endif>
+                                                            {{ $inst->Nama }}</option>
+                                                    @endforeach
+                                                </select>
                     </td>
                     <td><input type="text" name="Qty[]" class="form-control qty" placeholder="Jumlah Alat" value=""></td>
                     <td>
@@ -324,11 +329,9 @@
                             </div>
                         </div>
                     </td>
-                    <td>
-                        <div class="input-group">
-                        <button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i></button>
-                        </div>
-                    </td>
+                     <td>
+                <button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i></button>
+            </td>
                 </tr>
             `;
 
@@ -340,6 +343,12 @@
                     element.addEventListener('input', recalculateTotals);
                 });
 
+                const deleteButton = tbody.lastElementChild.querySelector('.delete-row');
+    deleteButton.addEventListener('click', function() {
+        tbody.removeChild(tbody.lastElementChild);
+        recalculateTotals(); // Recalculate totals after deleting a row
+    });
+
                 recalculateTotals();
             });
 
@@ -347,7 +356,7 @@
         });
 
         $(document).ready(function() {
-
+  $(".multi-select").select2();
             $('#Diskon').on('keyup', function() {
                 let diskon = $(this).val();
                 $('#TotalDiskon').val(diskon);
@@ -379,6 +388,8 @@
             $('#TipeDiskon').on('change', function() {
                 $('#TotalDiskon').trigger('input');
             });
+
+
         });
     </script>
 @endsection

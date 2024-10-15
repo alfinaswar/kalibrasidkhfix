@@ -159,6 +159,7 @@
     </div>
     <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
     <script>
+
         for (let i = 1; i <= 4; i++) {
             ClassicEditor
                 .create(document.querySelector(`#texteditor${i}`))
@@ -343,6 +344,8 @@
             $('#TipeDiskon').on('change', function() {
                 $('#TotalDiskon').trigger('input');
             });
+
+
         });
     </script>
 @endsection

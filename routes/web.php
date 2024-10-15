@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('hapus/{id}', [SerahTerimaAlatController::class, 'destroy'])->name('st.destroy');
         Route::GET('/pdf/{id}', [SerahTerimaAlatController::class, 'GeneratePdf'])->name('st.pdf');
         Route::GET('/cetak-stiker/{id}', [SerahTerimaAlatController::class, 'CetakStiker'])->name('st.cetak-stiker');
+        Route::put('/update-tanggal-diserahkan/{id}', [SerahTerimaAlatController::class, 'updateTanggalDiserahkan'])->name('st.UpdateDiserahkan');
     });
     Route::prefix('kaji-ulang')->group(function () {
         Route::GET('/', [KajiUlangController::class, 'index'])->name('ku.index');

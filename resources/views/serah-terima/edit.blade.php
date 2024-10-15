@@ -88,6 +88,7 @@
                                             <th scope="col">SerialNumber</th>
                                             <th scope="col">Qty</th>
                                             <th scope="col">Deskripsi</th>
+                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -113,6 +114,9 @@
                                                 </td>
                                                 <td><input type="text" name="Deskripsi[]" value="{{ $item->Deskripsi }}"
                                                         class="form-control" placeholder="Deskripsi">
+                                                        <input type="hidden" name="Tambahan[]" value="TIDAK">
+                                                </td>
+                                                <td><button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -140,8 +144,9 @@
                 '<input type="text" name="Type[]" class="form-control" placeholder="Type">',
                 '<input type="text" name="SerialNumber[]" class="form-control" placeholder="Serial Number">',
                 '<input type="text" name="Qty[]" value="1" class="form-control" placeholder="Qty">',
-                '<input type="text" name="Deskripsi[]" class="form-control" placeholder="Deskripsi">',
-                '<button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>'
+                '<input type="text" name="Deskripsi[]" class="form-control" placeholder="Deskripsi"><input type="hidden" name="Tambahan[]" value="YA">',
+
+                '<button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i></button>'
             ];
 
             cells.forEach(function(cellContent) {

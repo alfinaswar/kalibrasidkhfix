@@ -46,16 +46,22 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'nip' => 'required',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
-        ]);
 
         $input = $request->all();
-        dd($request->input('roles'));
+        // dd($input);
+        if ($request->hasFile('Foto')) {
+            $foto = $request->file('Foto');
+            $fotoName = time() . '_' . $foto->getClientOriginalName();
+            $input['Foto'] = $foto->storeAs('public/foto', $fotoName);
+        }
+
+        if ($request->hasFile('DigitalSign')) {
+            $sign = $request->file('DigitalSign');
+            $signName = time() . '_' . $sign->getClientOriginalName();
+            $input['DigitalSign'] = $sign->storeAs('public/sign', $signName);
+        }
+
+// dd($input);
         $input['password'] = Hash::make($input['password']);
         $input['akses'] = $request->roles[0];
 
