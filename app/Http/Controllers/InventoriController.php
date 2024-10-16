@@ -84,7 +84,6 @@ class InventoriController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        // dd($data);
         $validator = Validator::make($request->all(), [
             'Nama' => 'required',
             'Kategori' => 'required',
@@ -102,6 +101,13 @@ class InventoriController extends Controller
             return redirect()
                 ->back()
                 ->withErrors($validator)
+                ->withInput();
+        }
+        $existingInventori = inventori::where('Sn', $request->input('Sn'))->first();
+        if ($existingInventori) {
+            return redirect()
+                ->back()
+                ->withErrors(['Sn' => 'Nomor seri (SN) sudah ada.'])
                 ->withInput();
         }
         $data = $request->all();
