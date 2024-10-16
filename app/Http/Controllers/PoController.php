@@ -170,19 +170,19 @@ class PoController extends Controller
     }
     public function infoKalibrasi($NoSertifikat)
     {
-        $data =Sertifikat::with('getCustomer', 'getNamaAlat')->where('NoSertifikat', $NoSertifikat)->first();
-        $InstrumenId = $data->InstrumenId;
+        $sertifikat =Sertifikat::with('getCustomer', 'getNamaAlat')->where('NoSertifikat', $NoSertifikat)->first();
+        $InstrumenId = $sertifikat->InstrumenId;
         $cek = Instrumen::where('id', $InstrumenId)->first()->NamaFile;
         $FormLK = 'sertifikat' . DIRECTORY_SEPARATOR . 'form-lk' . DIRECTORY_SEPARATOR . $cek;
 
         $metode = MasterMetode::get();
 
-        $alatUkurId = $data->getNamaAlat->AlatUkur;
+        $alatUkurId = $sertifikat->getNamaAlat->AlatUkur;
         $getAlatUkur = inventori::whereIn('id', $alatUkurId)->get();
-        if ($data->TanggalPelaksanaan == null) {
+        if ($sertifikat->TanggalPelaksanaan == null) {
             return view($FormLK, compact('sertifikat', 'metode', 'getAlatUkur'));
         } else {
-            return view($FormLK, compact('sertifikat', 'metode', 'getAlatUkur'));
+            return redirect()->route('job.hasilpdf',$sertifikat->id);
         }
     }
     /**
